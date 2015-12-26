@@ -1,16 +1,14 @@
 package cc.cubone.turbo.ui.support;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import cc.cubone.turbo.R;
+import cc.cubone.turbo.base.BaseTabFragment;
 import cc.cubone.turbo.ui.test.TestFragment;
 
 /**
@@ -22,7 +20,7 @@ import cc.cubone.turbo.ui.test.TestFragment;
  * <li><a href="https://guides.codepath.com/android/">CodePath Android Cliffnotes</a>
  * </ul>
  */
-public class SupportFragment extends Fragment {
+public class SupportFragment extends BaseTabFragment {
 
     public SupportFragment() {
     }
@@ -37,17 +35,9 @@ public class SupportFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_support, container, false);
-
-        ViewPager pager = (ViewPager) v.findViewById(R.id.pager);
+    public boolean onTabCreated(TabLayout tab, ViewPager pager, @Nullable Bundle savedInstanceState) {
         pager.setAdapter(new SupportPagerAdapter(getChildFragmentManager()));
-
-        TabLayout tabs = (TabLayout) v.findViewById(R.id.tabs);
-        tabs.setupWithViewPager(pager);
-
-        return v;
+        return true;
     }
 
     public static class SupportPagerAdapter extends FragmentPagerAdapter {

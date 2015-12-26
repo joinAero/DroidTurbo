@@ -13,7 +13,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,6 +21,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.base.BaseActivity;
 import cc.cubone.turbo.ui.support.SupportFragment;
 import cc.cubone.turbo.ui.test.TestFragment;
 
@@ -34,10 +34,8 @@ import cc.cubone.turbo.ui.test.TestFragment;
  * <li><a href="https://github.com/android/platform_frameworks_support">Platform Frameworks Support</a>
  * </ul>
  */
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    private MainPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +46,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
-        pager.setAdapter(mPagerAdapter);
+        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
