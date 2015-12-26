@@ -25,6 +25,9 @@ import cc.cubone.turbo.base.BaseActivity;
 import cc.cubone.turbo.ui.support.SupportFragment;
 import cc.cubone.turbo.ui.test.TestFragment;
 
+import static cc.cubone.turbo.ui.test.TestFragment.PINK;
+import static cc.cubone.turbo.ui.test.TestFragment.PURPLE;
+
 /**
  * Main activity.
  *
@@ -200,8 +203,8 @@ public class MainActivity extends BaseActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return SupportFragment.newInstance();
-                case 1: return TestFragment.newInstance(1, 0xFFE57373);
-                case 2: return TestFragment.newInstance(2, 0xFFF06292);
+                case 1: return TestFragment.newInstance(1, PINK);
+                case 2: return TestFragment.newInstance(2, PURPLE);
                 default: return null;
             }
         }

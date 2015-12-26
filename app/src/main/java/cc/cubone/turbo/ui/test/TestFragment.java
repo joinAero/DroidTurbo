@@ -14,6 +14,10 @@ import cc.cubone.turbo.base.BaseFragment;
  */
 public class TestFragment extends BaseFragment {
 
+    public static final int RED = 0xFFE57373;
+    public static final int PINK = 0xFFF06292;
+    public static final int PURPLE = 0xFFBA68C8;
+
     private static final String ARG_PAGE    = "page";
     private static final String ARG_COLOR   = "color";
     private static final String ARG_TITLE   = "title";

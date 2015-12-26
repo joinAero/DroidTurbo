@@ -19,6 +19,10 @@ import cc.cubone.turbo.R;
 import cc.cubone.turbo.base.BaseTabFragment;
 import cc.cubone.turbo.ui.test.TestFragment;
 
+import static cc.cubone.turbo.ui.test.TestFragment.PINK;
+import static cc.cubone.turbo.ui.test.TestFragment.PURPLE;
+import static cc.cubone.turbo.ui.test.TestFragment.RED;
+
 /**
  * Fragment for practising new APIs in support libraries.
  *
@@ -74,9 +78,9 @@ public class SupportFragment extends BaseTabFragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return TestFragment.newInstance(0, 0xFFE57373);
-                case 1: return TestFragment.newInstance(1, 0xFFF06292);
-                case 2: return TestFragment.newInstance(2, 0xFFBA68C8);
+                case 0: return TestFragment.newInstance(0, RED);
+                case 1: return TestFragment.newInstance(1, PINK);
+                case 2: return TestFragment.newInstance(2, PURPLE);
                 default: return null;
             }
         }
