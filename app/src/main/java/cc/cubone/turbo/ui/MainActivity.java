@@ -63,8 +63,8 @@ public class MainActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        NavigationView nav = (NavigationView) findViewById(R.id.nav);
+        nav.setNavigationItemSelectedListener(this);
 
         // TODO: How to set StatusBar to transparent?
         // Issue: Could not set StatusBar to transparent if using DrawerLayout

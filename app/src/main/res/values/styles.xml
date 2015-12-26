@@ -17,4 +17,22 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <!-- TabLayout -->
+
+    <style name="AppTheme.Tab.Text" parent="TextAppearance.Design.Tab">
+        <item name="android:textSize">@dimen/tab_text_size</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
+    <style name="AppTheme.TabLayout" parent="Widget.Design.TabLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/tab_height</item>
+        <item name="tabPaddingStart">@dimen/tab_padding</item>
+        <item name="tabPaddingTop">@dimen/tab_padding</item>
+        <item name="tabPaddingEnd">@dimen/tab_padding</item>
+        <item name="tabPaddingBottom">@dimen/tab_padding</item>
+        <item name="tabTextAppearance">@style/AppTheme.Tab.Text</item>
+        <item name="tabSelectedTextColor">?attr/colorAccent</item>
+    </style>
+
 </resources>

@@ -24,15 +24,12 @@ public class BaseTabFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TabLayout tab = (TabLayout) view.findViewById(R.id.tab);
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-
-        boolean attach = onTabCreated(tab, pager, savedInstanceState);
-        if (attach) {
-            tab.setupWithViewPager(pager);
-        }
+        onTabCreated(tab, pager, savedInstanceState);
     }
 
-    public boolean onTabCreated(TabLayout tab, ViewPager pager, @Nullable Bundle savedInstanceState) {
-        return true;
+    public void onTabCreated(TabLayout tabLayout, ViewPager viewPager,
+                             @Nullable Bundle savedInstanceState) {
+        tabLayout.setupWithViewPager(viewPager);
     }
 
 }
