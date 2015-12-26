@@ -6,7 +6,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,16 +22,22 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import org.join.turbo.R;
+import org.join.turbo.ui.support.SupportFragment;
+import org.join.turbo.ui.test.TestFragment;
 
 /**
- * <p>Guide & Source:
+ * Main activity.
+ *
+ * <p>UI Guide & Source:
  * <ul>
- * <li>Fragment Navigation Drawer: https://github.com/codepath/android_guides/wiki/Fragment-Navigation-Drawer
- * <li>Platform Frameworks Support: https://github.com/android/platform_frameworks_support
+ * <li><a href="https://github.com/codepath/android_guides/wiki/Fragment-Navigation-Drawer">Fragment Navigation Drawer</a>
+ * <li><a href="https://github.com/android/platform_frameworks_support">Platform Frameworks Support</a>
  * </ul>
  */
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private MainPagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +46,10 @@ public class MainActivity extends AppCompatActivity
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        mPagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
+        pager.setAdapter(mPagerAdapter);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -56,14 +70,29 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         // TODO: How to set StatusBar to transparent?
+        // Issue: Could not set StatusBar to transparent if using DrawerLayout
         // Google: DrawerLayout setStatusBarBackground
         /*drawer.setScrimColor(Color.TRANSPARENT);
         drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
-
-        initSystemBar();
     }
 
-    private void initSystemBar() {
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            initSystemUI();
+        }
+    }
+
+    /**
+     * Initialize system ui.
+     *
+     * <p>Reference:
+     * <ul>
+     * <li><a href="http://developer.android.com/training/system-ui/immersive.html">Using Immersive Full-Screen Mode</a>
+     * </ul>
+     */
+    private void initSystemUI() {
         Window win = getWindow();
 
         // StatusBar
@@ -156,4 +185,35 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public static class MainPagerAdapter extends FragmentPagerAdapter {
+
+        private final int PAGE_COUNT = 3;
+
+        public MainPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
+
+        @Override
+        public int getCount() {
+            return PAGE_COUNT;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            switch (position) {
+                case 0: return SupportFragment.newInstance();
+                case 1: return TestFragment.newInstance(1, 0xFFE57373);
+                case 2: return TestFragment.newInstance(2, 0xFFF06292);
+                default: return null;
+            }
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return "Page " + position;
+        }
+
+    }
+
 }
