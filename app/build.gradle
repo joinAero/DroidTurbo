@@ -4,6 +4,8 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+    // Apache HTTP Client Removal - Android 6.0 Changes:
+    // http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
     //useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
@@ -12,6 +14,8 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        // Apps Over 65K Methods: http://developer.android.com/tools/building/multidex.html
+        //multiDexEnabled true
     }
     buildTypes {
         release {
@@ -26,4 +30,10 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
+    compile 'com.android.support:support-v4:23.1.1'
+    //compile 'com.android.support:multidex:1.0.1'
 }
+
+// Reference:
+// * Android Plugin for Gradle: http://developer.android.com/tools/building/plugin-for-gradle.html
+// * Gradle Plugin User Guide: http://tools.android.com/tech-docs/new-build-system/user-guide
