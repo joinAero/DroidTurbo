@@ -1,4 +1,4 @@
-package org.join.turbo.ui;
+package cc.cubone.turbo.ui;
 
 import android.graphics.Color;
 import android.os.Build;
@@ -21,9 +21,9 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import org.join.turbo.R;
-import org.join.turbo.ui.support.SupportFragment;
-import org.join.turbo.ui.test.TestFragment;
+import cc.cubone.turbo.R;
+import cc.cubone.turbo.ui.support.SupportFragment;
+import cc.cubone.turbo.ui.test.TestFragment;
 
 /**
  * Main activity.

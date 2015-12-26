@@ -1,4 +1,4 @@
-package org.join.turbo.ui.support;
+package cc.cubone.turbo.ui.support;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -10,8 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import org.join.turbo.R;
-import org.join.turbo.ui.test.TestFragment;
+import cc.cubone.turbo.R;
+import cc.cubone.turbo.ui.test.TestFragment;
 
 /**
  * Fragment for practising new APIs in support libraries.

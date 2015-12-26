@@ -1,4 +1,4 @@
-package org.join.turbo;
+package cc.cubone.turbo;
 
 import org.junit.Test;
 

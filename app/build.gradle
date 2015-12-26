@@ -9,7 +9,7 @@ android {
     //useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
-        applicationId "org.join.turbo"
+        applicationId "cc.cubone.turbo"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1

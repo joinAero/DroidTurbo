@@ -1,4 +1,4 @@
-package org.join.turbo.ui.test;
+package cc.cubone.turbo.ui.test;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.join.turbo.R;
+import cc.cubone.turbo.R;
 
 /**
  * Test fragment.
