@@ -41,13 +41,21 @@ import static cc.cubone.turbo.test.TestFragment.PURPLE;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Toolbar: http://developer.android.com/reference/android/support/v7/widget/Toolbar.html
+        // Adding the App Bar: http://developer.android.com/training/appbar/index.html
+        // Using the App ToolBar: https://guides.codepath.com/android/Using-the-App-ToolBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        // setup ActionBar
+        /*ActionBar ab = getSupportActionBar();
+        ab.setDisplayHomeAsUpEnabled(true);
+        ab.setDisplayShowTitleEnabled(false);*/
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
@@ -155,7 +163,7 @@ public class MainActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_search) {
             return true;
         }
 
