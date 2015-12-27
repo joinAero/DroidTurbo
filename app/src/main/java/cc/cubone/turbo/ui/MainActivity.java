@@ -22,11 +22,12 @@ import android.view.WindowManager;
 
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.base.BaseActivity;
+import cc.cubone.turbo.ui.arch.ArchFragment;
+import cc.cubone.turbo.ui.fever.FeverFragment;
 import cc.cubone.turbo.ui.support.SupportFragment;
-import cc.cubone.turbo.ui.test.TestFragment;
 
-import static cc.cubone.turbo.ui.test.TestFragment.PINK;
-import static cc.cubone.turbo.ui.test.TestFragment.PURPLE;
+import static cc.cubone.turbo.test.TestFragment.PINK;
+import static cc.cubone.turbo.test.TestFragment.PURPLE;
 
 /**
  * Main activity.
@@ -203,8 +204,8 @@ public class MainActivity extends BaseActivity
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return SupportFragment.newInstance();
-                case 1: return TestFragment.newInstance(1, PINK);
-                case 2: return TestFragment.newInstance(2, PURPLE);
+                case 1: return FeverFragment.newInstance(1, PINK);
+                case 2: return ArchFragment.newInstance(2, PURPLE);
                 default: return null;
             }
         }

@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.test;
+package cc.cubone.turbo.test;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

@@ -10,15 +10,15 @@ import android.support.v4.view.ViewPager;
 
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.base.BaseTabFragment;
-import cc.cubone.turbo.ui.test.TestFragment;
+import cc.cubone.turbo.test.TestFragment;
 import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
-import static cc.cubone.turbo.ui.test.TestFragment.PINK;
-import static cc.cubone.turbo.ui.test.TestFragment.PURPLE;
-import static cc.cubone.turbo.ui.test.TestFragment.RED;
+import static cc.cubone.turbo.test.TestFragment.PINK;
+import static cc.cubone.turbo.test.TestFragment.PURPLE;
+import static cc.cubone.turbo.test.TestFragment.RED;
 
 /**
- * Fragment for practising new APIs in support libraries.
+ * Fragment for practicing new APIs in support libraries.
  *
  * <p>Reference:
  * <ul>
