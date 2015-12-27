@@ -18,8 +18,17 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <!-- TabLayout -->
+    <style name="AppTheme.Tab.Icon" parent="">
+        <item name="android:src">@null</item>
+        <!-- tint color for vector drawable -->
+        <!-- Reference:
+        * Working with Drawables: http://developer.android.com/training/material/drawables.html
+        * 谈谈Android Material Design 中的Tint（着色）: http://segmentfault.com/a/1190000003038675
+        -->
+        <item name="android:tint">@color/tab_icon_color</item>
+    </style>
 
-    <style name="AppTheme.Tab" parent="TextAppearance.Design.Tab">
+    <style name="AppTheme.Tab.Text" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/tab_text_size</item>
         <item name="android:maxLines">1</item>
         <!-- lowercase tab text -->
@@ -34,7 +43,7 @@
         <item name="tabPaddingTop">@dimen/tab_padding</item>
         <item name="tabPaddingEnd">@dimen/tab_padding</item>
         <item name="tabPaddingBottom">@dimen/tab_padding</item>
-        <item name="tabTextAppearance">@style/AppTheme.Tab</item>
+        <item name="tabTextAppearance">@style/AppTheme.Tab.Text</item>
         <item name="tabSelectedTextColor">?attr/colorAccent</item>
     </style>
 

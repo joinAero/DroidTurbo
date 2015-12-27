@@ -75,9 +75,9 @@ public class SupportFragment extends BaseTabFragment {
         @Override
         public int getTabIcon(int position) {
             switch (position) {
-                case 0: return android.R.drawable.ic_dialog_dialer;
-                case 1: return android.R.drawable.ic_dialog_map;
-                case 2: return android.R.drawable.ic_dialog_info;
+                case 0: return R.drawable.ic_apps;
+                case 1: return R.drawable.ic_apps;
+                case 2: return R.drawable.ic_apps;
                 default: return 0;
             }
         }

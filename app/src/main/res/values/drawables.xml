@@ -1,4 +1,15 @@
 <resources>
+    <!--
+    More introductions:
+    * drawable/ic_apps.xml
+
+    Reference:
+    * Working with Drawables: https://developer.android.com/training/material/drawables.html
+    * VectorDrawable: http://developer.android.com/reference/android/graphics/drawable/VectorDrawable.html
+    * Android Studio 1.4: http://android-developers.blogspot.com/2015/09/android-studio-14.html
+    * Vector Asset Studio: https://developer.android.com/tools/help/vector-asset-studio.html
+    -->
+
     <item name="ic_menu_camera" type="drawable">@android:drawable/ic_menu_camera</item>
     <item name="ic_menu_gallery" type="drawable">@android:drawable/ic_menu_gallery</item>
     <item name="ic_menu_slideshow" type="drawable">@android:drawable/ic_menu_slideshow</item>
