@@ -1,6 +1,8 @@
 package cc.cubone.turbo.ui;
 
+import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -9,6 +11,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -152,7 +156,29 @@ public class MainActivity extends BaseActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
+
+        tintMenuItem(menu.findItem(R.id.action_search));
+
         return true;
+    }
+
+    /**
+     * Tint menu item.
+     *
+     * <p>Reference:
+     * <ul>
+     * <li><a href="http://stackoverflow.com/questions/24301235/tint-menu-icons">Tint menu icons</a>
+     * <li><a href="http://stackoverflow.com/questions/26780046/menuitem-tinting-on-appcompat-toolbar">
+     *     MenuItem tinting on AppCompat Toolbar</a>
+     * </ul>
+     *
+     * @param item Menu item
+     */
+    private void tintMenuItem(MenuItem item) {
+        Drawable icon = DrawableCompat.wrap(item.getIcon());
+        ColorStateList tint = ContextCompat.getColorStateList(this, R.color.menu_icon_color);
+        DrawableCompat.setTintList(icon, tint);
+        item.setIcon(icon);
     }
 
     @Override
