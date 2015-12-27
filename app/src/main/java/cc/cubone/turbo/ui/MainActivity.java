@@ -10,9 +10,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v4.view.GravityCompat;
@@ -32,6 +32,7 @@ import cc.cubone.turbo.base.BaseActivity;
 import cc.cubone.turbo.ui.arch.ArchFragment;
 import cc.cubone.turbo.ui.fever.FeverFragment;
 import cc.cubone.turbo.ui.support.SupportFragment;
+import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
 import static cc.cubone.turbo.test.TestFragment.PINK;
 import static cc.cubone.turbo.test.TestFragment.PURPLE;
@@ -57,15 +58,20 @@ public class MainActivity extends BaseActivity
         // Toolbar: http://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         // Adding the App Bar: http://developer.android.com/training/appbar/index.html
         // Using the App ToolBar: https://guides.codepath.com/android/Using-the-App-ToolBar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        Toolbar bar = (Toolbar) findViewById(R.id.bar);
+        setSupportActionBar(bar);
         // setup ActionBar
         /*ActionBar ab = getSupportActionBar();
         ab.setDisplayHomeAsUpEnabled(true);
         ab.setDisplayShowTitleEnabled(false);*/
 
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        pager.setAdapter(new MainPagerAdapter(getSupportFragmentManager()));
+        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        pager.setAdapter(adapter);
+
+        TabLayout barTabs = (TabLayout) bar.findViewById(R.id.tab);
+        barTabs.setupWithViewPager(pager);
+        adapter.customTabViews(barTabs);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -78,7 +84,7 @@ public class MainActivity extends BaseActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, bar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -191,7 +197,7 @@ public class MainActivity extends BaseActivity
      */
     private void tintMenuItem(MenuItem item) {
         Drawable icon = DrawableCompat.wrap(item.getIcon());
-        ColorStateList tint = ContextCompat.getColorStateList(this, R.color.menu_icon_color);
+        ColorStateList tint = ContextCompat.getColorStateList(this, R.color.bar_icon_color);
         DrawableCompat.setTintList(icon, tint);
         item.setIcon(icon);
     }
@@ -236,12 +242,12 @@ public class MainActivity extends BaseActivity
         return true;
     }
 
-    public static class MainPagerAdapter extends FragmentPagerAdapter {
+    public static class MainPagerAdapter extends TabFragmentPagerAdapter {
 
         private final int PAGE_COUNT = 3;
 
-        public MainPagerAdapter(FragmentManager fm) {
-            super(fm);
+        public MainPagerAdapter(FragmentManager fm, Context ctx) {
+            super(fm, ctx, R.layout.tab_custom_bar);
         }
 
         @Override
@@ -262,6 +268,21 @@ public class MainActivity extends BaseActivity
         @Override
         public CharSequence getPageTitle(int position) {
             return "Page " + position;
+        }
+
+        @Override
+        public CharSequence getTabText(int position) {
+            return null;
+        }
+
+        @Override
+        public int getTabIcon(int position) {
+            switch (position) {
+                case 0: return R.drawable.ic_widgets;
+                case 1: return R.drawable.ic_toys;
+                case 2: return R.drawable.ic_pets;
+                default: return 0;
+            }
         }
 
     }

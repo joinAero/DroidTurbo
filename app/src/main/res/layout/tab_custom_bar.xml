@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.AppCompatImageView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme.Tab.Icon"
+    android:id="@+id/icon"
+    android:layout_width="@dimen/bar_icon_size"
+    android:layout_height="@dimen/bar_icon_size"
+    android:tint="@color/bar_icon_color" />

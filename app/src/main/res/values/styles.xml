@@ -57,4 +57,12 @@
         <item name="tabSelectedTextColor">?attr/colorAccent</item>
     </style>
 
+    <style name="AppTheme.TabLayout.Bar">
+        <item name="android:layout_height">match_parent</item>
+        <item name="tabPaddingStart">@dimen/bar_tab_padding</item>
+        <item name="tabPaddingEnd">@dimen/bar_tab_padding</item>
+        <item name="tabIndicatorHeight">0dp</item>
+        <item name="tabGravity">center</item>
+    </style>
+
 </resources>

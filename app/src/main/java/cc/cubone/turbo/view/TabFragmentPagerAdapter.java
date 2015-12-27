@@ -4,9 +4,11 @@ import android.content.Context;
 import android.content.res.ColorStateList;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -65,11 +67,20 @@ public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
         View v = LayoutInflater.from(mContext).inflate(mTabResId, null);
 
         TextView textView = (TextView) v.findViewById(R.id.text);
-        textView.setText(getTabText(position));
-        // Apply style colors to text view.
-        ColorStateList tabTextColors = tabLayout.getTabTextColors();
-        if (tabTextColors != null) {
-            textView.setTextColor(tabTextColors);
+        if (textView != null) {
+            final CharSequence text = getTabText(position);
+            if (TextUtils.isEmpty(text)) {
+                textView.setText(null);
+                textView.setVisibility(View.GONE);
+            } else {
+                textView.setText(text);
+                textView.setVisibility(View.VISIBLE);
+            }
+            // Apply style colors to text view.
+            ColorStateList tabTextColors = tabLayout.getTabTextColors();
+            if (tabTextColors != null) {
+                textView.setTextColor(tabTextColors);
+            }
         }
         // Select tab at current position to make style color valid.
         final int curPos = tabLayout.getSelectedTabPosition();
@@ -78,15 +89,26 @@ public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         ImageView iconView = (ImageView) v.findViewById(R.id.icon);
-        final int iconResId = getTabIcon(position);
-        if (iconResId != 0) {
-            iconView.setImageResource(iconResId);
-            iconView.setVisibility(View.VISIBLE);
-        } else {
-            iconView.setVisibility(View.GONE);
+        if (iconView != null) {
+            final int iconResId = getTabIcon(position);
+            if (iconResId == 0) {
+                //iconView.setImageResource(0);
+                iconView.setVisibility(View.GONE);
+            } else {
+                iconView.setImageResource(iconResId);
+                iconView.setVisibility(View.VISIBLE);
+            }
         }
 
+        onCustomTabViewCreated(v, position, textView, iconView);
+
         tab.setCustomView(v);
+    }
+
+    protected void onCustomTabViewCreated(View view,
+                                          int position,
+                                          @Nullable TextView textView,
+                                          @Nullable ImageView iconView) {
     }
 
 }
