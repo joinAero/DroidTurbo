@@ -20,11 +20,7 @@ import static cc.cubone.turbo.test.TestFragment.RED;
 /**
  * Fragment for practicing new APIs in support libraries.
  *
- * <p>Reference:
- * <ul>
- * <li><a href="http://developer.android.com/tools/support-library/features.html">Support Library Features</a>
- * <li><a href="https://guides.codepath.com/android/">CodePath Android Cliffnotes</a>
- * </ul>
+ * <p>See `Support.md` for more introductions.
  */
 public class SupportFragment extends BaseTabFragment {
 
