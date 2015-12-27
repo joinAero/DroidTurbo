@@ -5,4 +5,6 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_search">Search</string>
+
+    <string name="search_hint">Search hint here!</string>
 </resources>

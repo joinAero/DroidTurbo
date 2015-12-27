@@ -1,5 +1,7 @@
 package cc.cubone.turbo.ui;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -17,6 +19,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -157,9 +160,21 @@ public class MainActivity extends BaseActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
-        tintMenuItem(menu.findItem(R.id.action_search));
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        associateSearchable(searchItem);
+
+        tintMenuItem(searchItem);
 
         return true;
+    }
+
+    /**
+     * Associate searchable configuration with the SearchView.
+     */
+    private void associateSearchable(MenuItem searchItem) {
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) searchItem.getActionView();
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
     }
 
     /**

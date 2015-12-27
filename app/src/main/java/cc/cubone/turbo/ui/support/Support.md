@@ -15,6 +15,7 @@
 
 * [SearchView](http://developer.android.com/reference/android/widget/SearchView.html)
 * [Setting Up the Search Interface](http://developer.android.com/training/search/setup.html)
+* [Creating a Search Interface](http://developer.android.com/guide/topics/search/search-dialog.html)
 * [Extended ActionBar Guide](https://guides.codepath.com/android/Extended-ActionBar-Guide)
 
 ## 2) TabLayout
