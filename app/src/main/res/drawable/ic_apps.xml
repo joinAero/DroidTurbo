@@ -6,6 +6,12 @@
     <!--
     Only Android 5.0 (API level 21) and higher supports dynamic attributes, for example,
     android:fillColor="?attr/colorAccent", android:fillColor="@color/colorAccent".
+
+    Reference:
+    * Working with Drawables: https://developer.android.com/training/material/drawables.html
+    * VectorDrawable: http://developer.android.com/reference/android/graphics/drawable/VectorDrawable.html
+    * Android Studio 1.4: http://android-developers.blogspot.com/2015/09/android-studio-14.html
+    * Vector Asset Studio: https://developer.android.com/tools/help/vector-asset-studio.html
     -->
     <path
         android:fillColor="#FF000000"
