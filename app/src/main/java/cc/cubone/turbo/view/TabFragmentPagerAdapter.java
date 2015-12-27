@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import cc.cubone.turbo.R;
+
 public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
@@ -62,7 +64,7 @@ public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 
         View v = LayoutInflater.from(mContext).inflate(mTabResId, null);
 
-        TextView textView = (TextView) v.findViewById(android.R.id.text1);
+        TextView textView = (TextView) v.findViewById(R.id.text);
         textView.setText(getTabText(position));
         // Apply style colors to text view.
         ColorStateList tabTextColors = tabLayout.getTabTextColors();
@@ -75,7 +77,7 @@ public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
             v.setSelected(true);
         }
 
-        ImageView iconView = (ImageView) v.findViewById(android.R.id.icon);
+        ImageView iconView = (ImageView) v.findViewById(R.id.icon);
         final int iconResId = getTabIcon(position);
         if (iconResId != 0) {
             iconView.setImageResource(iconResId);
