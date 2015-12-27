@@ -189,6 +189,7 @@ public class MainActivity extends BaseActivity
      * <p>Reference:
      * <ul>
      * <li><a href="http://stackoverflow.com/questions/24301235/tint-menu-icons">Tint menu icons</a>
+     * <li><a href="http://stackoverflow.com/questions/28219178/toolbar-icon-tinting-on-android">Toolbar icon tinting on Android</a>
      * <li><a href="http://stackoverflow.com/questions/26780046/menuitem-tinting-on-appcompat-toolbar">
      *     MenuItem tinting on AppCompat Toolbar</a>
      * </ul>
