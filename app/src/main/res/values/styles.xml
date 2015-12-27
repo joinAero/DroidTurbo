@@ -19,7 +19,7 @@
 
     <!-- TabLayout -->
 
-    <style name="AppTheme.Tab.Text" parent="TextAppearance.Design.Tab">
+    <style name="AppTheme.Tab" parent="TextAppearance.Design.Tab">
         <item name="android:textSize">@dimen/tab_text_size</item>
         <item name="android:maxLines">1</item>
     </style>
@@ -31,7 +31,7 @@
         <item name="tabPaddingTop">@dimen/tab_padding</item>
         <item name="tabPaddingEnd">@dimen/tab_padding</item>
         <item name="tabPaddingBottom">@dimen/tab_padding</item>
-        <item name="tabTextAppearance">@style/AppTheme.Tab.Text</item>
+        <item name="tabTextAppearance">@style/AppTheme.Tab</item>
         <item name="tabSelectedTextColor">?attr/colorAccent</item>
     </style>
 

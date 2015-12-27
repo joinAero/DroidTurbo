@@ -24,11 +24,11 @@ public class BaseTabFragment extends BaseFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         TabLayout tab = (TabLayout) view.findViewById(R.id.tab);
         ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
-        onTabCreated(tab, pager, savedInstanceState);
+        onLayoutCreated(tab, pager, savedInstanceState);
     }
 
-    public void onTabCreated(TabLayout tabLayout, ViewPager viewPager,
-                             @Nullable Bundle savedInstanceState) {
+    public void onLayoutCreated(TabLayout tabLayout, ViewPager viewPager,
+                                @Nullable Bundle savedInstanceState) {
         tabLayout.setupWithViewPager(viewPager);
     }
 
