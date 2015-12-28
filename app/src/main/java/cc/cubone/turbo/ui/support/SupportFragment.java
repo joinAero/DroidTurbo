@@ -9,13 +9,13 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import cc.cubone.turbo.R;
-import cc.cubone.turbo.base.BaseTabFragment;
-import cc.cubone.turbo.test.TestFragment;
+import cc.cubone.turbo.ui.ColorPageFragment;
+import cc.cubone.turbo.ui.base.BaseTabFragment;
 import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
 import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
-import static cc.cubone.turbo.test.TestFragment.PINK;
-import static cc.cubone.turbo.test.TestFragment.PURPLE;
+import static cc.cubone.turbo.ui.ColorPageFragment.PINK;
+import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
 
 /**
  * Fragment for practicing new APIs in support libraries.
@@ -66,8 +66,8 @@ public class SupportFragment extends BaseTabFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return RecyclerFragment.newInstance();
-                case 1: return TestFragment.newInstance(1, PINK);
-                case 2: return TestFragment.newInstance(2, PURPLE);
+                case 1: return ColorPageFragment.newInstance(1, PINK);
+                case 2: return ColorPageFragment.newInstance(2, PURPLE);
                 default: return null;
             }
         }

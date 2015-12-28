@@ -5,8 +5,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
-import cc.cubone.turbo.base.BaseListFragment;
 import cc.cubone.turbo.ui.CardRecyclerViewAdapter;
+import cc.cubone.turbo.ui.base.BaseListFragment;
 
 public class RecyclerFragment extends BaseListFragment {
 

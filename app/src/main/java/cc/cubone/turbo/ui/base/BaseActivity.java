@@ -1,4 +1,4 @@
-package cc.cubone.turbo.base;
+package cc.cubone.turbo.ui.base;
 
 import android.support.v7.app.AppCompatActivity;
 

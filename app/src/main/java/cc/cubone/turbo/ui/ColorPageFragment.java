@@ -1,4 +1,4 @@
-package cc.cubone.turbo.test;
+package cc.cubone.turbo.ui;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,12 +7,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import cc.cubone.turbo.R;
-import cc.cubone.turbo.base.BaseFragment;
+import cc.cubone.turbo.ui.base.BaseFragment;
 
 /**
  * Test fragment.
  */
-public class TestFragment extends BaseFragment {
+public class ColorPageFragment extends BaseFragment {
 
     public static final int RED = 0xFFE57373;
     public static final int PINK = 0xFFF06292;
@@ -26,15 +26,15 @@ public class TestFragment extends BaseFragment {
     private int mColor;
     private String mTitle;
 
-    public TestFragment() {
+    public ColorPageFragment() {
     }
 
-    public static TestFragment newInstance(int page, int color) {
+    public static ColorPageFragment newInstance(int page, int color) {
         return newInstance(page, color, "Page " + page);
     }
 
-    public static TestFragment newInstance(int page, int color, String title) {
-        TestFragment fragment = new TestFragment();
+    public static ColorPageFragment newInstance(int page, int color, String title) {
+        ColorPageFragment fragment = new ColorPageFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
         args.putInt(ARG_COLOR, color);
@@ -56,7 +56,7 @@ public class TestFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_test, container, false);
+        return inflater.inflate(R.layout.fragment_color_page, container, false);
     }
 
     @Override

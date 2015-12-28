@@ -28,14 +28,14 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import cc.cubone.turbo.R;
-import cc.cubone.turbo.base.BaseActivity;
 import cc.cubone.turbo.ui.arch.ArchFragment;
+import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.ui.fever.FeverFragment;
 import cc.cubone.turbo.ui.support.SupportFragment;
 import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
-import static cc.cubone.turbo.test.TestFragment.PINK;
-import static cc.cubone.turbo.test.TestFragment.PURPLE;
+import static cc.cubone.turbo.ui.ColorPageFragment.PINK;
+import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
 
 /**
  * Main activity.
