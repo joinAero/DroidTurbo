@@ -28,3 +28,8 @@
 * [RecyclerView](http://developer.android.com/reference/android/support/v7/widget/RecyclerView.html)
 * [Creating Lists and Cards](http://developer.android.com/training/material/lists-cards.html)
 * [Using the RecyclerView](https://guides.codepath.com/android/Using-the-RecyclerView)
+
+### CardView
+
+* [CardView](http://developer.android.com/reference/android/support/v7/widget/CardView.html)
+* [Using the CardView](https://guides.codepath.com/android/Using-the-CardView)

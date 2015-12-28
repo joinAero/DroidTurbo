@@ -11,11 +11,11 @@ import android.support.v4.view.ViewPager;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.base.BaseTabFragment;
 import cc.cubone.turbo.test.TestFragment;
+import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
 import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
 import static cc.cubone.turbo.test.TestFragment.PINK;
 import static cc.cubone.turbo.test.TestFragment.PURPLE;
-import static cc.cubone.turbo.test.TestFragment.RED;
 
 /**
  * Fragment for practicing new APIs in support libraries.
@@ -65,7 +65,7 @@ public class SupportFragment extends BaseTabFragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return TestFragment.newInstance(0, RED);
+                case 0: return RecyclerFragment.newInstance();
                 case 1: return TestFragment.newInstance(1, PINK);
                 case 2: return TestFragment.newInstance(2, PURPLE);
                 default: return null;
@@ -73,13 +73,22 @@ public class SupportFragment extends BaseTabFragment {
         }
 
         @Override
-        public int getTabIcon(int position) {
+        public CharSequence getTabText(int position) {
             switch (position) {
+                case 0: return "Recycler";
+                default: return "Tab " + position;
+            }
+        }
+
+        @Override
+        public int getTabIcon(int position) {
+            /*switch (position) {
                 case 0: return R.drawable.ic_apps;
                 case 1: return R.drawable.ic_apps;
                 case 2: return R.drawable.ic_apps;
                 default: return 0;
-            }
+            }*/
+            return 0;
         }
     }
 
