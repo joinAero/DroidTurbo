@@ -1,6 +1,7 @@
 package cc.cubone.turbo.core.util;
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -267,7 +268,9 @@ public final class Log {
         private int mLogLevel = INFO;
 
         public FileChannel(Context context) {
-            this(context, DirUtils.getExternalPackageDir(context));
+            // Default filepath for example: /storage/emulated/0/.cc.cubone.example
+            this(context, new File(Environment.getExternalStorageDirectory(),
+                    '.' + context.getPackageName()));
         }
 
         public FileChannel(Context context, File logPath) {
