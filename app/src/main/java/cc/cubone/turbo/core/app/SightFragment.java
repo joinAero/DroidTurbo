@@ -81,11 +81,6 @@ public class SightFragment extends Fragment {
     protected void onUserFirstSight() {
     }
 
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-    }
-
     /**
      * Called when the visible state to user has been changed.
      */
