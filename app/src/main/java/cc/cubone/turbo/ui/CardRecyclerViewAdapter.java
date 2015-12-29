@@ -1,6 +1,8 @@
 package cc.cubone.turbo.ui;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -14,13 +16,19 @@ import java.util.List;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.model.Card;
 
-public class CardRecyclerViewAdapter extends
-        RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> {
+public class CardRecyclerViewAdapter<Data extends Card> extends
+        RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
-    private List<Card> mCardList;
+    private List<Data> mCardList;
 
-    public CardRecyclerViewAdapter(List<Card> cardList) {
+    private OnItemClickListener<Data> mOnItemClickListener;
+
+    public CardRecyclerViewAdapter(@NonNull List<Data> cardList) {
         mCardList = cardList;
+    }
+
+    public void setOnItemClickListener(@Nullable OnItemClickListener<Data> listener) {
+        mOnItemClickListener = listener;
     }
 
     @Override
@@ -28,6 +36,7 @@ public class CardRecyclerViewAdapter extends
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         View v = inflater.inflate(R.layout.item_card, parent, false);
+        v.setOnClickListener(this);
         return new ViewHolder(v);
     }
 
@@ -35,6 +44,8 @@ public class CardRecyclerViewAdapter extends
     public void onBindViewHolder(ViewHolder holder, int position) {
         Card card = mCardList.get(position);
         //if (card == null) return;
+
+        holder.itemView.setTag(position);
 
         TextView titleView = holder.titleView;
         TextView descView = holder.descView;
@@ -52,14 +63,22 @@ public class CardRecyclerViewAdapter extends
 
     @Override
     public int getItemCount() {
-        return mCardList == null ? 0 : mCardList.size();
+        return mCardList.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {
+            final int position = (int) v.getTag();
+            mOnItemClickListener.onItemClick(v, position, mCardList.get(position));
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView titleView;
-        public TextView descView;
-        public ImageView imageView;
+        public final TextView titleView;
+        public final TextView descView;
+        public final ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -68,6 +87,28 @@ public class CardRecyclerViewAdapter extends
             imageView = (ImageView) itemView.findViewById(R.id.image);
         }
 
+    }
+
+    public static interface OnItemClickListener<Data extends Card> {
+        void onItemClick(View view, int position, Data data);
+    }
+
+    public static class ActivityCard extends Card {
+
+        private Class<?> mActivity;
+
+        public ActivityCard(String title, String description, String imagePath, Class<?> activity) {
+            super(title, description, imagePath);
+            mActivity = activity;
+        }
+
+        public Class<?> getActivity() {
+            return mActivity;
+        }
+
+        public void setActivity(Class<?> activity) {
+            mActivity = activity;
+        }
     }
 
 }
