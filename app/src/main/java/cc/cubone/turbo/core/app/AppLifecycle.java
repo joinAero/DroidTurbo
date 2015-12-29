@@ -1,4 +1,4 @@
-package cc.cubone.turbo.core;
+package cc.cubone.turbo.core.app;
 
 import android.app.Activity;
 import android.app.Application;
