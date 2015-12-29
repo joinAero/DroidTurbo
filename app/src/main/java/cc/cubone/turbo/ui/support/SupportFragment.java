@@ -9,10 +9,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.ColorPageFragment;
 import cc.cubone.turbo.ui.base.BaseTabFragment;
 import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
-import cc.cubone.turbo.view.TabFragmentPagerAdapter;
 
 import static cc.cubone.turbo.ui.ColorPageFragment.PINK;
 import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;

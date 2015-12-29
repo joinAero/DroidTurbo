@@ -1,4 +1,4 @@
-package cc.cubone.turbo.util;
+package cc.cubone.turbo.core.util;
 
 import android.content.Context;
 import android.os.Build;

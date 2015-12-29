@@ -1,4 +1,4 @@
-package cc.cubone.turbo.view;
+package cc.cubone.turbo.core.view;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
