@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context="cc.cubone.turbo.ui.support.recycler.AllAppsActivity">
 
-    <include layout="@layout/toolbar_scroll" />
+    <include layout="@layout/toolbar" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler"
