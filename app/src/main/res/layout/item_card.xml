@@ -18,8 +18,9 @@
         <ImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="top"
+            android:minHeight="50dp"
             android:background="@color/colorPrimary" />
 
         <TextView
@@ -31,6 +32,7 @@
             android:textColor="@android:color/white"
             android:textSize="24sp"
             android:ellipsize="end"
+            android:singleLine="true"
             android:text="Title" />
 
         <TextView
