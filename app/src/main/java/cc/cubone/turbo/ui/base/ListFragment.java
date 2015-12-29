@@ -1,7 +1,6 @@
 package cc.cubone.turbo.ui.base;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +8,9 @@ import android.view.ViewGroup;
 
 import cc.cubone.turbo.R;
 
-public class BaseListFragment extends BaseFragment {
+public class ListFragment extends BaseFragment {
 
-    public BaseListFragment() {
+    public ListFragment() {
     }
 
     @Override
@@ -23,10 +22,10 @@ public class BaseListFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         RecyclerView recycler = (RecyclerView) view.findViewById(R.id.recycler);
-        onLayoutCreated(recycler, savedInstanceState);
+        onViewPrepared(recycler);
     }
 
-    public void onLayoutCreated(RecyclerView recyclerView, @Nullable Bundle savedInstanceState) {
+    public void onViewPrepared(RecyclerView recyclerView) {
     }
 
 }

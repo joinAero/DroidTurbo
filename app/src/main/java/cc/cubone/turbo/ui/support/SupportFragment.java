@@ -1,8 +1,6 @@
 package cc.cubone.turbo.ui.support;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,7 +9,7 @@ import android.support.v4.view.ViewPager;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.ColorPageFragment;
-import cc.cubone.turbo.ui.base.BaseTabFragment;
+import cc.cubone.turbo.ui.base.TabSightFragment;
 import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
 
 import static cc.cubone.turbo.ui.ColorPageFragment.PINK;
@@ -22,7 +20,7 @@ import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
  *
  * <p>See `Support.md` for more introductions.
  */
-public class SupportFragment extends BaseTabFragment {
+public class SupportFragment extends TabSightFragment {
 
     public SupportFragment() {
     }
@@ -32,16 +30,11 @@ public class SupportFragment extends BaseTabFragment {
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public void onLayoutCreated(TabLayout tabLayout, ViewPager viewPager,
-                                @Nullable Bundle savedInstanceState) {
+    public void onViewPrepared(TabLayout tabLayout, ViewPager viewPager) {
         SupportPagerAdapter adapter = new SupportPagerAdapter(getChildFragmentManager(),
                 getActivity());
         viewPager.setAdapter(adapter);
+        viewPager.setOffscreenPageLimit(3);
 
         tabLayout.setupWithViewPager(viewPager);
 

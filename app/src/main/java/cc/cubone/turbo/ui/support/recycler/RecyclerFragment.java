@@ -1,7 +1,5 @@
 package cc.cubone.turbo.ui.support.recycler;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -12,10 +10,10 @@ import java.util.List;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.ui.CardRecyclerViewAdapter;
 import cc.cubone.turbo.ui.CardRecyclerViewAdapter.ActivityCard;
-import cc.cubone.turbo.ui.base.BaseListFragment;
+import cc.cubone.turbo.ui.base.ListSightFragment;
 import cc.cubone.turbo.util.ContextUtils;
 
-public class RecyclerFragment extends BaseListFragment implements
+public class RecyclerFragment extends ListSightFragment implements
         CardRecyclerViewAdapter.OnItemClickListener<ActivityCard> {
 
     public RecyclerFragment() {
@@ -26,7 +24,7 @@ public class RecyclerFragment extends BaseListFragment implements
     }
 
     @Override
-    public void onLayoutCreated(RecyclerView recyclerView, @Nullable Bundle savedInstanceState) {
+    public void onViewPrepared(RecyclerView recyclerView) {
         CardRecyclerViewAdapter<ActivityCard> adapter = new CardRecyclerViewAdapter<>(createCards());
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);

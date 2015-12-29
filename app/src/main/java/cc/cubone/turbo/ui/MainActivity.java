@@ -68,6 +68,8 @@ public class MainActivity extends BaseActivity
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
         pager.setAdapter(adapter);
+        // retain all pagers
+        pager.setOffscreenPageLimit(adapter.getCount());
 
         TabLayout barTabs = (TabLayout) bar.findViewById(R.id.tab);
         barTabs.setupWithViewPager(pager);
