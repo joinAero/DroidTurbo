@@ -1,8 +1,8 @@
 package cc.cubone.turbo.ui.base;
 
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -42,7 +42,8 @@ public class BaseActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
-            initSystemUI();
+            initSystemUI(Color.TRANSPARENT);
+            //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
         }
     }
 
@@ -54,7 +55,7 @@ public class BaseActivity extends AppCompatActivity {
      * <li><a href="http://developer.android.com/training/system-ui/immersive.html">Using Immersive Full-Screen Mode</a>
      * </ul>
      */
-    private void initSystemUI() {
+    protected void initSystemUI(int color) {
         Window win = getWindow();
 
         // StatusBar
@@ -68,14 +69,6 @@ public class BaseActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
-            // get theme color here
-            /*TypedArray array = getTheme().obtainStyledAttributes(new int[]{
-                    android.R.attr.colorPrimary,
-            });
-            int colorPrimary = array.getColor(0, Color.TRANSPARENT);
-            array.recycle();*/
-
-            int color = ContextCompat.getColor(this, R.color.colorPrimary);
             win.setStatusBarColor(color);
         }
 
@@ -92,8 +85,8 @@ public class BaseActivity extends AppCompatActivity {
                     | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                     | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            win.setStatusBarColor(Color.TRANSPARENT);
-            win.setNavigationBarColor(Color.TRANSPARENT);
+            win.setStatusBarColor(color);
+            win.setNavigationBarColor(color);
         }*/
 
         // Reference:

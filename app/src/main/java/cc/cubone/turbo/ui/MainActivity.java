@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity
         drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
     }
 
-    public void initViews() {
+    private void initViews() {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
