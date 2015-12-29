@@ -19,12 +19,12 @@ import cc.cubone.turbo.R;
 public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final Context mContext;
-    private final int mTabResId;
+    private final int mResource;
 
-    public TabFragmentPagerAdapter(FragmentManager fm, Context ctx, @LayoutRes int tabResId) {
+    public TabFragmentPagerAdapter(FragmentManager fm, Context ctx, @LayoutRes int res) {
         super(fm);
         mContext = ctx;
-        mTabResId = tabResId;
+        mResource = res;
     }
 
     @Override
@@ -64,7 +64,7 @@ public abstract class TabFragmentPagerAdapter extends FragmentPagerAdapter {
         //tab.setTag(getTabText(position)); // android.R.id.text1
         //tab.setIcon(getTabIcon(position)); // android.R.id.icon
 
-        View v = LayoutInflater.from(mContext).inflate(mTabResId, null);
+        View v = LayoutInflater.from(mContext).inflate(mResource, null);
 
         TextView textView = (TextView) v.findViewById(R.id.text);
         if (textView != null) {
