@@ -1,9 +1,11 @@
 package cc.cubone.turbo.ui.support.recycler;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +14,7 @@ import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.ui.base.ListSightFragment;
 import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.view.CardRecyclerViewAdapter;
+import pl.droidsonroids.gif.GifDrawable;
 
 public class RecyclerFragment extends ListSightFragment implements
         CardRecyclerViewAdapter.OnItemClickListener<DataCard<Class>> {
@@ -34,12 +37,19 @@ public class RecyclerFragment extends ListSightFragment implements
 
     private List<DataCard<Class>> createCards() {
         List<DataCard<Class>> cards = new ArrayList<>();
-        cards.add(new DataCard<Class>(
-                getString(R.string.all_apps),
-                "Show all apps in list or grid.",
-                null,
-                AllAppsActivity.class));
+        cards.add(createCard(R.string.all_apps, "Show all apps in list or grid.",
+                "all_apps.gif", AllAppsActivity.class));
         return cards;
+    }
+
+    private DataCard<Class> createCard(int titleId, String desc, String gifAsset, Class<?> cls) {
+        Drawable drawable = null;
+        try {
+            drawable = new GifDrawable(getActivity().getAssets(), gifAsset);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return new DataCard<Class>(getString(titleId), desc, drawable, cls);
     }
 
     @Override
