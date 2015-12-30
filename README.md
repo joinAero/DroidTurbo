@@ -29,3 +29,8 @@ Samples about fever things.
 ### 3) Architecture
 
 Samples about latest architectures.
+
+
+## License
+
+[Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0)
