@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -26,6 +27,8 @@ import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity {
 
+    private final int SPAN_COUNT = 3;
+
     private RecyclerView mRecyclerView;
     private PrefAllApps mPrefAllApps;
 
@@ -40,9 +43,7 @@ public class AllAppsActivity extends BaseActivity {
 
     private void initViews() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setHasFixedSize(true);
-        updateDisplay(mPrefAllApps.getDisplay());
+        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplay());
     }
 
     private void updateLayout(int layout) {
@@ -51,6 +52,7 @@ public class AllAppsActivity extends BaseActivity {
             return; // same layout
         }
         mPrefAllApps.setLayout(layout);
+        updateAdapter(layout, mPrefAllApps.getDisplay());
     }
 
     private void updateDisplay(int display) {
@@ -61,10 +63,25 @@ public class AllAppsActivity extends BaseActivity {
             }
         }
         mPrefAllApps.setDisplay(display);
+        updateAdapter(mPrefAllApps.getLayout(), display);
+    }
+
+    private void updateAdapter(int layout, int display) {
+        int layoutId;
+        if (layout == LAYOUT_LIST) {
+            layoutId = R.layout.item_app;
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            mRecyclerView.setHasFixedSize(true);
+        } else { // grid
+            layoutId = R.layout.item_app_cell;
+            mRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(
+                    SPAN_COUNT, StaggeredGridLayoutManager.VERTICAL));
+            mRecyclerView.setHasFixedSize(false);
+        }
 
         boolean onlyUser = (display == DISPLAY_USER);
         CardRecyclerViewAdapter<DataCard<ApplicationInfo>> adapter =
-                new CardRecyclerViewAdapter<>(createCards(onlyUser), R.layout.item_app);
+                new CardRecyclerViewAdapter<>(createCards(onlyUser), layoutId);
         mRecyclerView.setAdapter(adapter);
     }
 

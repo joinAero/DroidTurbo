@@ -47,9 +47,21 @@ public class CardRecyclerViewAdapter<Data extends Card> extends
         Card card = mCardList.get(position);
         //if (card == null) return;
         holder.itemView.setTag(position);
-        holder.titleView.setText(card.getTitle());
-        holder.descView.setText(card.getDescription());
-        holder.imageView.setImageDrawable(card.getDrawable());
+
+        TextView titleView = holder.titleView;
+        if (titleView != null) {
+            titleView.setText(card.getTitle());
+        }
+
+        TextView descView = holder.descView;
+        if (descView != null) {
+            descView.setText(card.getDescription());
+        }
+
+        ImageView imageView = holder.imageView;
+        if (imageView != null) {
+            imageView.setImageDrawable(card.getDrawable());
+        }
     }
 
     @Override
