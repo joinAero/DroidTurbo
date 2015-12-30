@@ -1,13 +1,13 @@
-package cc.cubone.turbo.core.persistence;
+package cc.cubone.turbo.persistence;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public abstract class Dict {
+/*package*/ abstract class Pref {
 
     protected SharedPreferences mSp;
 
-    public Dict(Context context, String name) {
+    public Pref(Context context, String name) {
         mSp = context.getSharedPreferences(name, Context.MODE_PRIVATE);
     }
 

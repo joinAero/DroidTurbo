@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Layout"
+        android:orderInCategory="100"
+        android:enabled="false" />
+    <group
+        android:id="@+id/group_layout"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/layout_list"
+            android:orderInCategory="101"
+            android:title="List" />
+        <item
+            android:id="@+id/layout_grid"
+            android:orderInCategory="102"
+            android:title="Grid" />
+    </group>
+    <item android:title="Display"
+        android:orderInCategory="200"
+        android:enabled="false" />
+    <!-- need unique IDs for two single groups -->
+    <group
+        android:id="@+id/group_display"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/display_all"
+            android:orderInCategory="201"
+            android:title="All Apps" />
+        <item
+            android:id="@+id/display_user"
+            android:orderInCategory="202"
+            android:title="User Apps" />
+    </group>
+</menu>
+<!--
+* Menus: http://developer.android.com/guide/topics/ui/menus.html
+* Menu Resource: http://developer.android.com/guide/topics/resources/menu-resource.html
+-->
