@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,14 +34,6 @@ public class AllAppsActivity extends BaseActivity {
 
         recycler.setAdapter(new RecyclerViewAdapter());
         recycler.setLayoutManager(new LinearLayoutManager(this));
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: finish(); return true;
-            default: return super.onOptionsItemSelected(item);
-        }
     }
 
     @Override
