@@ -1,7 +1,11 @@
 package cc.cubone.turbo.ui.support.recycler;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -20,7 +25,9 @@ import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.persistence.PrefAllApps;
 import cc.cubone.turbo.receiver.PackageCallback;
 import cc.cubone.turbo.receiver.PackageListener;
+import cc.cubone.turbo.ui.ActionDialogFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
+import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.ToastUtils;
 import cc.cubone.turbo.view.CardRecyclerViewAdapter;
 
@@ -29,7 +36,8 @@ import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_USER;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
-public class AllAppsActivity extends BaseActivity implements PackageCallback {
+public class AllAppsActivity extends BaseActivity implements PackageCallback,
+        CardRecyclerViewAdapter.OnItemClickListener<DataCard<ApplicationInfo>> {
 
     private final int SPAN_COUNT = 3;
 
@@ -100,6 +108,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback {
         boolean onlyUser = (display == DISPLAY_USER);
         CardRecyclerViewAdapter<DataCard<ApplicationInfo>> adapter =
                 new CardRecyclerViewAdapter<>(createCards(onlyUser), layoutId);
+        adapter.setOnItemClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
         // update title appended with number of apps
@@ -112,7 +121,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback {
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
         for (ApplicationInfo info : packages) {
             if (onlyUser) {
-                if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                if (isSystemApp(info)) {
                     continue; // System apps
                 }
             }
@@ -129,6 +138,62 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback {
             }
         });
         return cards;
+    }
+
+    private boolean isSystemApp(ApplicationInfo info) {
+        return (info.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
+    }
+
+    @Override
+    public void onItemClick(View view, int position, DataCard<ApplicationInfo> data) {
+        final String appName = data.getTitle();
+        final ApplicationInfo info = data.getData();
+        final Intent intent = getPackageManager().getLaunchIntentForPackage(info.packageName);
+
+        ArrayList<Integer> actions = new ArrayList<>();
+        if (intent != null) {
+            actions.add(R.string.launch);
+        }
+        if (!isSystemApp(info)) {
+            actions.add(R.string.uninstall);
+        }
+        actions.add(R.string.copy_app_name);
+        actions.add(R.string.copy_package_name);
+
+        final int size = actions.size();
+        int[] ints = new int[size];
+        for (int i = 0; i < size; i++) {
+            ints[i] = actions.get(i);
+        }
+
+        ActionDialogFragment.make(data.getTitle(), ints).setOnActionSelectListener(
+                new ActionDialogFragment.OnActionSelectListener() {
+                    AllAppsActivity context = AllAppsActivity.this;
+                    @Override
+                    public void onActionSelect(ActionDialogFragment dialog, int action) {
+                        switch (action) {
+                            case R.string.launch: launch(); break;
+                            case R.string.uninstall: uninstall(); break;
+                            case R.string.copy_app_name: copy(appName); break;
+                            case R.string.copy_package_name: copy(info.packageName); break;
+                        }
+                        dialog.dismiss();
+                    }
+                    private void launch() {
+                        ContextUtils.startActivity(context, intent);
+                    }
+                    private void uninstall() {
+                        Uri uri = Uri.fromParts("package", info.packageName, null);
+                        Intent intent = new Intent(Intent.ACTION_DELETE, uri);
+                        ContextUtils.startActivity(context, intent);
+                    }
+                    private void copy(String text) {
+                        // Copy and Paste: http://developer.android.com/guide/topics/text/copy-paste.html
+                        ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        ClipData clip = ClipData.newPlainText(text, text);
+                        clipboard.setPrimaryClip(clip);
+                    }
+                }).show(getSupportFragmentManager());
     }
 
     @Override
