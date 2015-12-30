@@ -3,6 +3,7 @@ package cc.cubone.turbo.ui.base;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.ColorInt;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -55,7 +56,7 @@ public class BaseActivity extends AppCompatActivity {
      * <li><a href="http://developer.android.com/training/system-ui/immersive.html">Using Immersive Full-Screen Mode</a>
      * </ul>
      */
-    protected void initSystemUI(int color) {
+    protected void initSystemUI(@ColorInt int color) {
         Window win = getWindow();
 
         // StatusBar
