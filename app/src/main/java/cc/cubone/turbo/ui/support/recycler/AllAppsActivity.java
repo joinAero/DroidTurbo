@@ -3,6 +3,7 @@ package cc.cubone.turbo.ui.support.recycler;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -46,6 +47,12 @@ public class AllAppsActivity extends BaseActivity {
         updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplay());
     }
 
+    private void updateTitle(CharSequence title) {
+        ActionBar ab = getSupportActionBar();
+        if (ab == null) return;
+        ab.setTitle(title);
+    }
+
     private void updateLayout(int layout) {
         int layoutNow = mPrefAllApps.getLayout();
         if (layout == layoutNow) {
@@ -83,6 +90,9 @@ public class AllAppsActivity extends BaseActivity {
         CardRecyclerViewAdapter<DataCard<ApplicationInfo>> adapter =
                 new CardRecyclerViewAdapter<>(createCards(onlyUser), layoutId);
         mRecyclerView.setAdapter(adapter);
+
+        // update title appended with number of apps
+        updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
     }
 
     private List<DataCard<ApplicationInfo>> createCards(boolean onlyUser) {
