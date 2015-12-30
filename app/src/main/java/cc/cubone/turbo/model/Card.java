@@ -1,18 +1,20 @@
 package cc.cubone.turbo.model;
 
+import android.graphics.drawable.Drawable;
+
 public class Card {
 
     private String mTitle;
     private String mDescription;
-    private String mImagePath;
+    private Drawable mDrawable;
 
     public Card() {
     }
 
-    public Card(String title, String description, String imagePath) {
+    public Card(String title, String description, Drawable drawable) {
         mTitle = title;
         mDescription = description;
-        mImagePath = imagePath;
+        mDrawable = drawable;
     }
 
 
@@ -32,12 +34,11 @@ public class Card {
         mDescription = description;
     }
 
-    public String getImagePath() {
-        return mImagePath;
+    public Drawable getDrawable() {
+        return mDrawable;
     }
 
-    public void setImagePath(String imagePath) {
-        mImagePath = imagePath;
+    public void setDrawable(Drawable drawable) {
+        mDrawable = drawable;
     }
-
 }

@@ -1,17 +1,20 @@
 package cc.cubone.turbo.ui.support.recycler;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.ui.base.BaseActivity;
+import cc.cubone.turbo.view.CardRecyclerViewAdapter;
 
 public class AllAppsActivity extends BaseActivity {
 
@@ -23,57 +26,44 @@ public class AllAppsActivity extends BaseActivity {
         initViews();
     }
 
-    @Override
-    protected void onToolbarCreated(Toolbar toolbar) {
-        super.onToolbarCreated(toolbar);
-    }
-
     private void initViews() {
         RecyclerView recycler = (RecyclerView) findViewById(R.id.recycler);
-        recycler.setHasFixedSize(true);
-
-        recycler.setAdapter(new RecyclerViewAdapter());
+        CardRecyclerViewAdapter<DataCard<ApplicationInfo>> adapter = new CardRecyclerViewAdapter<>(
+                createCards(), R.layout.item_app);
+        recycler.setAdapter(adapter);
         recycler.setLayoutManager(new LinearLayoutManager(this));
+        recycler.setHasFixedSize(true);
+    }
+
+    private List<DataCard<ApplicationInfo>> createCards() {
+        List<DataCard<ApplicationInfo>> cards = new ArrayList<>();
+        final PackageManager pm = getPackageManager();
+        List<ApplicationInfo> packages = pm.getInstalledApplications(0);
+        for (ApplicationInfo info : packages) {
+            if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 1) {
+                // System apps
+            } else {
+                // User apps
+                cards.add(new DataCard<>(
+                        info.loadLabel(pm).toString(),
+                        info.packageName,
+                        info.loadIcon(pm),
+                        info));
+            }
+        }
+        Collections.sort(cards, new Comparator<DataCard<ApplicationInfo>>() {
+            @Override
+            public int compare(DataCard<ApplicationInfo> lhs, DataCard<ApplicationInfo> rhs) {
+                return lhs.getTitle().compareTo(rhs.getTitle());
+            }
+        });
+        return cards;
     }
 
     @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
-    public static class RecyclerViewAdapter extends
-            RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            TextView v = new TextView(parent.getContext());
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
-            TextView v = (TextView) holder.itemView;
-            int height = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50,
-                    v.getResources().getDisplayMetrics());
-            v.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height));
-            v.setGravity(Gravity.CENTER_VERTICAL);
-            v.setText("Item " + position);
-        }
-
-        @Override
-        public int getItemCount() {
-            return 20;
-        }
-
-        public static class ViewHolder extends RecyclerView.ViewHolder {
-
-            public ViewHolder(View itemView) {
-                super(itemView);
-            }
-
-        }
-
     }
 
 }

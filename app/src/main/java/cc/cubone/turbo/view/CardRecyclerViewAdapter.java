@@ -1,10 +1,10 @@
 package cc.cubone.turbo.view;
 
 import android.content.Context;
+import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +20,13 @@ public class CardRecyclerViewAdapter<Data extends Card> extends
         RecyclerView.Adapter<CardRecyclerViewAdapter.ViewHolder> implements View.OnClickListener {
 
     private List<Data> mCardList;
+    private int mResource;
 
     private OnItemClickListener<Data> mOnItemClickListener;
 
-    public CardRecyclerViewAdapter(@NonNull List<Data> cardList) {
+    public CardRecyclerViewAdapter(@NonNull List<Data> cardList, @LayoutRes int resource) {
         mCardList = cardList;
+        mResource = resource;
     }
 
     public void setOnItemClickListener(@Nullable OnItemClickListener<Data> listener) {
@@ -35,7 +37,7 @@ public class CardRecyclerViewAdapter<Data extends Card> extends
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        View v = inflater.inflate(R.layout.item_card, parent, false);
+        View v = inflater.inflate(mResource, parent, false);
         v.setOnClickListener(this);
         return new ViewHolder(v);
     }
@@ -44,21 +46,10 @@ public class CardRecyclerViewAdapter<Data extends Card> extends
     public void onBindViewHolder(ViewHolder holder, int position) {
         Card card = mCardList.get(position);
         //if (card == null) return;
-
         holder.itemView.setTag(position);
-
-        TextView titleView = holder.titleView;
-        TextView descView = holder.descView;
-        ImageView imageView = holder.imageView;
-
-        titleView.setText(card.getTitle());
-        descView.setText(card.getDescription());
-
-        String imagePath = card.getImagePath();
-        if (TextUtils.isEmpty(imagePath)) {
-            imageView.setImageDrawable(null);
-        } else {
-        }
+        holder.titleView.setText(card.getTitle());
+        holder.descView.setText(card.getDescription());
+        holder.imageView.setImageDrawable(card.getDrawable());
     }
 
     @Override

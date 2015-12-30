@@ -25,7 +25,8 @@ public class RecyclerFragment extends ListSightFragment implements
 
     @Override
     public void onViewPrepared(RecyclerView recyclerView) {
-        CardRecyclerViewAdapter<DataCard<Class>> adapter = new CardRecyclerViewAdapter<>(createCards());
+        CardRecyclerViewAdapter<DataCard<Class>> adapter = new CardRecyclerViewAdapter<>(
+                createCards(), R.layout.item_card);
         adapter.setOnItemClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -33,7 +34,11 @@ public class RecyclerFragment extends ListSightFragment implements
 
     private List<DataCard<Class>> createCards() {
         List<DataCard<Class>> cards = new ArrayList<>();
-        cards.add(new DataCard<Class>("All Apps", "Show all apps in list or grid.", null, AllAppsActivity.class));
+        cards.add(new DataCard<Class>(
+                getString(R.string.all_apps),
+                "Show all apps in list or grid.",
+                null,
+                AllAppsActivity.class));
         return cards;
     }
 
