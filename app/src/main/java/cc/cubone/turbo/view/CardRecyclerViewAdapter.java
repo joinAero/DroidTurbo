@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui;
+package cc.cubone.turbo.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -89,26 +89,8 @@ public class CardRecyclerViewAdapter<Data extends Card> extends
 
     }
 
-    public static interface OnItemClickListener<Data extends Card> {
+    public interface OnItemClickListener<Data extends Card> {
         void onItemClick(View view, int position, Data data);
-    }
-
-    public static class ActivityCard extends Card {
-
-        private Class<?> mActivity;
-
-        public ActivityCard(String title, String description, String imagePath, Class<?> activity) {
-            super(title, description, imagePath);
-            mActivity = activity;
-        }
-
-        public Class<?> getActivity() {
-            return mActivity;
-        }
-
-        public void setActivity(Class<?> activity) {
-            mActivity = activity;
-        }
     }
 
 }
