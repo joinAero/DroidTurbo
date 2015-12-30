@@ -18,7 +18,10 @@ import java.util.List;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.persistence.PrefAllApps;
+import cc.cubone.turbo.receiver.PackageCallback;
+import cc.cubone.turbo.receiver.PackageListener;
 import cc.cubone.turbo.ui.base.BaseActivity;
+import cc.cubone.turbo.util.ToastUtils;
 import cc.cubone.turbo.view.CardRecyclerViewAdapter;
 
 import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_ALL;
@@ -26,12 +29,14 @@ import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_USER;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
-public class AllAppsActivity extends BaseActivity {
+public class AllAppsActivity extends BaseActivity implements PackageCallback {
 
     private final int SPAN_COUNT = 3;
 
     private RecyclerView mRecyclerView;
     private PrefAllApps mPrefAllApps;
+
+    private PackageListener mPackageListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,11 +45,13 @@ public class AllAppsActivity extends BaseActivity {
         mPrefAllApps = new PrefAllApps(this);
         initToolbar();
         initViews();
+        mPackageListener = new PackageListener(this);
+        mPackageListener.register(this);
     }
 
     private void initViews() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
-        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplay());
+        updateAdapter();
     }
 
     private void updateTitle(CharSequence title) {
@@ -71,6 +78,10 @@ public class AllAppsActivity extends BaseActivity {
         }
         mPrefAllApps.setDisplay(display);
         updateAdapter(mPrefAllApps.getLayout(), display);
+    }
+
+    private void updateAdapter() {
+        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplay());
     }
 
     private void updateAdapter(int layout, int display) {
@@ -172,9 +183,44 @@ public class AllAppsActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPackageListener.unregister();
+        mPackageListener = null;
+    }
+
+    @Override
     public void finish() {
         super.finish();
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @Override
+    public void onPackageAdded(String packageName) {
+        ToastUtils.show(this, "add " + packageName);
+        updateAdapter();
+    }
+
+    @Override
+    public void onPackageChanged(String packageName) {
+        ToastUtils.show(this, "change " + packageName);
+        updateAdapter();
+    }
+
+    @Override
+    public void onPackageRemoved(String packageName) {
+        ToastUtils.show(this, "remove " + packageName);
+        updateAdapter();
+    }
+
+    @Override
+    public void onPackagesAvailable(String[] packages, boolean replacing) {
+        updateAdapter();
+    }
+
+    @Override
+    public void onPackagesUnavailable(String[] packages, boolean replacing) {
+        updateAdapter();
     }
 
 }
