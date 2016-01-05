@@ -324,7 +324,7 @@ public final class Log {
             if (suffix != null) {
                 name = LOG_PREFIX + '_' + suffix;
             }
-            String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
+            String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmssSSS")).format(new Date());
             return name + '_' + timeStamp;
         }
 
