@@ -11,6 +11,7 @@
 
     <!-- actions in all apps -->
     <string name="launch">Launch</string>
+    <string name="details">Details</string>
     <string name="uninstall">Uninstall</string>
     <string name="copy_app_name">Copy app name</string>
     <string name="copy_package_name">Copy package name</string>

@@ -148,12 +148,18 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     public void onItemClick(View view, int position, DataCard<ApplicationInfo> data) {
         final String appName = data.getTitle();
         final ApplicationInfo info = data.getData();
-        final Intent intent = getPackageManager().getLaunchIntentForPackage(info.packageName);
+
+        final Intent launchIntent = getPackageManager()
+                .getLaunchIntentForPackage(info.packageName);
+        final Intent detailsIntent = new Intent(
+                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Uri.parse("package:" + info.packageName));
 
         ArrayList<Integer> actions = new ArrayList<>();
-        if (intent != null) {
+        if (launchIntent != null) {
             actions.add(R.string.launch);
         }
+        actions.add(R.string.details);
         if (!isSystemApp(info)) {
             actions.add(R.string.uninstall);
         }
@@ -173,6 +179,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
                     public void onActionSelect(ActionDialogFragment dialog, int action) {
                         switch (action) {
                             case R.string.launch: launch(); break;
+                            case R.string.details: details(); break;
                             case R.string.uninstall: uninstall(); break;
                             case R.string.copy_app_name: copy(appName); break;
                             case R.string.copy_package_name: copy(info.packageName); break;
@@ -180,7 +187,10 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
                         dialog.dismiss();
                     }
                     private void launch() {
-                        ContextUtils.startActivity(context, intent);
+                        ContextUtils.startActivity(context, launchIntent);
+                    }
+                    private void details() {
+                        ContextUtils.startActivity(context, detailsIntent);
                     }
                     private void uninstall() {
                         Uri uri = Uri.fromParts("package", info.packageName, null);

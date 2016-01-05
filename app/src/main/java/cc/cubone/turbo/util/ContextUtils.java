@@ -6,28 +6,31 @@ import android.content.Intent;
 
 public class ContextUtils {
 
-    public static void startActivity(Context context, Class<?> activity) {
-        startActivity(context, activity, Intent.FLAG_ACTIVITY_CLEAR_TOP
+    public static boolean startActivity(Context context, Class<?> activity) {
+        return startActivity(context, activity, Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
-    public static void startActivity(Context context, Class<?> activity, int flags) {
-        Intent i = new Intent(context, activity);
-        startActivity(context, i, flags);
+    public static boolean startActivity(Context context, Class<?> activity, int flags) {
+        return startActivity(context, new Intent(context, activity), flags);
     }
 
-    public static void startActivity(Context context, Intent intent) {
-        startActivity(context, intent, Intent.FLAG_ACTIVITY_CLEAR_TOP
+    public static boolean startActivity(Context context, Intent intent) {
+        return startActivity(context, intent, Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_SINGLE_TOP);
     }
 
-    public static void startActivity(Context context, Intent intent, int flags) {
-        if (context == null) return;
+    public static boolean startActivity(Context context, Intent intent, int flags) {
+        if (context == null) {
+            return false;
+        }
         intent.addFlags(flags);
         try {
             context.startActivity(intent);
+            return true;
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();
+            return false;
         }
     }
 
