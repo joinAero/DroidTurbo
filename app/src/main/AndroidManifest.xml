@@ -2,6 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cc.cubone.turbo">
 
+    <!--
+    * Dashboards: http://developer.android.com/about/dashboards/index.html
+    -->
+
+    <supports-screens
+        android:smallScreens="true"
+        android:normalScreens="true"
+        android:largeScreens="true"
+        android:xlargeScreens="true"  />
+
+    <!--
+    Preference:
+    * System Permissions: http://developer.android.com/guide/topics/security/permissions.html
+    * Working with System Permissions: http://developer.android.com/training/permissions/index.html
+    -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".MyApplication"
         android:allowBackup="false"
