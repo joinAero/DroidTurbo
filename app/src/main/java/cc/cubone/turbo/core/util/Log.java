@@ -1,7 +1,6 @@
 package cc.cubone.turbo.core.util;
 
 import android.content.Context;
-import android.os.Environment;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,6 +22,8 @@ import java.util.HashMap;
  *     Log.addChannel(fileChannel);
  * }
  * </pre>
+ *
+ * <p>Requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} for file channel.
  */
 public final class Log {
 
@@ -249,7 +250,7 @@ public final class Log {
      */
     public static final class FileChannel extends LogChannel {
 
-        static final String LOG_NAME = "log";
+        static final String LOG_PREFIX = "log";
 
         static final SimpleDateFormat mDateFormat;
         static final HashMap<Integer, Character> mLogToken;
@@ -267,10 +268,10 @@ public final class Log {
         private File mLogFile;
         private int mLogLevel = INFO;
 
+        private boolean mParentDirsCreated = false;
+
         public FileChannel(Context context) {
-            // Default filepath for example: /storage/emulated/0/.cc.cubone.example
-            this(context, new File(Environment.getExternalStorageDirectory(),
-                    '.' + context.getPackageName()));
+            this(context, new File(DirUtils.getExternalPackageDir(context), "log"));
         }
 
         public FileChannel(Context context, File logPath) {
@@ -285,15 +286,8 @@ public final class Log {
          * Sets the log file that you wanna save as.
          */
         public FileChannel setLogFile(File logFile) {
-            if (logFile.exists() && !logFile.isFile()) {
-                throw new IllegalArgumentException(logFile + " is not a file.");
-            }
-            final File parent = logFile.getParentFile();
-            if (parent != null) {
-                //noinspection ResultOfMethodCallIgnored
-                parent.mkdirs();
-            }
             mLogFile = logFile;
+            mParentDirsCreated = false;
             return this;
         }
 
@@ -314,11 +308,6 @@ public final class Log {
             return this;
         }
 
-        private String logName(Context context) {
-            String suffix = ProcessUtils.procNameSuffix(context);
-            return suffix == null ? LOG_NAME : LOG_NAME + '_' + suffix;
-        }
-
         public File getLogFile() {
             return mLogFile;
         }
@@ -327,11 +316,36 @@ public final class Log {
             return mLogLevel;
         }
 
+        private String logName(Context context) {
+            String suffix = ProcessUtils.procNameSuffix(context);
+            String name = LOG_PREFIX;
+            if (suffix != null) {
+                name = LOG_PREFIX + '_' + suffix;
+            }
+            String timeStamp = (new SimpleDateFormat("yyyyMMdd_HHmmss")).format(new Date());
+            return name + '_' + timeStamp;
+        }
+
+        private void createParentDirs(File file) throws IOException {
+            if (mParentDirsCreated) {
+                return;
+            }
+            final File parent = file.getParentFile();
+            if (parent != null) {
+                parent.mkdirs();
+                if (!parent.isDirectory()) {
+                    throw new IOException("Unable to create parent directories of " + file);
+                }
+            }
+            mParentDirsCreated = true;
+        }
+
         /**
          * Log a message to the log file
          */
         private synchronized void println(String msg) {
             try {
+                createParentDirs(mLogFile);
                 PrintWriter writer = new PrintWriter(new FileWriter(mLogFile, true));
                 writer.println(msg);
                 writer.flush();
