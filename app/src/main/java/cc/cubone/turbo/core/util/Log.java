@@ -24,6 +24,8 @@ import java.util.HashMap;
  * </pre>
  *
  * <p>Requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} for file channel.
+ *
+ * @see android.Manifest.permission#WRITE_EXTERNAL_STORAGE
  */
 public final class Log {
 

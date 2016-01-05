@@ -35,6 +35,8 @@ import cc.cubone.turbo.core.util.ProcessUtils;
  * </pre>
  *
  * <p>Requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE}.
+ *
+ * @see android.Manifest.permission#WRITE_EXTERNAL_STORAGE
  */
 public class CrashHandler implements Thread.UncaughtExceptionHandler {
 
