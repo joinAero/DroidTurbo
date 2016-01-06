@@ -1,6 +1,5 @@
 package cc.cubone.turbo.ui.support.recycler;
 
-import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -23,7 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import cc.cubone.turbo.R;
-import cc.cubone.turbo.core.util.ProcessUtils;
+import cc.cubone.turbo.core.util.Log;
 import cc.cubone.turbo.model.AppCard;
 import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.persistence.PrefAllApps;
@@ -35,13 +34,17 @@ import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.ToastUtils;
 import cc.cubone.turbo.view.AppCardRecyclerViewAdapter;
 
-import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_ALL;
-import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_USER;
+import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_RUNNING;
+import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_STOPPED;
+import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_SYSTEM;
+import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_USER;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity implements PackageCallback,
         AppCardRecyclerViewAdapter.OnItemViewClickListener<AppCard> {
+
+    static final String TAG = "AllAppsActivity";
 
     private final int SPAN_COUNT = 3;
 
@@ -73,30 +76,41 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     }
 
     private void updateLayout(int layout) {
+        Log.i(TAG, "updateLayout: " + layout);
         int layoutNow = mPrefAllApps.getLayout();
         if (layout == layoutNow) {
             return; // same layout
         }
         mPrefAllApps.setLayout(layout);
-        updateAdapter(layout, mPrefAllApps.getDisplay());
+        updateAdapter(layout, mPrefAllApps.getDisplayFlags());
     }
 
-    private void updateDisplay(int display) {
+    private void updateDisplayFlag(int displayFlag, boolean checked) {
+        Log.i(TAG, "updateDisplayFlag: 0x" + Integer.toHexString(displayFlag) + ", " + checked);
+        int displayFlags = mPrefAllApps.getDisplayFlags();
         if (mRecyclerView.getAdapter() != null) {
-            int displayNow = mPrefAllApps.getDisplay();
-            if (display == displayNow) {
-                return; // same display
+            boolean included = (displayFlags & displayFlag) > 0;
+            if (checked) {
+                if (included) return;
+            } else {
+                if (!included) return;
             }
         }
-        mPrefAllApps.setDisplay(display);
-        updateAdapter(mPrefAllApps.getLayout(), display);
+        if (checked) {
+            displayFlags = displayFlags | displayFlag;
+        } else {
+            displayFlags = displayFlags & (~displayFlag);
+        }
+        mPrefAllApps.setDisplayFlags(displayFlags);
+        updateAdapter(mPrefAllApps.getLayout(), displayFlags);
     }
 
     private void updateAdapter() {
-        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplay());
+        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplayFlags());
     }
 
-    private void updateAdapter(int layout, int display) {
+    private void updateAdapter(int layout, int displayFlags) {
+        Log.i(TAG, "updateAdapter: " + layout + ", 0x" + Integer.toHexString(displayFlags));
         int layoutId;
         if (layout == LAYOUT_LIST) {
             layoutId = R.layout.item_app;
@@ -109,9 +123,8 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             mRecyclerView.setHasFixedSize(false);
         }
 
-        boolean onlyUser = (display == DISPLAY_USER);
         AppCardRecyclerViewAdapter adapter = new AppCardRecyclerViewAdapter(
-                createCards(onlyUser), layoutId);
+                createCards(displayFlags), layoutId);
         adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
@@ -119,26 +132,34 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
     }
 
-    private List<AppCard> createCards(boolean onlyUser) {
+    private List<AppCard> createCards(int displayFlags) {
         List<AppCard> cards = new ArrayList<>();
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-        List<RunningAppProcessInfo> runningProcessInfos = ProcessUtils.getRunningProcesses(this);
-        AppCard cardApp;
-        boolean isSysApp;
+        AppCard appCard;
+        boolean isSystem;
+        boolean isStopped;
         for (ApplicationInfo info : packages) {
-            isSysApp = isSystemApp(info);
-            if (onlyUser && isSysApp) {
-                continue; // System apps
+            isSystem = (info.flags & ApplicationInfo.FLAG_SYSTEM) > 0;
+            if (isSystem) {
+                if ((displayFlags & FLAG_DISPLAY_SYSTEM) == 0) continue;
+            } else {
+                if ((displayFlags & FLAG_DISPLAY_USER) == 0) continue;
             }
-            cardApp = new AppCard(
+            isStopped = (info.flags & ApplicationInfo.FLAG_STOPPED) > 0;
+            if (isStopped) {
+                if ((displayFlags & FLAG_DISPLAY_STOPPED) == 0) continue;
+            } else {
+                if ((displayFlags & FLAG_DISPLAY_RUNNING) == 0) continue;
+            }
+            appCard = new AppCard(
                     info.loadLabel(pm).toString(),
                     info.packageName,
                     info.loadIcon(pm),
                     info);
-            cardApp.setType(isSysApp ? AppCard.Type.SYSTEM : AppCard.Type.USER);
-            cardApp.setState(getAppState(info, runningProcessInfos));
-            cards.add(cardApp);
+            appCard.setType(isSystem ? AppCard.Type.SYSTEM : AppCard.Type.USER);
+            appCard.setState(isStopped ? AppCard.State.STOPPED : AppCard.State.RUNNING);
+            cards.add(appCard);
         }
         Collections.sort(cards, new Comparator<DataCard<ApplicationInfo>>() {
             @Override
@@ -147,23 +168,6 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             }
         });
         return cards;
-    }
-
-    private boolean isSystemApp(ApplicationInfo info) {
-        return (info.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
-    }
-
-    private AppCard.State getAppState(ApplicationInfo appInfo,
-                                      List<RunningAppProcessInfo> runningProcessInfos) {
-        if (runningProcessInfos != null && appInfo != null) {
-            final String pkgName = appInfo.packageName;
-            for (RunningAppProcessInfo info : runningProcessInfos) {
-                if (pkgName.equals(info.processName)) {
-                    return AppCard.State.RUNNING;
-                }
-            }
-        }
-        return AppCard.State.DEAD;
     }
 
     @Override
@@ -182,7 +186,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             actions.add(R.string.launch);
         }
         actions.add(R.string.details);
-        if (!isSystemApp(info)) {
+        if ((info.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
             actions.add(R.string.uninstall);
         }
         actions.add(R.string.copy_app_name);
@@ -197,43 +201,28 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         ActionDialogFragment.make(data.getTitle(), ints).setOnActionSelectListener(
                 new ActionDialogFragment.OnActionSelectListener() {
                     AllAppsActivity context = AllAppsActivity.this;
-
                     @Override
                     public void onActionSelect(ActionDialogFragment dialog, int action) {
                         switch (action) {
-                            case R.string.launch:
-                                launch();
-                                break;
-                            case R.string.details:
-                                details();
-                                break;
-                            case R.string.uninstall:
-                                uninstall();
-                                break;
-                            case R.string.copy_app_name:
-                                copy(appName);
-                                break;
-                            case R.string.copy_package_name:
-                                copy(info.packageName);
-                                break;
+                            case R.string.launch: launch(); break;
+                            case R.string.details: details(); break;
+                            case R.string.uninstall: uninstall(); break;
+                            case R.string.copy_app_name: copy(appName); break;
+                            case R.string.copy_package_name: copy(info.packageName); break;
                         }
                         dialog.dismiss();
                     }
-
                     private void launch() {
                         ContextUtils.startActivity(context, launchIntent);
                     }
-
                     private void details() {
                         ContextUtils.startActivity(context, detailsIntent);
                     }
-
                     private void uninstall() {
                         Uri uri = Uri.fromParts("package", info.packageName, null);
                         Intent intent = new Intent(Intent.ACTION_DELETE, uri);
                         ContextUtils.startActivity(context, intent);
                     }
-
                     private void copy(String text) {
                         // Copy and Paste: http://developer.android.com/guide/topics/text/copy-paste.html
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -249,28 +238,18 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
         final int layout = mPrefAllApps.getLayout();
         switch (layout) {
-            case LAYOUT_GRID:
-                menu.findItem(R.id.layout_grid).setChecked(true);
-                break;
-            case LAYOUT_LIST:
-                menu.findItem(R.id.layout_list).setChecked(true);
-                break;
+            case LAYOUT_GRID: menu.findItem(R.id.layout_grid).setChecked(true); break;
+            case LAYOUT_LIST: menu.findItem(R.id.layout_list).setChecked(true); break;
         }
         // Issue: `setChecked(false)` still check the item :(
         //menu.findItem(R.id.layout_grid).setChecked(layout == LAYOUT_GRID);
         //menu.findItem(R.id.layout_list).setChecked(layout == LAYOUT_LIST);
 
-        final int display = mPrefAllApps.getDisplay();
-        switch (display) {
-            case DISPLAY_USER:
-                menu.findItem(R.id.display_user).setChecked(true);
-                break;
-            case DISPLAY_ALL:
-                menu.findItem(R.id.display_all).setChecked(true);
-                break;
-        }
-        //menu.findItem(R.id.display_user).setChecked(display == DISPLAY_USER);
-        //menu.findItem(R.id.display_all).setChecked(display == DISPLAY_ALL);
+        final int displayFlags = mPrefAllApps.getDisplayFlags();
+        menu.findItem(R.id.display_user).setChecked((displayFlags & FLAG_DISPLAY_USER) > 0);
+        menu.findItem(R.id.display_system).setChecked((displayFlags & FLAG_DISPLAY_SYSTEM) > 0);
+        menu.findItem(R.id.display_running).setChecked((displayFlags & FLAG_DISPLAY_RUNNING) > 0);
+        menu.findItem(R.id.display_stopped).setChecked((displayFlags & FLAG_DISPLAY_STOPPED) > 0);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -286,13 +265,21 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
                 toggleChecked(item);
                 updateLayout(LAYOUT_GRID);
                 return true;
-            case R.id.display_all:
-                toggleChecked(item);
-                updateDisplay(DISPLAY_ALL);
-                return true;
             case R.id.display_user:
                 toggleChecked(item);
-                updateDisplay(DISPLAY_USER);
+                updateDisplayFlag(FLAG_DISPLAY_USER, item.isChecked());
+                return true;
+            case R.id.display_system:
+                toggleChecked(item);
+                updateDisplayFlag(FLAG_DISPLAY_SYSTEM, item.isChecked());
+                return true;
+            case R.id.display_running:
+                toggleChecked(item);
+                updateDisplayFlag(FLAG_DISPLAY_RUNNING, item.isChecked());
+                return true;
+            case R.id.display_stopped:
+                toggleChecked(item);
+                updateDisplayFlag(FLAG_DISPLAY_STOPPED, item.isChecked());
                 return true;
         }
         return super.onOptionsItemSelected(item);

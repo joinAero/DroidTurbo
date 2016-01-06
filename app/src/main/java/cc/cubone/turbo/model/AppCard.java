@@ -6,11 +6,11 @@ import android.graphics.drawable.Drawable;
 public class AppCard extends DataCard<ApplicationInfo> {
 
     public enum Type {
-        UNDEFINED, USER, SYSTEM,
+        UNDEFINED, SYSTEM, USER,
     }
 
     public enum State {
-        UNDEFINED, DEAD, RUNNING,
+        UNDEFINED, STOPPED, RUNNING,
     }
 
     private Type mType = Type.UNDEFINED;

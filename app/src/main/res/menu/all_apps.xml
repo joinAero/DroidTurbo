@@ -3,6 +3,7 @@
     <item android:title="Layout"
         android:orderInCategory="100"
         android:enabled="false" />
+    <!-- need unique IDs for two single groups -->
     <group
         android:id="@+id/group_layout"
         android:checkableBehavior="single">
@@ -18,18 +19,25 @@
     <item android:title="Display"
         android:orderInCategory="200"
         android:enabled="false" />
-    <!-- need unique IDs for two single groups -->
     <group
         android:id="@+id/group_display"
-        android:checkableBehavior="single">
-        <item
-            android:id="@+id/display_all"
-            android:orderInCategory="201"
-            android:title="All Apps" />
+        android:checkableBehavior="all">
         <item
             android:id="@+id/display_user"
-            android:orderInCategory="202"
+            android:orderInCategory="201"
             android:title="User Apps" />
+        <item
+            android:id="@+id/display_system"
+            android:orderInCategory="202"
+            android:title="System Apps" />
+        <item
+            android:id="@+id/display_running"
+            android:orderInCategory="203"
+            android:title="Running" />
+        <item
+            android:id="@+id/display_stopped"
+            android:orderInCategory="204"
+            android:title="Stopped" />
     </group>
 </menu>
 <!--
