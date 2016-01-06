@@ -17,7 +17,7 @@ import cc.cubone.turbo.view.CardRecyclerViewAdapter;
 import pl.droidsonroids.gif.GifDrawable;
 
 public class RecyclerFragment extends ListSightFragment implements
-        CardRecyclerViewAdapter.OnItemClickListener<DataCard<Class>> {
+        CardRecyclerViewAdapter.OnItemViewClickListener<DataCard<Class>> {
 
     public RecyclerFragment() {
     }
@@ -28,9 +28,9 @@ public class RecyclerFragment extends ListSightFragment implements
 
     @Override
     public void onViewPrepared(RecyclerView recyclerView) {
-        CardRecyclerViewAdapter<DataCard<Class>> adapter = new CardRecyclerViewAdapter<>(
-                createCards(), R.layout.item_card);
-        adapter.setOnItemClickListener(this);
+        CardRecyclerViewAdapter<DataCard<Class>, CardRecyclerViewAdapter.ViewHolder> adapter
+                = CardRecyclerViewAdapter.create(createCards(), R.layout.item_card);
+        adapter.setOnItemViewClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -53,7 +53,7 @@ public class RecyclerFragment extends ListSightFragment implements
     }
 
     @Override
-    public void onItemClick(View view, int position, DataCard<Class> data) {
+    public void onItemViewClick(View view, int position, DataCard<Class> data) {
         ContextUtils.startActivity(getActivity(), data.getData());
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,7 +38,7 @@ import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity implements PackageCallback,
-        CardRecyclerViewAdapter.OnItemClickListener<DataCard<ApplicationInfo>> {
+        CardRecyclerViewAdapter.OnItemViewClickListener<DataCard<ApplicationInfo>> {
 
     private final int SPAN_COUNT = 3;
 
@@ -106,9 +107,9 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         }
 
         boolean onlyUser = (display == DISPLAY_USER);
-        CardRecyclerViewAdapter<DataCard<ApplicationInfo>> adapter =
-                new CardRecyclerViewAdapter<>(createCards(onlyUser), layoutId);
-        adapter.setOnItemClickListener(this);
+        CardRecyclerViewAdapter<DataCard<ApplicationInfo>, CardRecyclerViewAdapter.ViewHolder> adapter
+                = CardRecyclerViewAdapter.create(createCards(onlyUser), layoutId);
+        adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
         // update title appended with number of apps
@@ -145,14 +146,14 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     }
 
     @Override
-    public void onItemClick(View view, int position, DataCard<ApplicationInfo> data) {
+    public void onItemViewClick(View view, int position, DataCard<ApplicationInfo> data) {
         final String appName = data.getTitle();
         final ApplicationInfo info = data.getData();
 
         final Intent launchIntent = getPackageManager()
                 .getLaunchIntentForPackage(info.packageName);
         final Intent detailsIntent = new Intent(
-                android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
+                Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
                 Uri.parse("package:" + info.packageName));
 
         ArrayList<Integer> actions = new ArrayList<>();
@@ -175,28 +176,43 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         ActionDialogFragment.make(data.getTitle(), ints).setOnActionSelectListener(
                 new ActionDialogFragment.OnActionSelectListener() {
                     AllAppsActivity context = AllAppsActivity.this;
+
                     @Override
                     public void onActionSelect(ActionDialogFragment dialog, int action) {
                         switch (action) {
-                            case R.string.launch: launch(); break;
-                            case R.string.details: details(); break;
-                            case R.string.uninstall: uninstall(); break;
-                            case R.string.copy_app_name: copy(appName); break;
-                            case R.string.copy_package_name: copy(info.packageName); break;
+                            case R.string.launch:
+                                launch();
+                                break;
+                            case R.string.details:
+                                details();
+                                break;
+                            case R.string.uninstall:
+                                uninstall();
+                                break;
+                            case R.string.copy_app_name:
+                                copy(appName);
+                                break;
+                            case R.string.copy_package_name:
+                                copy(info.packageName);
+                                break;
                         }
                         dialog.dismiss();
                     }
+
                     private void launch() {
                         ContextUtils.startActivity(context, launchIntent);
                     }
+
                     private void details() {
                         ContextUtils.startActivity(context, detailsIntent);
                     }
+
                     private void uninstall() {
                         Uri uri = Uri.fromParts("package", info.packageName, null);
                         Intent intent = new Intent(Intent.ACTION_DELETE, uri);
                         ContextUtils.startActivity(context, intent);
                     }
+
                     private void copy(String text) {
                         // Copy and Paste: http://developer.android.com/guide/topics/text/copy-paste.html
                         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
@@ -212,8 +228,12 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
         final int layout = mPrefAllApps.getLayout();
         switch (layout) {
-            case LAYOUT_GRID: menu.findItem(R.id.layout_grid).setChecked(true); break;
-            case LAYOUT_LIST: menu.findItem(R.id.layout_list).setChecked(true); break;
+            case LAYOUT_GRID:
+                menu.findItem(R.id.layout_grid).setChecked(true);
+                break;
+            case LAYOUT_LIST:
+                menu.findItem(R.id.layout_list).setChecked(true);
+                break;
         }
         // Issue: `setChecked(false)` still check the item :(
         //menu.findItem(R.id.layout_grid).setChecked(layout == LAYOUT_GRID);
@@ -221,8 +241,12 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
         final int display = mPrefAllApps.getDisplay();
         switch (display) {
-            case DISPLAY_USER: menu.findItem(R.id.display_user).setChecked(true); break;
-            case DISPLAY_ALL: menu.findItem(R.id.display_all).setChecked(true); break;
+            case DISPLAY_USER:
+                menu.findItem(R.id.display_user).setChecked(true);
+                break;
+            case DISPLAY_ALL:
+                menu.findItem(R.id.display_all).setChecked(true);
+                break;
         }
         //menu.findItem(R.id.display_user).setChecked(display == DISPLAY_USER);
         //menu.findItem(R.id.display_all).setChecked(display == DISPLAY_ALL);
