@@ -1,5 +1,6 @@
 package cc.cubone.turbo.ui.support.recycler;
 
+import android.app.ActivityManager.RunningAppProcessInfo;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -22,6 +23,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.core.util.ProcessUtils;
 import cc.cubone.turbo.model.AppCard;
 import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.persistence.PrefAllApps;
@@ -121,17 +123,22 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         List<AppCard> cards = new ArrayList<>();
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
+        List<RunningAppProcessInfo> runningProcessInfos = ProcessUtils.getRunningProcesses(this);
+        AppCard cardApp;
+        boolean isSysApp;
         for (ApplicationInfo info : packages) {
-            if (onlyUser) {
-                if (isSystemApp(info)) {
-                    continue; // System apps
-                }
+            isSysApp = isSystemApp(info);
+            if (onlyUser && isSysApp) {
+                continue; // System apps
             }
-            cards.add(new AppCard(
+            cardApp = new AppCard(
                     info.loadLabel(pm).toString(),
                     info.packageName,
                     info.loadIcon(pm),
-                    info));
+                    info);
+            cardApp.setType(isSysApp ? AppCard.Type.SYSTEM : AppCard.Type.USER);
+            cardApp.setState(getAppState(info, runningProcessInfos));
+            cards.add(cardApp);
         }
         Collections.sort(cards, new Comparator<DataCard<ApplicationInfo>>() {
             @Override
@@ -144,6 +151,19 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
     private boolean isSystemApp(ApplicationInfo info) {
         return (info.flags & ApplicationInfo.FLAG_SYSTEM) == 1;
+    }
+
+    private AppCard.State getAppState(ApplicationInfo appInfo,
+                                      List<RunningAppProcessInfo> runningProcessInfos) {
+        if (runningProcessInfos != null && appInfo != null) {
+            final String pkgName = appInfo.packageName;
+            for (RunningAppProcessInfo info : runningProcessInfos) {
+                if (pkgName.equals(info.processName)) {
+                    return AppCard.State.RUNNING;
+                }
+            }
+        }
+        return AppCard.State.DEAD;
     }
 
     @Override
