@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.model.AppCard;
 import cc.cubone.turbo.model.DataCard;
 import cc.cubone.turbo.persistence.PrefAllApps;
 import cc.cubone.turbo.receiver.PackageCallback;
@@ -30,7 +31,7 @@ import cc.cubone.turbo.ui.ActionDialogFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.ToastUtils;
-import cc.cubone.turbo.view.CardRecyclerViewAdapter;
+import cc.cubone.turbo.view.AppCardRecyclerViewAdapter;
 
 import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_ALL;
 import static cc.cubone.turbo.persistence.PrefAllApps.DISPLAY_USER;
@@ -38,7 +39,7 @@ import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity implements PackageCallback,
-        CardRecyclerViewAdapter.OnItemViewClickListener<DataCard<ApplicationInfo>> {
+        AppCardRecyclerViewAdapter.OnItemViewClickListener<AppCard> {
 
     private final int SPAN_COUNT = 3;
 
@@ -107,8 +108,8 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         }
 
         boolean onlyUser = (display == DISPLAY_USER);
-        CardRecyclerViewAdapter<DataCard<ApplicationInfo>, CardRecyclerViewAdapter.ViewHolder> adapter
-                = CardRecyclerViewAdapter.create(createCards(onlyUser), layoutId);
+        AppCardRecyclerViewAdapter adapter = new AppCardRecyclerViewAdapter(
+                createCards(onlyUser), layoutId);
         adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
@@ -116,8 +117,8 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
     }
 
-    private List<DataCard<ApplicationInfo>> createCards(boolean onlyUser) {
-        List<DataCard<ApplicationInfo>> cards = new ArrayList<>();
+    private List<AppCard> createCards(boolean onlyUser) {
+        List<AppCard> cards = new ArrayList<>();
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
         for (ApplicationInfo info : packages) {
@@ -126,7 +127,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
                     continue; // System apps
                 }
             }
-            cards.add(new DataCard<>(
+            cards.add(new AppCard(
                     info.loadLabel(pm).toString(),
                     info.packageName,
                     info.loadIcon(pm),
@@ -146,7 +147,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     }
 
     @Override
-    public void onItemViewClick(View view, int position, DataCard<ApplicationInfo> data) {
+    public void onItemViewClick(View view, int position, AppCard data) {
         final String appName = data.getTitle();
         final ApplicationInfo info = data.getData();
 

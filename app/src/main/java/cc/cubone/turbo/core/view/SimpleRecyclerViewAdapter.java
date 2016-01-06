@@ -10,26 +10,14 @@ import android.view.ViewGroup;
 
 import java.util.List;
 
-public class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
+public abstract class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
         extends RecyclerView.Adapter<VH> implements View.OnClickListener {
 
     private List<Data> mDataList;
-
-    private OnItemViewCreateListener<Data, VH> mOnItemViewCreateListener;
     private OnItemViewClickListener<Data> mOnItemClickListener;
 
     protected SimpleRecyclerViewAdapter(@NonNull List<Data> dataList) {
         mDataList = dataList;
-    }
-
-    public SimpleRecyclerViewAdapter(@NonNull List<Data> dataList,
-                                     @NonNull OnItemViewCreateListener<Data, VH> listener) {
-        mDataList = dataList;
-        mOnItemViewCreateListener = listener;
-    }
-
-    protected void setOnItemViewCreateListener(@NonNull OnItemViewCreateListener<Data, VH> listener) {
-        mOnItemViewCreateListener = listener;
     }
 
     public void setOnItemViewClickListener(@Nullable OnItemViewClickListener<Data> listener) {
@@ -38,17 +26,21 @@ public class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return mOnItemViewCreateListener.onItemViewTypeCreate(position);
+        return 0;
     }
+
+    public abstract int getItemViewResource(int viewType);
+    public abstract VH onViewHolderCreate(View itemView, int viewType);
+    public abstract void onViewHolderBind(Data data, VH holder, int position);
 
     @Override
     public VH onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
-        int res = mOnItemViewCreateListener.onItemViewResourceCreate(viewType);
+        int res = getItemViewResource(viewType);
         View v = inflater.inflate(res, parent, false);
         v.setOnClickListener(this);
-        return mOnItemViewCreateListener.onItemViewHolderCreate(v, viewType);
+        return onViewHolderCreate(v, viewType);
     }
 
     @Override
@@ -56,7 +48,7 @@ public class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
         Data data = mDataList.get(position);
         //if (data == null) return;
         holder.itemView.setTag(position);
-        mOnItemViewCreateListener.onItemViewHolderBind(data, holder, position);
+        onViewHolderBind(data, holder, position);
     }
 
     @Override
@@ -70,13 +62,6 @@ public class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
             final int position = (int) v.getTag();
             mOnItemClickListener.onItemViewClick(v, position, mDataList.get(position));
         }
-    }
-
-    public interface OnItemViewCreateListener<Data, VH extends RecyclerView.ViewHolder> {
-        int onItemViewTypeCreate(int position);
-        int onItemViewResourceCreate(int viewType);
-        VH onItemViewHolderCreate(View itemView, int viewType);
-        void onItemViewHolderBind(Data data, VH holder, int position);
     }
 
     public interface OnItemViewClickListener<Data> {
