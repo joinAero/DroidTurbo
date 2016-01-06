@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/refresh"
+          android:checkable="false"
+          android:title="Refresh"
+          android:icon="@drawable/ic_refresh"
+          app:showAsAction="ifRoom" />
     <item android:title="Layout"
-        android:orderInCategory="100"
         android:enabled="false" />
     <!-- need unique IDs for two single groups -->
     <group
@@ -9,34 +14,27 @@
         android:checkableBehavior="single">
         <item
             android:id="@+id/layout_list"
-            android:orderInCategory="101"
             android:title="List" />
         <item
             android:id="@+id/layout_grid"
-            android:orderInCategory="102"
             android:title="Grid" />
     </group>
     <item android:title="Display"
-        android:orderInCategory="200"
         android:enabled="false" />
     <group
         android:id="@+id/group_display"
         android:checkableBehavior="all">
         <item
             android:id="@+id/display_user"
-            android:orderInCategory="201"
             android:title="User Apps" />
         <item
             android:id="@+id/display_system"
-            android:orderInCategory="202"
             android:title="System Apps" />
         <item
             android:id="@+id/display_running"
-            android:orderInCategory="203"
             android:title="Running" />
         <item
             android:id="@+id/display_stopped"
-            android:orderInCategory="204"
             android:title="Stopped" />
     </group>
 </menu>

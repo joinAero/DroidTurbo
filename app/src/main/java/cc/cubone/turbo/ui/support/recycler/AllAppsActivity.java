@@ -31,6 +31,7 @@ import cc.cubone.turbo.receiver.PackageListener;
 import cc.cubone.turbo.ui.ActionDialogFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ContextUtils;
+import cc.cubone.turbo.util.TintUtils;
 import cc.cubone.turbo.util.ToastUtils;
 import cc.cubone.turbo.view.AppCardRecyclerViewAdapter;
 
@@ -251,12 +252,17 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         menu.findItem(R.id.display_running).setChecked((displayFlags & FLAG_DISPLAY_RUNNING) > 0);
         menu.findItem(R.id.display_stopped).setChecked((displayFlags & FLAG_DISPLAY_STOPPED) > 0);
 
+        TintUtils.tintList(this, menu.findItem(R.id.refresh), R.color.bar_icon_color);
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.refresh:
+                updateAdapter();
+                return true;
             case R.id.layout_list:
                 toggleChecked(item);
                 updateLayout(LAYOUT_LIST);
@@ -287,6 +293,12 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
     private void toggleChecked(MenuItem item) {
         item.setChecked(!item.isChecked());
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateAdapter();
     }
 
     @Override
