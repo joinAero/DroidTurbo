@@ -26,7 +26,7 @@ public class PrefAllApps extends Pref {
     }
 
     public int getDisplay() {
-        return mSp.getInt(KEY_DISPLAY, DISPLAY_ALL);
+        return mSp.getInt(KEY_DISPLAY, DISPLAY_USER);
     }
 
     public void setDisplay(int display) {
