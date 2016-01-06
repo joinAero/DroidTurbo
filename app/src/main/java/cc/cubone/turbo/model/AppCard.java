@@ -6,19 +6,15 @@ import android.graphics.drawable.Drawable;
 public class AppCard extends DataCard<ApplicationInfo> {
 
     public enum Type {
-        Undefined,
-        User,
-        System
+        UNDEFINED, USER, SYSTEM,
     }
 
     public enum State {
-        Undefined,
-        Dead,
-        Running
+        UNDEFINED, DEAD, RUNNING,
     }
 
-    private Type mType = Type.Undefined;
-    private State mState = State.Undefined;
+    private Type mType = Type.UNDEFINED;
+    private State mState = State.UNDEFINED;
 
     public AppCard(String title, String description, Drawable drawable, ApplicationInfo info) {
         super(title, description, drawable, info);

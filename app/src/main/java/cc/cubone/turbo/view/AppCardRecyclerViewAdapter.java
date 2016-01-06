@@ -1,5 +1,6 @@
 package cc.cubone.turbo.view;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.view.View;
@@ -28,8 +29,11 @@ public class AppCardRecyclerViewAdapter extends
         bindInfo(appCard, holder.infoView);
     }
 
+    @SuppressLint("SetTextI18n")
     private void bindInfo(AppCard appCard, TextView infoView) {
         if (infoView == null) return;
+        infoView.setText(appCard.getType().name().toLowerCase()
+                + ", " + appCard.getState().name().toLowerCase());
     }
 
     public static class ViewHolder extends CardRecyclerViewAdapter.ViewHolder {
@@ -38,7 +42,7 @@ public class AppCardRecyclerViewAdapter extends
 
         public ViewHolder(View itemView) {
             super(itemView);
-            infoView = (TextView) itemView.findViewById(R.id.title);
+            infoView = (TextView) itemView.findViewById(R.id.info);
         }
     }
 }
