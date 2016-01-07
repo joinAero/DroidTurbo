@@ -33,3 +33,19 @@
 
 * [CardView](http://developer.android.com/reference/android/support/v7/widget/CardView.html)
 * [Using the CardView](https://guides.codepath.com/android/Using-the-CardView)
+
+---
+
+## Percent
+
+* [Android Percent Support Lib Sample](https://github.com/JulienGenoud/android-percent-support-lib-sample)
+* [Constructing View Layouts](https://guides.codepath.com/android/Constructing-View-Layouts)
+
+## Swipe to Refresh
+
+* [Supporting Swipe-to-Refresh](http://developer.android.com/training/swipe/index.html)
+
+## Custom Tabs
+
+* [Chrome Custom Tabs](https://developer.chrome.com/multidevice/android/customtabs)
+* [Chrome custom tabs 会给 Android 开发者带来哪些便利？](https://www.zhihu.com/question/35425462)
