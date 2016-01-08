@@ -50,12 +50,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
-            initSystemUI(Color.TRANSPARENT);
-            //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
-        }
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        initSystemUI(Color.TRANSPARENT);
+        //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
     }
 
     /**
@@ -74,12 +72,11 @@ public class BaseActivity extends AppCompatActivity {
             win.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21, 5.0
+            win.getAttributes().systemUiVisibility |=
+                    (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-            win.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
             win.setStatusBarColor(color);
         }
 
@@ -89,15 +86,15 @@ public class BaseActivity extends AppCompatActivity {
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21, 5.0
+            win.getAttributes().systemUiVisibility |=
+                    (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
                     | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-
-            win.getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            win.setStatusBarColor(color);
-            win.setNavigationBarColor(color);
+            win.setStatusBarColor(Color.TRANSPARENT);
+            win.setNavigationBarColor(Color.TRANSPARENT);
         }*/
 
         // Reference:

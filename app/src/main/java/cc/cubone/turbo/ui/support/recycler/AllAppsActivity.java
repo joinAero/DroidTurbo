@@ -61,8 +61,6 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         mPrefAllApps = new PrefAllApps(this);
         initToolbar();
         initViews();
-        mPackageListener = new PackageListener(this);
-        mPackageListener.register(this);
     }
 
     private void initViews() {
@@ -302,8 +300,15 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        mPackageListener = new PackageListener(this);
+        mPackageListener.register(this);
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         mPackageListener.unregister();
         mPackageListener = null;
     }
