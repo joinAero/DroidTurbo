@@ -9,7 +9,7 @@ import android.content.IntentFilter;
 /**
  * The bluetooth listener for receiving the state changed.
  *
- * <p>Requires the {@link android.Manifest.permission#BLUETOOTH} permission.
+ * <p>Requires {@link android.Manifest.permission#BLUETOOTH} to receive.
  */
 public class BluetoothListener {
 

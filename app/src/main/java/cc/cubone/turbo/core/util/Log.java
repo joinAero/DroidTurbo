@@ -23,7 +23,8 @@ import java.util.HashMap;
  * }
  * </pre>
  *
- * <p>Requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} for file channel.
+ * <p>Requires {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} to
+ * write to external storage for file channel.
  *
  * @see android.Manifest.permission#WRITE_EXTERNAL_STORAGE
  */
@@ -247,8 +248,8 @@ public final class Log {
     /**
      * The file log channel for outputting to a file.
      *
-     * <p>Write external path requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE}
-     * permission.
+     * <p>Requires {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} to
+     * write to external storage.
      */
     public static final class FileChannel extends LogChannel {
 

@@ -1,9 +1,11 @@
 package cc.cubone.turbo.core.bluetooth;
 
+import android.Manifest;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
+import android.support.annotation.RequiresPermission;
 import android.util.Log;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +15,10 @@ import java.util.Set;
 
 /**
  * The bluetooth profile proxy for operating the system bluetooth profile.
+ *
+ * @see android.bluetooth.BluetoothProfile
+ * @see android.bluetooth.BluetoothAdapter
+ * @see android.bluetooth.BluetoothManager
  */
 public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile.ServiceListener {
 
@@ -38,7 +44,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
 
     public BluetoothProfileProxy(Context context) {
         mContext = context;
-        mBluetoothAdapter = BluetoothUtils.getBluetoothAdapter(context);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
     }
 
     /**
@@ -62,6 +68,10 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * @see BluetoothAdapter#getProfileProxy(Context, ServiceListener, int)
      */
     public boolean register(int profile, boolean followBluetooth) {
+        if (mBluetoothAdapter == null) {
+            Log.w(TAG, "Bluetooth is not supported");
+            return false;
+        }
         if (mRegistered) {
             Log.w(TAG, "BluetoothProfile has registered");
             return false;
@@ -210,7 +220,12 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      *
      * <p>Requires {@link android.Manifest.permission#BLUETOOTH}.
      */
+    @RequiresPermission(Manifest.permission.BLUETOOTH)
     public Set<BluetoothDevice> getBondedDevices() {
+        if (mBluetoothAdapter == null) {
+            Log.w(TAG, "Bluetooth is not supported");
+            return null;
+        }
         return mBluetoothAdapter.getBondedDevices();
     }
 

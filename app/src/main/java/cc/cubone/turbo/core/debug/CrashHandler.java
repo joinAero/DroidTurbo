@@ -34,7 +34,8 @@ import cc.cubone.turbo.core.util.ProcessUtils;
  * }
  * </pre>
  *
- * <p>Requires the {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE}.
+ * <p>Requires {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} to
+ * write to external storage.
  *
  * @see android.Manifest.permission#WRITE_EXTERNAL_STORAGE
  */
