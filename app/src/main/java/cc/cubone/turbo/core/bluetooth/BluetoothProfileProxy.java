@@ -99,8 +99,10 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
         mBluetoothAdapter.closeProfileProxy(mProfile, mBluetoothProfile);
         mBluetoothProfile = null;
         mRegistered = false;
-        mProfile = -1;
-        if (formUser) unfollowBluetooth();
+        if (formUser) {
+            unfollowBluetooth();
+            mProfile = -1;
+        }
     }
 
     /**
