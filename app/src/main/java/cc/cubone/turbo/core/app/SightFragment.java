@@ -27,11 +27,11 @@ public class SightFragment extends Fragment {
     public SightFragment() {
     }
 
-    /*public boolean hasUserSeen() {
+    /*public boolean isUserSeen() {
         return mUserSeen;
     }
 
-    public boolean hasViewCreated() {
+    public boolean isViewCreated() {
         return mViewCreated;
     }*/
 
