@@ -29,3 +29,8 @@ RxJava architecture library for Android
 This sample project shows how to apply MVP and Clean architecture on an Android app
 
 * [EffectiveAndroid](https://github.com/rallat/EffectiveAndroid)
+
+---
+
+* [给 Android 开发者的 RxJava 详解](http://gank.io/post/560e15be2dca930e00da1083)
+* [RxJava Essentials 中文翻译版](http://rxjava.yuxingxin.com/)
