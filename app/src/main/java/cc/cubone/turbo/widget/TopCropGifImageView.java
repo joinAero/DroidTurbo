@@ -1,7 +1,9 @@
 package cc.cubone.turbo.widget;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Matrix;
+import android.os.Build;
 import android.util.AttributeSet;
 
 import pl.droidsonroids.gif.GifImageView;
@@ -13,18 +15,23 @@ public class TopCropGifImageView extends GifImageView {
 
     public TopCropGifImageView(Context context) {
         super(context);
+        setScaleType(ScaleType.MATRIX);
     }
 
     public TopCropGifImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        setScaleType(ScaleType.MATRIX);
     }
 
     public TopCropGifImageView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
+        setScaleType(ScaleType.MATRIX);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public TopCropGifImageView(Context context, AttributeSet attrs, int defStyle, int defStyleRes) {
         super(context, attrs, defStyle, defStyleRes);
+        setScaleType(ScaleType.MATRIX);
     }
 
     @Override
@@ -40,6 +47,8 @@ public class TopCropGifImageView extends GifImageView {
     }
 
     private void recomputeImgMatrix() {
+        if (getDrawable() == null) return;
+
         final Matrix matrix = getImageMatrix();
 
         float scale;
