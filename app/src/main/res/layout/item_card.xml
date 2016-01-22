@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <cc.cubone.turbo.widget.TopCropGifImageView
+        <pl.droidsonroids.gif.GifImageView
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
