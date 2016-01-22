@@ -1,6 +1,5 @@
 package cc.cubone.turbo.view;
 
-import android.annotation.SuppressLint;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -46,7 +45,6 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
             public ViewHolder2 onViewHolderCreate(View itemView, int viewType) {
                 return new ViewHolder2(itemView);
             }
-            @SuppressLint("SetTextI18n")
             @Override
             public void onViewHolderBind(Data data, ViewHolder2 holder, int position) {
                 super.onViewHolderBind(data, holder, position);
