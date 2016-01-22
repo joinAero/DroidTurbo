@@ -13,21 +13,21 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.SimpleRecyclerViewAdapter;
-import cc.cubone.turbo.model.Card;
+import cc.cubone.turbo.model.Info;
 
-public abstract class CardRecyclerViewAdapter<Data extends Card, VH extends CardRecyclerViewAdapter.ViewHolder>
+public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends InfoRecyclerViewAdapter.ViewHolder>
         extends SimpleRecyclerViewAdapter<Data, VH> {
 
     private int mResource;
 
-    public CardRecyclerViewAdapter(@NonNull List<Data> dataList, @LayoutRes int resource) {
+    public InfoRecyclerViewAdapter(@NonNull List<Data> dataList, @LayoutRes int resource) {
         super(dataList);
         mResource = resource;
     }
 
-    public static <Data extends Card> CardRecyclerViewAdapter<Data, CardRecyclerViewAdapter.ViewHolder>
+    public static <Data extends Info> InfoRecyclerViewAdapter<Data, InfoRecyclerViewAdapter.ViewHolder>
             create(@NonNull List<Data> dataList, @LayoutRes int resource) {
-        return new CardRecyclerViewAdapter<Data, ViewHolder>(dataList, resource) {
+        return new InfoRecyclerViewAdapter<Data, ViewHolder>(dataList, resource) {
             @Override
             public ViewHolder onViewHolderCreate(View itemView, int viewType) {
                 return new ViewHolder(itemView);

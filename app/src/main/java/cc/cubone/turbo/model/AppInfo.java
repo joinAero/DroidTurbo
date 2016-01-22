@@ -3,7 +3,7 @@ package cc.cubone.turbo.model;
 import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
 
-public class AppCard extends DataCard<ApplicationInfo> {
+public class AppInfo extends DataInfo<ApplicationInfo> {
 
     public enum Type {
         UNDEFINED, SYSTEM, USER,
@@ -16,7 +16,7 @@ public class AppCard extends DataCard<ApplicationInfo> {
     private Type mType = Type.UNDEFINED;
     private State mState = State.UNDEFINED;
 
-    public AppCard(String title, String description, Drawable drawable, ApplicationInfo info) {
+    public AppInfo(String title, String description, Drawable drawable, ApplicationInfo info) {
         super(title, description, drawable, info);
     }
 

@@ -2,16 +2,16 @@ package cc.cubone.turbo.model;
 
 import android.graphics.drawable.Drawable;
 
-public class Card {
+public class Info {
 
     private String mTitle;
     private String mDescription;
     private Drawable mDrawable;
 
-    public Card() {
+    public Info() {
     }
 
-    public Card(String title, String description, Drawable drawable) {
+    public Info(String title, String description, Drawable drawable) {
         mTitle = title;
         mDescription = description;
         mDrawable = drawable;

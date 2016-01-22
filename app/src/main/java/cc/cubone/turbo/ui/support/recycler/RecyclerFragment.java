@@ -10,14 +10,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.cubone.turbo.R;
-import cc.cubone.turbo.model.DataCard;
+import cc.cubone.turbo.model.DataInfo;
 import cc.cubone.turbo.ui.base.ListSightFragment;
 import cc.cubone.turbo.util.ContextUtils;
-import cc.cubone.turbo.view.CardRecyclerViewAdapter;
+import cc.cubone.turbo.view.InfoRecyclerViewAdapter;
 import pl.droidsonroids.gif.GifDrawable;
 
 public class RecyclerFragment extends ListSightFragment implements
-        CardRecyclerViewAdapter.OnItemViewClickListener<DataCard<Class>> {
+        InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Class>> {
 
     public RecyclerFragment() {
     }
@@ -28,23 +28,23 @@ public class RecyclerFragment extends ListSightFragment implements
 
     @Override
     public void onViewPrepared(RecyclerView recyclerView) {
-        CardRecyclerViewAdapter<DataCard<Class>, CardRecyclerViewAdapter.ViewHolder> adapter
-                = CardRecyclerViewAdapter.create(createCards(), R.layout.item_card);
+        InfoRecyclerViewAdapter<DataInfo<Class>, InfoRecyclerViewAdapter.ViewHolder> adapter
+                = InfoRecyclerViewAdapter.create(createInfos(), R.layout.item_card);
         adapter.setOnItemViewClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
-    private List<DataCard<Class>> createCards() {
-        List<DataCard<Class>> cards = new ArrayList<>();
-        cards.add(createCard(R.string.all_apps, "Show all apps in list or grid.",
+    private List<DataInfo<Class>> createInfos() {
+        List<DataInfo<Class>> infos = new ArrayList<>();
+        infos.add(createInfo(R.string.all_apps, "Show all apps in list or grid.",
                 "all_apps.gif", AllAppsActivity.class));
-        cards.add(createCard(R.string.rx_apps, "Show all apps with RxJava.",
+        infos.add(createInfo(R.string.rx_apps, "Show all apps with RxJava.",
                 null, RxAppsActivity.class));
-        return cards;
+        return infos;
     }
 
-    private DataCard<Class> createCard(int titleId, String desc, String gifAsset, Class<?> cls) {
+    private DataInfo<Class> createInfo(int titleId, String desc, String gifAsset, Class<?> cls) {
         Drawable drawable = null;
         if (gifAsset != null) {
             try {
@@ -53,11 +53,11 @@ public class RecyclerFragment extends ListSightFragment implements
                 e.printStackTrace();
             }
         }
-        return new DataCard<Class>(getString(titleId), desc, drawable, cls);
+        return new DataInfo<Class>(getString(titleId), desc, drawable, cls);
     }
 
     @Override
-    public void onItemViewClick(View view, int position, DataCard<Class> data) {
+    public void onItemViewClick(View view, int position, DataInfo<Class> data) {
         ContextUtils.startActivity(getActivity(), data.getData());
         getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }

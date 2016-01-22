@@ -25,8 +25,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.util.Log;
-import cc.cubone.turbo.model.AppCard;
-import cc.cubone.turbo.model.DataCard;
+import cc.cubone.turbo.model.AppInfo;
+import cc.cubone.turbo.model.DataInfo;
 import cc.cubone.turbo.persistence.PrefAllApps;
 import cc.cubone.turbo.receiver.PackageCallback;
 import cc.cubone.turbo.receiver.PackageListener;
@@ -35,7 +35,7 @@ import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.TintUtils;
 import cc.cubone.turbo.util.ToastUtils;
-import cc.cubone.turbo.view.AppCardRecyclerViewAdapter;
+import cc.cubone.turbo.view.AppInfoRecyclerViewAdapter;
 
 import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_RUNNING;
 import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_STOPPED;
@@ -45,7 +45,7 @@ import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity implements PackageCallback,
-        AppCardRecyclerViewAdapter.OnItemViewClickListener<AppCard> {
+        AppInfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
 
     static final String TAG = "AllAppsActivity";
 
@@ -125,8 +125,8 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             mRecyclerView.setHasFixedSize(false);
         }
 
-        AppCardRecyclerViewAdapter adapter = new AppCardRecyclerViewAdapter(
-                createCards(displayFlags), layoutId);
+        AppInfoRecyclerViewAdapter adapter = new AppInfoRecyclerViewAdapter(
+                createAppInfos(displayFlags), layoutId);
         adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 
@@ -134,11 +134,11 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
         updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
     }
 
-    private List<AppCard> createCards(int displayFlags) {
-        List<AppCard> cards = new ArrayList<>();
+    private List<AppInfo> createAppInfos(int displayFlags) {
+        List<AppInfo> infos = new ArrayList<>();
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-        AppCard appCard;
+        AppInfo appInfo;
         boolean isSystem;
         boolean isStopped;
         for (ApplicationInfo info : packages) {
@@ -154,26 +154,26 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             } else {
                 if ((displayFlags & FLAG_DISPLAY_RUNNING) == 0) continue;
             }
-            appCard = new AppCard(
+            appInfo = new AppInfo(
                     info.loadLabel(pm).toString(),
                     info.packageName,
                     info.loadIcon(pm),
                     info);
-            appCard.setType(isSystem ? AppCard.Type.SYSTEM : AppCard.Type.USER);
-            appCard.setState(isStopped ? AppCard.State.STOPPED : AppCard.State.RUNNING);
-            cards.add(appCard);
+            appInfo.setType(isSystem ? AppInfo.Type.SYSTEM : AppInfo.Type.USER);
+            appInfo.setState(isStopped ? AppInfo.State.STOPPED : AppInfo.State.RUNNING);
+            infos.add(appInfo);
         }
-        Collections.sort(cards, new Comparator<DataCard<ApplicationInfo>>() {
+        Collections.sort(infos, new Comparator<DataInfo<ApplicationInfo>>() {
             @Override
-            public int compare(DataCard<ApplicationInfo> lhs, DataCard<ApplicationInfo> rhs) {
+            public int compare(DataInfo<ApplicationInfo> lhs, DataInfo<ApplicationInfo> rhs) {
                 return lhs.getTitle().compareTo(rhs.getTitle());
             }
         });
-        return cards;
+        return infos;
     }
 
     @Override
-    public void onItemViewClick(View view, int position, AppCard data) {
+    public void onItemViewClick(View view, int position, AppInfo data) {
         final String appName = data.getTitle();
         final ApplicationInfo info = data.getData();
 

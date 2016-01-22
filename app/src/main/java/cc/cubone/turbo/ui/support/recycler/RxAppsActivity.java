@@ -18,19 +18,19 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.util.Log;
-import cc.cubone.turbo.model.AppCard;
-import cc.cubone.turbo.model.Card;
+import cc.cubone.turbo.model.AppInfo;
+import cc.cubone.turbo.model.Info;
 import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ToastUtils;
-import cc.cubone.turbo.view.AppCardRecyclerViewAdapter;
-import cc.cubone.turbo.view.CardRecyclerViewAdapter;
+import cc.cubone.turbo.view.AppInfoRecyclerViewAdapter;
+import cc.cubone.turbo.view.InfoRecyclerViewAdapter;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 public class RxAppsActivity extends BaseActivity implements
-        AppCardRecyclerViewAdapter.OnItemViewClickListener<AppCard> {
+        AppInfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
 
     private static final String TAG = "RxAppsActivity";
 
@@ -58,7 +58,7 @@ public class RxAppsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onItemViewClick(View view, int position, AppCard appCard) {
+    public void onItemViewClick(View view, int position, AppInfo appInfo) {
     }
 
     @Override
@@ -67,7 +67,7 @@ public class RxAppsActivity extends BaseActivity implements
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private Observable<Card> observableApps() {
+    private Observable<Info> observableApps() {
         return Observable.create(subscriber -> {
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -81,7 +81,7 @@ public class RxAppsActivity extends BaseActivity implements
                     return;
                 }
                 compInfo = getComponentInfo(info);
-                subscriber.onNext(new Card(
+                subscriber.onNext(new Info(
                         info.loadLabel(pm).toString(),
                         (compInfo == null) ? "" : compInfo.packageName,
                         info.loadIcon(pm)));
@@ -111,14 +111,14 @@ public class RxAppsActivity extends BaseActivity implements
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Card>() {
+                .subscribe(new Observer<Info>() {
 
-                    private List<Card> mApps = new ArrayList<>();
+                    private List<Info> mApps = new ArrayList<>();
 
                     @Override
                     public void onCompleted() {
                         if (DBG) Log.d(TAG, "onCompleted");
-                        mRecyclerView.setAdapter(CardRecyclerViewAdapter.create(mApps, R.layout.item_app));
+                        mRecyclerView.setAdapter(InfoRecyclerViewAdapter.create(mApps, R.layout.item_app));
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -131,9 +131,9 @@ public class RxAppsActivity extends BaseActivity implements
                     }
 
                     @Override
-                    public void onNext(Card card) {
-                        if (DBG) Log.d(TAG, "onNext: " + card.getTitle());
-                        mApps.add(card);
+                    public void onNext(Info info) {
+                        if (DBG) Log.d(TAG, "onNext: " + info.getTitle());
+                        mApps.add(info);
                     }
                 });
     }
