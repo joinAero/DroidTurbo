@@ -39,6 +39,7 @@ Samples about latest architectures.
 
 * [Butter Knife](https://github.com/JakeWharton/butterknife)
 * [android-gif-drawable](https://github.com/koral--/android-gif-drawable)
+* [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 
 **Studio Plugin**
 
