@@ -40,7 +40,7 @@ public class RecyclerFragment extends ListSightFragment implements
         infos.add(createInfo(R.string.all_apps, "Show all apps in list or grid.",
                 "all_apps.gif", AllAppsActivity.class));
         infos.add(createInfo(R.string.rx_apps, "Show all apps with RxJava.",
-                null, RxAppsActivity.class));
+                "rx_apps.gif", RxAppsActivity.class));
         return infos;
     }
 

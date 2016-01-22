@@ -20,6 +20,10 @@ Samples about new APIs in support libraries.
 
 ![](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/all_apps.gif?raw=true)
 
+**Show Apps With RxJava: Show all apps with RxJava.**
+
+![](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/rx_apps.gif?raw=true)
+
 
 ### 2) Fever
 
