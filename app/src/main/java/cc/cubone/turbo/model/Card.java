@@ -17,7 +17,6 @@ public class Card {
         mDrawable = drawable;
     }
 
-
     public String getTitle() {
         return mTitle;
     }
