@@ -45,7 +45,6 @@ public class RxAppsActivity extends BaseActivity implements
         setContentView(R.layout.activity_rx_apps);
         ButterKnife.bind(this);
         initViews();
-        refreshApps();
     }
 
     private void initViews() {
@@ -55,6 +54,9 @@ public class RxAppsActivity extends BaseActivity implements
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setHasFixedSize(true);
+
+        // should post `setRefreshing()` to take effect when called in `onCreate()`
+        mSwipeRefreshLayout.post(this::refreshApps);
     }
 
     @Override
@@ -86,6 +88,7 @@ public class RxAppsActivity extends BaseActivity implements
                         info.loadLabel(pm).toString(),
                         (compInfo == null) ? "" : compInfo.packageName,
                         info.loadIcon(pm), i++));
+                //break; // test complete immediately
             }
             // after sending all values we complete the sequence
             if (!subscriber.isUnsubscribed()){
@@ -104,10 +107,9 @@ public class RxAppsActivity extends BaseActivity implements
     }
 
     private void refreshApps() {
-        if (!mSwipeRefreshLayout.isRefreshing()) {
-            mSwipeRefreshLayout.post(() -> mSwipeRefreshLayout.setRefreshing(true));
-        }
+        mSwipeRefreshLayout.setRefreshing(true);
         mRecyclerView.setAdapter(null);
+        // hot observable begin emitting items as soon as it is created
         observableApps()
                 .map(new Func1<DataInfo<Long>, DataInfo<Long>>() {
                     long mIndex = 0;
@@ -118,7 +120,7 @@ public class RxAppsActivity extends BaseActivity implements
                         return info;
                     }
                 })
-                .onBackpressureBuffer()
+                .onBackpressureBuffer() // emit faster than observer consume
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<DataInfo<Long>>() {
