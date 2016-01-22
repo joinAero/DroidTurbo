@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.model.AppCard;
 
@@ -38,11 +39,10 @@ public class AppCardRecyclerViewAdapter extends
 
     public static class ViewHolder extends CardRecyclerViewAdapter.ViewHolder {
 
-        public final TextView infoView;
+        @Bind(R.id.info) TextView infoView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            infoView = (TextView) itemView.findViewById(R.id.info);
         }
     }
 }

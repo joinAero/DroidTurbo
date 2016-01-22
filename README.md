@@ -33,7 +33,10 @@ Samples about latest architectures.
 
 ## Third Party
 
+* [Butter Knife](https://github.com/JakeWharton/butterknife)
 * [android-gif-drawable](https://github.com/koral--/android-gif-drawable)
+
+**Studio Plugin**
 
 * [Gradle Retrolambda Plugin](https://github.com/evant/gradle-retrolambda)
 

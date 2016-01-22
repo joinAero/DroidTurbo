@@ -34,8 +34,17 @@ android {
         }
     }
     compileOptions {
+        // Gradle Retrolambda Plugin
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    lintOptions {
+        // Butter Knife
+        disable 'InvalidPackage'
+    }
+    packagingOptions {
+        // Butter Knife
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
     }
 }
 
@@ -48,6 +57,7 @@ dependencies {
     compile 'com.android.support:cardview-v7:23.1.1'
     //compile 'com.android.support:multidex:1.0.1'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.11'
+    compile 'com.jakewharton:butterknife:7.0.1'
 }
 
 // Reference:

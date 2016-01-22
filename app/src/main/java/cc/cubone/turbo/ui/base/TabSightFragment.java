@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 
 public class TabSightFragment extends BaseSightFragment {
@@ -22,8 +23,8 @@ public class TabSightFragment extends BaseSightFragment {
     @Override
     protected void onViewCreatedFirstSight(View view) {
         super.onViewCreatedFirstSight(view);
-        TabLayout tab = (TabLayout) view.findViewById(R.id.tab);
-        ViewPager pager = (ViewPager) view.findViewById(R.id.pager);
+        TabLayout tab = ButterKnife.findById(view, R.id.tab);
+        ViewPager pager = ButterKnife.findById(view, R.id.pager);
         onViewPrepared(tab, pager);
     }
 

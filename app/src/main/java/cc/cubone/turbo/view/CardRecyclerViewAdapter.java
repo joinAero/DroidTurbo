@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.SimpleRecyclerViewAdapter;
 import cc.cubone.turbo.model.Card;
@@ -56,15 +58,13 @@ public abstract class CardRecyclerViewAdapter<Data extends Card, VH extends Card
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public final TextView titleView;
-        public final TextView descView;
-        public final ImageView imageView;
+        @Bind(R.id.title) TextView titleView;
+        @Bind(R.id.desc) TextView descView;
+        @Bind(R.id.image) ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            titleView = (TextView) itemView.findViewById(R.id.title);
-            descView = (TextView) itemView.findViewById(R.id.desc);
-            imageView = (ImageView) itemView.findViewById(R.id.image);
+            ButterKnife.bind(this, itemView);
         }
     }
 }

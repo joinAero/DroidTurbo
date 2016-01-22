@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 
 public class BaseActivity extends AppCompatActivity {
@@ -25,7 +26,7 @@ public class BaseActivity extends AppCompatActivity {
         // Toolbar: http://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         // Adding the App Bar: http://developer.android.com/training/appbar/index.html
         // Using the App ToolBar: https://guides.codepath.com/android/Using-the-App-ToolBar
-        Toolbar bar = (Toolbar) findViewById(R.id.bar);
+        Toolbar bar = ButterKnife.findById(this, R.id.bar);
         if (bar != null) {
             setSupportActionBar(bar);
             onToolbarCreated(bar);

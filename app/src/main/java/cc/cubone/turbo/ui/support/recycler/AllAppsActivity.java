@@ -21,6 +21,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.util.Log;
 import cc.cubone.turbo.model.AppCard;
@@ -49,7 +51,8 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
     private final int SPAN_COUNT = 3;
 
-    private RecyclerView mRecyclerView;
+    @Bind(R.id.recycler) RecyclerView mRecyclerView;
+
     private PrefAllApps mPrefAllApps;
 
     private PackageListener mPackageListener;
@@ -58,13 +61,13 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_apps);
+        ButterKnife.bind(this);
         mPrefAllApps = new PrefAllApps(this);
-        initToolbar();
         initViews();
     }
 
     private void initViews() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler);
+        initToolbar();
         updateAdapter();
     }
 

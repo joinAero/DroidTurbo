@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.ui.base.BaseFragment;
 
@@ -63,7 +64,7 @@ public class ColorPageFragment extends BaseFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         view.setBackgroundColor(mColor);
 
-        TextView textView = (TextView) view.findViewById(R.id.text);
+        TextView textView = ButterKnife.findById(view, R.id.text);
         textView.setText(mTitle);
     }
 

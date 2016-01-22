@@ -24,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.arch.ArchFragment;
@@ -51,46 +53,22 @@ public class MainActivity extends BaseActivity
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
 
-    private View mLayout;
+    @Bind(R.id.drawer) DrawerLayout mDrawer;
+    @Bind(R.id.pager) ViewPager mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        initToolbar();
+        ButterKnife.bind(this);
         initViews();
         requestPermissions();
     }
 
-    @Override
-    protected void onToolbarCreated(Toolbar toolbar) {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
-        pager.setAdapter(adapter);
-        // retain all pagers
-        pager.setOffscreenPageLimit(adapter.getCount());
-
-        TabLayout barTabs = (TabLayout) toolbar.findViewById(R.id.tab);
-        barTabs.setupWithViewPager(pager);
-        adapter.customTabViews(barTabs);
-
-        mLayout = pager;
-
-        // How to set StatusBar to transparent?
-        // Issue: Could not set StatusBar to transparent if using DrawerLayout
-        // Google: DrawerLayout setStatusBarBackground
-        /*drawer.setScrimColor(Color.TRANSPARENT);
-        drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
-    }
-
     private void initViews() {
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        initToolbar();
+
+        FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,8 +77,31 @@ public class MainActivity extends BaseActivity
             }
         });
 
-        NavigationView nav = (NavigationView) findViewById(R.id.nav);
+        NavigationView nav = ButterKnife.findById(this, R.id.nav);
         nav.setNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    protected void onToolbarCreated(Toolbar toolbar) {
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
+        mPager.setAdapter(adapter);
+        // retain all pagers
+        mPager.setOffscreenPageLimit(adapter.getCount());
+
+        TabLayout barTab = ButterKnife.findById(this, R.id.tab);
+        barTab.setupWithViewPager(mPager);
+        adapter.customTabViews(barTab);
+
+        // How to set StatusBar to transparent?
+        // Issue: Could not set StatusBar to transparent if using DrawerLayout
+        // Google: DrawerLayout setStatusBarBackground
+        /*drawer.setScrimColor(Color.TRANSPARENT);
+        drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
     }
 
     /**
@@ -162,12 +163,12 @@ public class MainActivity extends BaseActivity
             if (PermissionUtils.verifyPermission(grantResults)) {
                 // permission was granted, yay!
                 // Do the related task you need to do.
-                Snackbar.make(mLayout, "Permission was granted, yay!",
+                Snackbar.make(mPager, "Permission was granted, yay!",
                         Snackbar.LENGTH_SHORT).show();
             } else {
                 // permission denied, boo!
                 // Disable the functionality that depends on this permission.
-                Snackbar.make(mLayout, "Permission denied, boo!",
+                Snackbar.make(mPager, "Permission denied, boo!",
                         Snackbar.LENGTH_SHORT).show();
             }
         } else {
@@ -177,9 +178,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
@@ -242,8 +242,7 @@ public class MainActivity extends BaseActivity
 
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 

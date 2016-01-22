@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 
 public class ListFragment extends BaseFragment {
@@ -21,7 +22,7 @@ public class ListFragment extends BaseFragment {
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-        RecyclerView recycler = (RecyclerView) view.findViewById(R.id.recycler);
+        RecyclerView recycler = ButterKnife.findById(view, R.id.recycler);
         onViewPrepared(recycler);
     }
 
