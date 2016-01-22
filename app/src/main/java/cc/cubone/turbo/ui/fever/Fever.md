@@ -23,6 +23,7 @@
 
 * [greenDAO](https://github.com/greenrobot/greenDAO)
     - greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases.
+    - Similar: [sqlbrite](https://github.com/square/sqlbrite)
 
 * [EventBus](https://github.com/greenrobot/EventBus)
     - Android optimized event bus that simplifies communication between Activities, Fragments, Threads, Services, etc. Less code, better quality.
@@ -32,7 +33,7 @@
     - Similar: [Volley](https://github.com/mcxiaoke/android-volley)
 
 * [RxAndroid](https://github.com/ReactiveX/RxAndroid)
-    - Reactive Extensions for Android
+    - Reactive Extensions for Android: [Wiki](https://github.com/ReactiveX/RxAndroid/wiki)
 
 ---
 
