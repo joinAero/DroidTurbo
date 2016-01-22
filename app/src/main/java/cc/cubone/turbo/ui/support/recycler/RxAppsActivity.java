@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -18,19 +19,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.util.Log;
-import cc.cubone.turbo.model.AppInfo;
-import cc.cubone.turbo.model.Info;
+import cc.cubone.turbo.model.DataInfo;
 import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ToastUtils;
-import cc.cubone.turbo.view.AppInfoRecyclerViewAdapter;
 import cc.cubone.turbo.view.InfoRecyclerViewAdapter;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class RxAppsActivity extends BaseActivity implements
-        AppInfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
+        InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Long>> {
 
     private static final String TAG = "RxAppsActivity";
 
@@ -58,7 +58,7 @@ public class RxAppsActivity extends BaseActivity implements
     }
 
     @Override
-    public void onItemViewClick(View view, int position, AppInfo appInfo) {
+    public void onItemViewClick(View view, int position, DataInfo<Long> info) {
     }
 
     @Override
@@ -67,7 +67,7 @@ public class RxAppsActivity extends BaseActivity implements
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
-    private Observable<Info> observableApps() {
+    private Observable<DataInfo<Long>> observableApps() {
         return Observable.create(subscriber -> {
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -76,15 +76,16 @@ public class RxAppsActivity extends BaseActivity implements
             List<ResolveInfo> infos = pm.queryIntentActivities(mainIntent, 0);
 
             ComponentInfo compInfo;
+            long i = 0L;
             for(ResolveInfo info : infos){
                 if (subscriber.isUnsubscribed()){
                     return;
                 }
                 compInfo = getComponentInfo(info);
-                subscriber.onNext(new Info(
+                subscriber.onNext(new DataInfo<>(
                         info.loadLabel(pm).toString(),
                         (compInfo == null) ? "" : compInfo.packageName,
-                        info.loadIcon(pm)));
+                        info.loadIcon(pm), i++));
             }
             // after sending all values we complete the sequence
             if (!subscriber.isUnsubscribed()){
@@ -108,34 +109,48 @@ public class RxAppsActivity extends BaseActivity implements
         }
         mRecyclerView.setAdapter(null);
         observableApps()
+                .map(new Func1<DataInfo<Long>, DataInfo<Long>>() {
+                    long mIndex = 0;
+                    @Override
+                    public DataInfo<Long> call(DataInfo<Long> info) {
+                        if (DBG) Log.i(TAG, "call: " + info.getData());
+                        info.setTitle((mIndex++) + " " + info.getTitle());
+                        return info;
+                    }
+                })
                 .onBackpressureBuffer()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Info>() {
-
-                    private List<Info> mApps = new ArrayList<>();
-
+                .subscribe(new Observer<DataInfo<Long>>() {
+                    private List<DataInfo<Long>> mApps = new ArrayList<>();
                     @Override
                     public void onCompleted() {
-                        if (DBG) Log.d(TAG, "onCompleted");
-                        mRecyclerView.setAdapter(InfoRecyclerViewAdapter.create(mApps, R.layout.item_app));
+                        if (DBG) Log.i(TAG, "onCompleted");
+                        mRecyclerView.setAdapter(createAdapter(mApps));
                         mSwipeRefreshLayout.setRefreshing(false);
                     }
-
                     @Override
                     public void onError(Throwable e) {
-                        if (DBG) Log.d(TAG, "onError");
+                        if (DBG) Log.i(TAG, "onError");
                         e.printStackTrace();
                         mSwipeRefreshLayout.setRefreshing(false);
                         ToastUtils.show(RxAppsActivity.this, "Refresh apps failed!");
                     }
-
                     @Override
-                    public void onNext(Info info) {
-                        if (DBG) Log.d(TAG, "onNext: " + info.getTitle());
+                    public void onNext(DataInfo<Long> info) {
+                        if (DBG) Log.i(TAG, "onNext: " + info.getTitle());
                         mApps.add(info);
                     }
                 });
+    }
+
+    private InfoRecyclerViewAdapter<DataInfo<Long>, InfoRecyclerViewAdapter.ViewHolder2>
+            createAdapter(@NonNull List<DataInfo<Long>> dataList) {
+        InfoRecyclerViewAdapter<DataInfo<Long>, InfoRecyclerViewAdapter.ViewHolder2> adapter =
+                InfoRecyclerViewAdapter.create(dataList, R.layout.item_app,
+                        (view, info) -> view.setText("index: " + info.getData()));
+        adapter.setOnItemViewClickListener(this);
+        return adapter;
     }
 
 }

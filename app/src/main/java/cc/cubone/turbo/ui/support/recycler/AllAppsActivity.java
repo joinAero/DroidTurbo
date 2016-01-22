@@ -35,7 +35,7 @@ import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.TintUtils;
 import cc.cubone.turbo.util.ToastUtils;
-import cc.cubone.turbo.view.AppInfoRecyclerViewAdapter;
+import cc.cubone.turbo.view.InfoRecyclerViewAdapter;
 
 import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_RUNNING;
 import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_STOPPED;
@@ -45,7 +45,7 @@ import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
 public class AllAppsActivity extends BaseActivity implements PackageCallback,
-        AppInfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
+        InfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
 
     static final String TAG = "AllAppsActivity";
 
@@ -125,8 +125,12 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
             mRecyclerView.setHasFixedSize(false);
         }
 
-        AppInfoRecyclerViewAdapter adapter = new AppInfoRecyclerViewAdapter(
-                createAppInfos(displayFlags), layoutId);
+        InfoRecyclerViewAdapter<AppInfo, InfoRecyclerViewAdapter.ViewHolder2> adapter =
+                InfoRecyclerViewAdapter.create(createAppInfos(displayFlags), layoutId,
+                        (view, appInfo) -> {
+                            view.setText(appInfo.getType().name().toLowerCase()
+                                    + ", " + appInfo.getState().name().toLowerCase());
+                        });
         adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 

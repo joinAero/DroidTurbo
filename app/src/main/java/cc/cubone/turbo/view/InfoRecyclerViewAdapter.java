@@ -1,5 +1,6 @@
 package cc.cubone.turbo.view;
 
+import android.annotation.SuppressLint;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -25,13 +26,36 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
         mResource = resource;
     }
 
-    public static <Data extends Info> InfoRecyclerViewAdapter<Data, InfoRecyclerViewAdapter.ViewHolder>
-            create(@NonNull List<Data> dataList, @LayoutRes int resource) {
+    public static <Data extends Info> InfoRecyclerViewAdapter<Data, ViewHolder>
+            create(@NonNull List<Data> dataList,
+                   @LayoutRes int resource) {
         return new InfoRecyclerViewAdapter<Data, ViewHolder>(dataList, resource) {
             @Override
             public ViewHolder onViewHolderCreate(View itemView, int viewType) {
                 return new ViewHolder(itemView);
             }
+        };
+    }
+
+    public static <Data extends Info> InfoRecyclerViewAdapter<Data, ViewHolder2>
+            create(@NonNull List<Data> dataList,
+                   @LayoutRes int resource,
+                   Binder<TextView, Data> infoBinder) {
+        return new InfoRecyclerViewAdapter<Data, ViewHolder2>(dataList, resource) {
+            @Override
+            public ViewHolder2 onViewHolderCreate(View itemView, int viewType) {
+                return new ViewHolder2(itemView);
+            }
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onViewHolderBind(Data data, ViewHolder2 holder, int position) {
+                super.onViewHolderBind(data, holder, position);
+                TextView infoView = holder.infoView;
+                if (infoView != null && infoBinder != null) {
+                    infoBinder.bind(infoView, data);
+                }
+            }
+
         };
     }
 
@@ -58,13 +82,27 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.title) TextView titleView;
-        @Bind(R.id.desc) TextView descView;
-        @Bind(R.id.image) ImageView imageView;
+        @Bind(R.id.title) public TextView titleView;
+        @Bind(R.id.desc) public TextView descView;
+        @Bind(R.id.image) public ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
     }
+
+    public static class ViewHolder2 extends ViewHolder {
+
+        @Bind(R.id.info) public TextView infoView;
+
+        public ViewHolder2(View itemView) {
+            super(itemView);
+        }
+    }
+
+    public interface Binder<V extends View, Data extends Info> {
+        void bind(@NonNull V view, Data data);
+    }
+
 }
