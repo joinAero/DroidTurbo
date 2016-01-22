@@ -39,15 +39,19 @@ public class RecyclerFragment extends ListSightFragment implements
         List<DataCard<Class>> cards = new ArrayList<>();
         cards.add(createCard(R.string.all_apps, "Show all apps in list or grid.",
                 "all_apps.gif", AllAppsActivity.class));
+        cards.add(createCard(R.string.rx_apps, "Show all apps with RxJava.",
+                null, RxAppsActivity.class));
         return cards;
     }
 
     private DataCard<Class> createCard(int titleId, String desc, String gifAsset, Class<?> cls) {
         Drawable drawable = null;
-        try {
-            drawable = new GifDrawable(getActivity().getAssets(), gifAsset);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (gifAsset != null) {
+            try {
+                drawable = new GifDrawable(getActivity().getAssets(), gifAsset);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return new DataCard<Class>(getString(titleId), desc, drawable, cls);
     }

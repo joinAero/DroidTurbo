@@ -8,6 +8,7 @@
     <string name="search_hint">Search hint here!</string>
 
     <string name="all_apps">All Apps</string>
+    <string name="rx_apps">Show Apps With RxJava</string>
 
     <!-- actions in all apps -->
     <string name="launch">Launch</string>
