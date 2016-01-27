@@ -1,58 +1,52 @@
 package cc.cubone.turbo.receiver;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 
 /**
- * The package listener.
+ * The package broadcast.
  *
  * @see <a href="https://android.googlesource.com/platform/packages/apps/Launcher3/+/master">Launcher3</a>
  */
-public class PackageListener {
+public class PackageBroadcast {
 
-    private Context mContext;
-    private PackageCallback mCallback;
-    private PackageReceiver mReceiver;
+    public interface Callback {
 
-    public PackageListener(Context context) {
-        mContext = context;
+        void onPackageAdded(String packageName);
+
+        void onPackageChanged(String packageName);
+
+        void onPackageRemoved(String packageName);
+
+        void onPackagesAvailable(String[] packages, boolean replacing);
+
+        void onPackagesUnavailable(String[] packages, boolean replacing);
+
     }
 
-    public void register(PackageCallback callback) {
-        mCallback = callback;
+    public static class Receiver extends Broadcast.Receiver<Callback> {
 
-        if (mReceiver != null) return;
-        synchronized (this) {
-            if (mReceiver != null) return;
-            mReceiver = new PackageReceiver();
-            IntentFilter filter = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
-            filter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-            filter.addAction(Intent.ACTION_PACKAGE_CHANGED);
-            filter.addDataScheme("package");
-            mContext.registerReceiver(mReceiver, filter);
-            filter = new IntentFilter();
-            filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
-            filter.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
-            mContext.registerReceiver(mReceiver, filter);
+        public Receiver(Context context) {
+            super(context);
         }
-    }
 
-    public void unregister() {
-        if (mReceiver == null) return;
-        synchronized (this) {
-            if (mReceiver == null) return;
-            mContext.unregisterReceiver(mReceiver);
-            mReceiver = null;
-        }
-    }
-
-    private class PackageReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            if (mCallback == null) return;
+        public IntentFilter[] onCreateIntentFilters() {
+            IntentFilter filter1 = new IntentFilter(Intent.ACTION_PACKAGE_ADDED);
+            filter1.addAction(Intent.ACTION_PACKAGE_REMOVED);
+            filter1.addAction(Intent.ACTION_PACKAGE_CHANGED);
+            filter1.addDataScheme("package");
+            IntentFilter filter2 = new IntentFilter();
+            filter2.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE);
+            filter2.addAction(Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE);
+            return new IntentFilter[]{filter1, filter2};
+        }
+
+        @Override
+        public void onIntentReceived(Intent intent, Callback callback) {
+            if (callback == null) return;
 
             String action = intent.getAction();
             if (action == null) return;
@@ -68,18 +62,18 @@ public class PackageListener {
                     return;
                 }
                 if (Intent.ACTION_PACKAGE_CHANGED.equals(action)) {
-                    mCallback.onPackageChanged(packageName);
+                    callback.onPackageChanged(packageName);
                 } else if (Intent.ACTION_PACKAGE_REMOVED.equals(action)) {
                     if (!replacing) {
-                        mCallback.onPackageRemoved(packageName);
+                        callback.onPackageRemoved(packageName);
                     }
                     // else, we are replacing the package, so a PACKAGE_ADDED will be sent
                     // later, we will update the package at this time
                 } else if (Intent.ACTION_PACKAGE_ADDED.equals(action)) {
                     if (!replacing) {
-                        mCallback.onPackageAdded(packageName);
+                        callback.onPackageAdded(packageName);
                     } else {
-                        mCallback.onPackageChanged(packageName);
+                        callback.onPackageChanged(packageName);
                     }
                 }
             } else if (Intent.ACTION_EXTERNAL_APPLICATIONS_AVAILABLE.equals(action)) {
@@ -89,7 +83,7 @@ public class PackageListener {
                 final boolean ATLEAST_KITKAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
                 final boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, ATLEAST_KITKAT);
                 String[] packages = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_PACKAGE_LIST);
-                mCallback.onPackagesAvailable(packages, replacing);
+                callback.onPackagesAvailable(packages, replacing);
             } else if (Intent.ACTION_EXTERNAL_APPLICATIONS_UNAVAILABLE.equals(action)) {
                 // This intent is broadcasted when moving a package or mounting/un-mounting
                 // external storage.
@@ -99,9 +93,8 @@ public class PackageListener {
                 // lower devices as the intent is not sent when the app is updating/replacing.
                 final boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, false);
                 String[] packages = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_PACKAGE_LIST);
-                mCallback.onPackagesUnavailable(packages, replacing);
+                callback.onPackagesUnavailable(packages, replacing);
             }
         }
     }
-
 }

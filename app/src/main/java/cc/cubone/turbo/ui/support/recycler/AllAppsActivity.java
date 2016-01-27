@@ -28,8 +28,7 @@ import cc.cubone.turbo.core.util.Log;
 import cc.cubone.turbo.model.AppInfo;
 import cc.cubone.turbo.model.DataInfo;
 import cc.cubone.turbo.persistence.PrefAllApps;
-import cc.cubone.turbo.receiver.PackageCallback;
-import cc.cubone.turbo.receiver.PackageListener;
+import cc.cubone.turbo.receiver.PackageBroadcast;
 import cc.cubone.turbo.ui.ActionDialogFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.util.ContextUtils;
@@ -44,7 +43,7 @@ import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_USER;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
 
-public class AllAppsActivity extends BaseActivity implements PackageCallback,
+public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Callback,
         InfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
 
     static final String TAG = "AllAppsActivity";
@@ -55,7 +54,7 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
 
     private PrefAllApps mPrefAllApps;
 
-    private PackageListener mPackageListener;
+    private PackageBroadcast.Receiver mPackageReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -309,15 +308,15 @@ public class AllAppsActivity extends BaseActivity implements PackageCallback,
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        mPackageListener = new PackageListener(this);
-        mPackageListener.register(this);
+        mPackageReceiver = new PackageBroadcast.Receiver(this);
+        mPackageReceiver.register(this);
     }
 
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        mPackageListener.unregister();
-        mPackageListener = null;
+        mPackageReceiver.unregister();
+        mPackageReceiver = null;
     }
 
     @Override
