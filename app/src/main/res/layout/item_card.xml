@@ -34,7 +34,7 @@
             android:singleLine="true"
             android:text="Title"
             android:textSize="24sp"
-            android:textColor="@android:color/white" />
+            android:textColor="@color/white" />
 
         <TextView
             android:id="@+id/desc"

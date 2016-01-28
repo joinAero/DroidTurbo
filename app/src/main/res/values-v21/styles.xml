@@ -4,6 +4,32 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/transparent</item>
     </style>
+
+    <style name="AppTheme.Bar.Icon" parent="">
+        <item name="android:src">@null</item>
+        <!-- tint color for vector drawable -->
+        <!--
+        Reference:
+        * Working with Drawables: http://developer.android.com/training/material/drawables.html
+        * 谈谈Android Material Design 中的Tint（着色）: http://segmentfault.com/a/1190000003038675
+
+        Further:
+        * Vector drawable: drawable/ic_apps.xml
+        * Tint menu item: MainActivity#tintMenuItem()
+        * Tint bitmap: however src can not be vector drawable
+            <?xml version="1.0" encoding="utf-8"?>
+            <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
+                android:src="@drawable/ic_search"
+                android:tint="@color/white"/>
+        -->
+        <item name="android:tint">@color/bar_icon_color</item>
+    </style>
+
+    <!-- TabLayout -->
+    <style name="AppTheme.Tab.Icon" parent="AppTheme.Bar.Icon">
+        <item name="android:tint">@color/tab_icon_color</item>
+    </style>
+
 </resources>

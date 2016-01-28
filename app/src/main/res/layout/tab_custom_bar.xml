@@ -4,5 +4,4 @@
     style="@style/AppTheme.Bar.Icon"
     android:id="@+id/icon"
     android:layout_width="@dimen/bar_icon_size"
-    android:layout_height="@dimen/bar_icon_size"
-    android:tint="@color/bar_icon_color" />
+    android:layout_height="@dimen/bar_icon_size" />
