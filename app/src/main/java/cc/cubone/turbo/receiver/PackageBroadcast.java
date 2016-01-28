@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Build;
 
+import cc.cubone.turbo.core.receiver.Broadcast;
+
 /**
  * The package broadcast.
  *
@@ -45,7 +47,7 @@ public class PackageBroadcast {
         }
 
         @Override
-        public void onIntentReceived(Intent intent, Callback callback) {
+        public void onIntentReceived(Context context, Intent intent, Callback callback) {
             if (callback == null) return;
 
             String action = intent.getAction();

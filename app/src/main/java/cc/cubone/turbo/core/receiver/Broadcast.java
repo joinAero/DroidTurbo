@@ -1,4 +1,4 @@
-package cc.cubone.turbo.receiver;
+package cc.cubone.turbo.core.receiver;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -10,9 +10,7 @@ public class Broadcast {
 
     public static void send(Context context, String action, Bundle extras) {
         Intent intent = new Intent(action);
-        if (extras != null) {
-            intent.putExtras(extras);
-        }
+        if (extras != null) intent.putExtras(extras);
         send(context, intent);
     }
 
@@ -42,7 +40,8 @@ public class Broadcast {
             mReceiver = new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    onIntentReceived(intent, mCallback);
+                    if (onInterceptIntentReceived(context, intent)) return;
+                    onIntentReceived(context, intent, mCallback);
                 }
             };
 
@@ -66,6 +65,10 @@ public class Broadcast {
             mReceiver = null;
         }
 
+        public boolean onInterceptIntentReceived(Context context, Intent intent) {
+            return false;
+        }
+
         public IntentFilter onCreateIntentFilter() {
             return null;
         }
@@ -74,7 +77,7 @@ public class Broadcast {
             return null;
         }
 
-        public abstract void onIntentReceived(Intent intent, Callback callback);
+        public abstract void onIntentReceived(Context context, Intent intent, Callback callback);
 
     }
 
