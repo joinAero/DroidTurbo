@@ -185,6 +185,14 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
         return false;
     }
 
+    private boolean checkNotBluetoothDevice(BluetoothDevice device) {
+        if (device == null) {
+            Log.w(TAG, "BluetoothDevice is null");
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Get connected devices for this specific profile.
      *
@@ -211,7 +219,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * @see BluetoothProfile#getConnectionState(BluetoothDevice)
      */
     public int getConnectionState(BluetoothDevice device) {
-        if (checkNotBluetoothProfile()) return STATE_UNKNOWN;
+        if (checkNotBluetoothProfile() || checkNotBluetoothDevice(device)) return STATE_UNKNOWN;
         return mBluetoothProfile.getConnectionState(device);
     }
 
@@ -235,6 +243,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * Connect the bluetooth device.
      */
     public boolean connect(BluetoothDevice device) {
+        if (checkNotBluetoothDevice(device)) return false;
         return invoke(mBluetoothProfile, "connect", device);
     }
 
@@ -242,6 +251,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * Disconnect the bluetooth device.
      */
     public boolean disconnect(BluetoothDevice device) {
+        if (checkNotBluetoothDevice(device)) return false;
         return invoke(mBluetoothProfile, "disconnect", device);
     }
 
@@ -249,6 +259,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * Create bond for the bluetooth device.
      */
     public boolean createBond(BluetoothDevice device) {
+        if (checkNotBluetoothDevice(device)) return false;
         return invoke(device, "createBond");
     }
 
@@ -256,6 +267,7 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
      * Remove bond for the bluetooth device.
      */
     public boolean removeBond(BluetoothDevice device) {
+        if (checkNotBluetoothDevice(device)) return false;
         return invoke(device, "removeBond");
     }
 
@@ -269,6 +281,9 @@ public class BluetoothProfileProxy implements BluetoothProfile, BluetoothProfile
                 int len = args.length;
                 paramTypes = new Class<?>[len];
                 for (int i = 0; i < len; ++i) {
+                    if (args[i] == null) {
+                        throw new NullPointerException();
+                    }
                     paramTypes[i] = args[i].getClass();
                 }
             }
