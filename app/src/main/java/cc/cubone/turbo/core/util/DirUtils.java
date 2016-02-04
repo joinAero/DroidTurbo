@@ -135,10 +135,10 @@ public class DirUtils {
     }
 
     /**
-     * <p>Example path: /storage/emulated/0/.cc.cubone.example
+     * <p>Example path: /storage/emulated/0/cc.cubone.example
      */
     public static File getExternalPackageDir(Context context) {
-        return new File(Environment.getExternalStorageDirectory(), '.' + context.getPackageName());
+        return new File(Environment.getExternalStorageDirectory(), context.getPackageName());
     }
 
 }
