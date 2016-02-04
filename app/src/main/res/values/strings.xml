@@ -16,5 +16,9 @@
     <string name="uninstall">Uninstall</string>
     <string name="copy_app_name">Copy app name</string>
     <string name="copy_package_name">Copy package name</string>
+    <string name="permission_manager">Permission Manager</string>
+    <string name="permission_autostart">Permission AutoStart</string>
+    <string name="permission_floatwindow">Permission FloatWindow</string>
+    <string name="permission_root">Permission Root</string>
 
 </resources>
