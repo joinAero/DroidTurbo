@@ -14,6 +14,7 @@ import android.view.WindowManager;
 
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.core.rom.MIUIUtils;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -79,6 +80,12 @@ public class BaseActivity extends AppCompatActivity {
             win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             win.setStatusBarColor(color);
+        }
+
+        // Setup immersive mode on third-party rom
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+            //FlymeUtils.setStatusBarDarkIcon(win, false);
+            MIUIUtils.setStatusBar(win, MIUIUtils.StatusBarMode.TRANSPARENT_DARK_TEXT);
         }
 
         // StatusBar & NavigationBar

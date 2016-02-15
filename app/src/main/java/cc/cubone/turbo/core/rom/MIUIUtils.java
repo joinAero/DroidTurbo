@@ -9,20 +9,26 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.Build;
 import android.provider.Settings;
+import android.view.Window;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 
 import cc.cubone.turbo.core.os.BuildProperties;
 
 /**
  * @see <a href="http://dev.xiaomi.com/doc/?p=254">如何识别小米设备/MIUI系统</a>
+ * @see <a href="http://dev.xiaomi.com/docs/appsmarket/technical_docs/immersion/">MIUI 6 沉浸式状态栏调用方法</a>
  * @see <a href="http://www.cnblogs.com/fangyucun/p/4027750.html">关于MIUI悬浮窗权限问题的解决方案</a>
- * @see <a href="http://www.cnblogs.com/niray/p/5153530.html">Android 沉浸式状态栏</a>
  */
 public class MIUIUtils {
 
     public static final String MIUI_V5 = "V5";
     public static final String MIUI_V6 = "V6";
+
+    public enum StatusBarMode {
+        TRANSPARENT, TRANSPARENT_DARK_TEXT, DARK_TEXT_CLEAN,
+    }
 
     private static final String KEY_MIUI_VERSION_CODE = "ro.miui.ui.version.code";
     private static final String KEY_MIUI_VERSION_NAME = "ro.miui.ui.version.name";
@@ -120,5 +126,27 @@ public class MIUIUtils {
         intent.setAction("miui.intent.action.ROOT_MANAGER");
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         return intent;
+    }
+
+    public static void setStatusBar(Window window, StatusBarMode mode) {
+        try {
+            Class layoutParamsClass = Class.forName("android.view.MiuiWindowManager$LayoutParams");
+            int tranceFlag = layoutParamsClass.getField("EXTRA_FLAG_STATUS_BAR_TRANSPARENT").getInt(null);
+            int darkModeFlag = layoutParamsClass.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE").getInt(null);
+
+            Method extraFlagsField = Window.class.getMethod("setExtraFlags", int.class, int.class);
+            switch (mode) {
+                case TRANSPARENT:
+                    extraFlagsField.invoke(window, tranceFlag, tranceFlag); // 只需要状态栏透明
+                    break;
+                case TRANSPARENT_DARK_TEXT:
+                    extraFlagsField.invoke(window, tranceFlag | darkModeFlag, tranceFlag | darkModeFlag); // 状态栏透明且黑色字体
+                    break;
+                case DARK_TEXT_CLEAN:
+                    extraFlagsField.invoke(window, 0, darkModeFlag); // 清除黑色字体
+                    break;
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

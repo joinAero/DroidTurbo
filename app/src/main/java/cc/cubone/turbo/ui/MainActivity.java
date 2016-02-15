@@ -23,10 +23,12 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
+import cc.cubone.turbo.core.rom.MIUIUtils;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.arch.ArchFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
@@ -79,6 +81,21 @@ public class MainActivity extends BaseActivity
 
         NavigationView nav = ButterKnife.findById(this, R.id.nav);
         nav.setNavigationItemSelectedListener(this);
+
+        if (MIUIUtils.isMIUI()) {
+            View content = ButterKnife.findById(this, R.id.content);
+            ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) content.getLayoutParams();
+            lp.topMargin = getStatusBarHeight();
+        }
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     @Override

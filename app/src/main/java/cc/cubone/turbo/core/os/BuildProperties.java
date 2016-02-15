@@ -5,6 +5,7 @@ import android.os.Environment;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
@@ -16,8 +17,10 @@ public class BuildProperties {
     private final Properties properties;
 
     private BuildProperties() throws IOException {
+        InputStream in = new FileInputStream(new File(Environment.getRootDirectory(), "build.prop"));
         properties = new Properties();
-        properties.load(new FileInputStream(new File(Environment.getRootDirectory(), "build.prop")));
+        properties.load(in);
+        in.close();
     }
 
     public static BuildProperties newInstance() throws IOException {
