@@ -85,7 +85,7 @@ public class BaseActivity extends AppCompatActivity {
         // Setup immersive mode on third-party rom
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
             //FlymeUtils.setStatusBarDarkIcon(win, false);
-            MIUIUtils.setStatusBar(win, MIUIUtils.StatusBarMode.TRANSPARENT_DARK_TEXT);
+            MIUIUtils.setStatusBar(win, MIUIUtils.StatusBarMode.TRANSPARENT);
         }
 
         // StatusBar & NavigationBar
