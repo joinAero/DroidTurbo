@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.IdRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -24,10 +25,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected Toolbar initToolbar() {
+        return initToolbar(R.id.bar);
+    }
+
+    protected Toolbar initToolbar(@IdRes int id) {
         // Toolbar: http://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         // Adding the App Bar: http://developer.android.com/training/appbar/index.html
         // Using the App ToolBar: https://guides.codepath.com/android/Using-the-App-ToolBar
-        Toolbar bar = ButterKnife.findById(this, R.id.bar);
+        Toolbar bar = ButterKnife.findById(this, id);
         if (bar != null) {
             setSupportActionBar(bar);
             onToolbarCreated(bar);
@@ -36,9 +41,11 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void onToolbarCreated(Toolbar toolbar) {
+        // Set the back arrow in the toolbar
         ActionBar ab = getSupportActionBar();
         if (ab != null) {
             ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeButtonEnabled(false);
         }
     }
 
