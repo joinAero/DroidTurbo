@@ -19,8 +19,6 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
@@ -59,7 +57,7 @@ public class MainActivity extends BaseActivity {
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
 
-    Drawer mDrawer;
+    private Drawer mDrawer;
 
     @Bind(R.id.pager) ViewPager mPager;
 
@@ -125,8 +123,6 @@ public class MainActivity extends BaseActivity {
         barTab.setupWithViewPager(mPager);
         adapter.customTabViews(barTab);
 
-        initStatusBar();
-
         // How to set StatusBar to transparent?
         // Issue: Could not set StatusBar to transparent if using DrawerLayout
         // Google: DrawerLayout setStatusBarBackground
@@ -134,23 +130,9 @@ public class MainActivity extends BaseActivity {
         drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
     }
 
-    private void initStatusBar() {
-        View content = ButterKnife.findById(this, R.id.content);
-        ViewGroup.MarginLayoutParams lp = (ViewGroup.MarginLayoutParams) content.getLayoutParams();
-        lp.topMargin = getStatusBarHeight();
-    }
-
-    private int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
-
     @Override
     protected void onToolbarCreated(Toolbar toolbar) {
+        holdStatusBar(toolbar, R.color.colorPrimary);
     }
 
     /**

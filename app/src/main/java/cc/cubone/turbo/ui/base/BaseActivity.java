@@ -4,18 +4,22 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.rom.MIUIUtils;
+import cc.cubone.turbo.core.util.UIUtils;
 
 public class BaseActivity extends AppCompatActivity {
 
@@ -47,22 +51,36 @@ public class BaseActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(false);
         }
+        clipToStatusBar(toolbar);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
+    protected void clipToStatusBar(Toolbar toolbar) {
+        ViewGroup contentParent = ButterKnife.findById(this, android.R.id.content);
+        View content = contentParent.getChildAt(0);
+        if (content != null) {
+            content.setFitsSystemWindows(false);
         }
-        return super.onOptionsItemSelected(item);
+
+        final int statusBarHeight = UIUtils.getStatusBarHeight(this);
+        toolbar.getLayoutParams().height += statusBarHeight;
+        toolbar.setPadding(0, statusBarHeight, 0, 0);
     }
 
-    @Override
-    public void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        initSystemUI(Color.TRANSPARENT);
-        //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
+    protected void holdStatusBar(Toolbar toolbar, @ColorRes int resid) {
+        ViewGroup toolbarParent = (ViewGroup) toolbar.getParent();
+        int i = 0;
+        for (int n = toolbarParent.getChildCount(); i < n; i++) {
+            if (toolbarParent.getChildAt(i) == toolbar) break;
+        }
+        View holderView = new View(this);
+        holderView.setId(R.id.status_bar);
+        holderView.setBackgroundColor(getResources().getColor(resid));
+        toolbarParent.addView(holderView, i, new ViewGroup.LayoutParams(
+                ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getStatusBarHeight(this)));
+        if (toolbarParent instanceof RelativeLayout) {
+            ((RelativeLayout.LayoutParams) toolbarParent.getLayoutParams())
+                    .addRule(RelativeLayout.BELOW, R.id.status_bar);
+        }
     }
 
     /**
@@ -114,6 +132,22 @@ public class BaseActivity extends AppCompatActivity {
 
         // Reference:
         // * http://stackoverflow.com/questions/29271251/put-navigation-drawer-under-status-bar
+    }
+
+    @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        initSystemUI(Color.TRANSPARENT);
+        //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
