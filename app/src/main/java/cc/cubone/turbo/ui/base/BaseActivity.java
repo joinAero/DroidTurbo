@@ -4,7 +4,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
-import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.RelativeLayout;
 
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
@@ -51,22 +49,32 @@ public class BaseActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(false);
         }
-        clipToStatusBar(toolbar);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+            // if enable immersive mode with `initSystemUI()`
+            ViewGroup contentParent = ButterKnife.findById(this, android.R.id.content);
+            setFitsSystemWindows(contentParent.getChildAt(0), false, false);
+            clipToStatusBar(toolbar);
+        }
+    }
+
+    protected void setFitsSystemWindows(View view, boolean fitSystemWindows, boolean applyToChildren) {
+        if (view == null) return;
+        view.setFitsSystemWindows(fitSystemWindows);
+        if (applyToChildren && (view instanceof ViewGroup)) {
+            ViewGroup viewGroup = (ViewGroup) view;
+            for (int i = 0, n = viewGroup.getChildCount(); i < n; i++) {
+                viewGroup.getChildAt(i).setFitsSystemWindows(fitSystemWindows);
+            }
+        }
     }
 
     protected void clipToStatusBar(Toolbar toolbar) {
-        ViewGroup contentParent = ButterKnife.findById(this, android.R.id.content);
-        View content = contentParent.getChildAt(0);
-        if (content != null) {
-            content.setFitsSystemWindows(false);
-        }
-
         final int statusBarHeight = UIUtils.getStatusBarHeight(this);
         toolbar.getLayoutParams().height += statusBarHeight;
         toolbar.setPadding(0, statusBarHeight, 0, 0);
     }
 
-    protected void holdStatusBar(Toolbar toolbar, @ColorRes int resid) {
+    /*protected void holdStatusBar(Toolbar toolbar, @ColorRes int resid) {
         ViewGroup toolbarParent = (ViewGroup) toolbar.getParent();
         int i = 0;
         for (int n = toolbarParent.getChildCount(); i < n; i++) {
@@ -81,7 +89,7 @@ public class BaseActivity extends AppCompatActivity {
             ((RelativeLayout.LayoutParams) toolbarParent.getLayoutParams())
                     .addRule(RelativeLayout.BELOW, R.id.status_bar);
         }
-    }
+    }*/
 
     /**
      * Initialize system ui.
@@ -112,23 +120,6 @@ public class BaseActivity extends AppCompatActivity {
             //FlymeUtils.setStatusBarDarkIcon(win, false);
             MIUIUtils.setStatusBar(win, MIUIUtils.StatusBarMode.TRANSPARENT);
         }
-
-        // StatusBar & NavigationBar
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
-            win.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21, 5.0
-            win.getAttributes().systemUiVisibility |=
-                    (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-            win.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS
-                    | WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);
-            win.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            win.setStatusBarColor(Color.TRANSPARENT);
-            win.setNavigationBarColor(Color.TRANSPARENT);
-        }*/
 
         // Reference:
         // * http://stackoverflow.com/questions/29271251/put-navigation-drawer-under-status-bar

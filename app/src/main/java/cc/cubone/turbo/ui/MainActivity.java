@@ -8,26 +8,21 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -53,12 +48,12 @@ import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
  * <li><a href="https://github.com/android/platform_frameworks_support">Platform Frameworks Support</a>
  * </ul>
  */
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
 
-    private Drawer mDrawer;
-
+    @Bind(R.id.drawer) DrawerLayout mDrawer;
     @Bind(R.id.pager) ViewPager mPager;
 
     @Override
@@ -79,40 +74,13 @@ public class MainActivity extends BaseActivity {
                     .setAction("Action", null).show();
         });
 
-        // Create the AccountHeader
-        AccountHeader header = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withHeaderBackground(R.drawable.side_nav_bar)
-                .addProfiles(
-                    new ProfileDrawerItem().withName("joinAero").withEmail("join.aero@gmail.com").withIcon(R.mipmap.ic_launcher)
-                )
-                .withOnAccountHeaderListener((view, profile, currentProfile) -> false)
-                .build();
+        NavigationView nav = ButterKnife.findById(this, R.id.nav);
+        nav.setNavigationItemSelectedListener(this);
 
-        mDrawer = new DrawerBuilder(this)
-                .withToolbar(toolbar)
-                .withActivity(this)
-                .withFullscreen(true)
-                .withAccountHeader(header)
-                .addDrawerItems(
-                    new PrimaryDrawerItem().withName("Import").withIcon(R.drawable.ic_menu_camera),
-                    new PrimaryDrawerItem().withName("Gallery").withIcon(R.drawable.ic_menu_gallery),
-                    new PrimaryDrawerItem().withName("Slideshow").withIcon(R.drawable.ic_menu_slideshow),
-                    new PrimaryDrawerItem().withName("Tools").withIcon(R.drawable.ic_menu_manage),
-                    new SectionDrawerItem().withName("Communicate"),
-                    new SecondaryDrawerItem().withName("Share").withIcon(R.drawable.ic_menu_share),
-                    new SecondaryDrawerItem().withName("Send").withIcon(R.drawable.ic_menu_send)
-                )
-                .withOnDrawerItemClickListener((view, position, drawerItem) -> {
-                    // do something with the clicked item :D
-                    return false;
-                })
-                .withSavedInstance(savedInstanceState)
-                .build();
-
-        if (Build.VERSION.SDK_INT >= 19) {
-            mDrawer.getDrawerLayout().setFitsSystemWindows(false);
-        }
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawer.setDrawerListener(toggle);
+        toggle.syncState();
 
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
         mPager.setAdapter(adapter);
@@ -132,7 +100,10 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void onToolbarCreated(Toolbar toolbar) {
-        holdStatusBar(toolbar, R.color.colorPrimary);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+            setFitsSystemWindows(mDrawer, false, true);
+            clipToStatusBar(toolbar);
+        }
     }
 
     /**
@@ -235,25 +206,35 @@ public class MainActivity extends BaseActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_search:
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+            case R.id.action_search: return true;
+            default: return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
     public void onBackPressed() {
-        if (mDrawer != null && mDrawer.isDrawerOpen()) {
-            mDrawer.closeDrawer();
+        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
+            mDrawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
         }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        switch (item.getItemId()) {
+            case R.id.nav_camera: break;
+            case R.id.nav_gallery: break;
+            case R.id.nav_slideshow: break;
+            case R.id.nav_manage: break;
+            case R.id.nav_share: break;
+            case R.id.nav_send: break;
+        }
+        mDrawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
     public static class MainPagerAdapter extends TabFragmentPagerAdapter {
 
