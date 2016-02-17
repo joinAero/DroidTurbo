@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onToolbarCreated(Toolbar toolbar) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             setFitsSystemWindows(mDrawer, false, true);
             clipToStatusBar(toolbar);
         }

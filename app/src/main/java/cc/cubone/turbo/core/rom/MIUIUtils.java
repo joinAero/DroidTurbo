@@ -64,7 +64,7 @@ public class MIUIUtils {
 
     @SuppressWarnings("IncompatibleBitwiseMaskOperation")
     public static boolean isFloatWindowOpAllowed(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             final AppOpsManager manager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
             final int mode = manager.checkOp(AppOpsManager.OPSTR_SYSTEM_ALERT_WINDOW,
                     Binder.getCallingUid(), context.getPackageName());

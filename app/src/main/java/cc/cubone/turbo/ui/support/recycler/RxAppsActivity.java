@@ -100,7 +100,7 @@ public class RxAppsActivity extends BaseActivity implements
     private ComponentInfo getComponentInfo(ResolveInfo info) {
         if (info.activityInfo != null) return info.activityInfo;
         if (info.serviceInfo != null) return info.serviceInfo;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             if (info.providerInfo != null) return info.providerInfo;
         }
         return null;

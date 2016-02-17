@@ -44,10 +44,10 @@ public class DirUtils {
     @SuppressWarnings("deprecation")
     public static long sizeOfDir(String dirPath) {
         StatFs sf = new StatFs(dirPath);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            return sf.getBlockSize() * sf.getAvailableBlocks();
-        } else {  // >= 18
+        if (Build.VERSION.SDK_INT >= 18) { // 18, 4.3, JELLY_BEAN_MR2
             return sf.getBlockSizeLong() * sf.getAvailableBlocksLong();
+        } else {
+            return sf.getBlockSize() * sf.getAvailableBlocks();
         }
     }
 

@@ -49,7 +49,7 @@ public final class RomCompat {
 
         @Override
         public boolean hasPermissionManager() {
-            return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+            return Build.VERSION.SDK_INT >= 23; // 23, 6.0, MARSHMALLOW
         }
 
         @Override
@@ -87,7 +87,7 @@ public final class RomCompat {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
+    @TargetApi(23) // 23, 6.0, MARSHMALLOW
     static class MarshmallowRomCompatImpl extends BaseRomCompatImpl {
         @Override
         public boolean hasFloatWindowPermission(Context context) {
@@ -165,7 +165,7 @@ public final class RomCompat {
     static final RomCompatImpl IMPL;
     static {
         final int version = android.os.Build.VERSION.SDK_INT;
-        if (version >= Build.VERSION_CODES.M) {
+        if (version >= 23) { // 23, 6.0, MARSHMALLOW
             IMPL = new MarshmallowRomCompatImpl();
         } else if (FlymeUtils.isFlyme()) {
             IMPL = new FlymeRomCompatImpl();

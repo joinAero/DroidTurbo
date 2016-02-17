@@ -26,7 +26,7 @@ public class BluetoothUtils {
      * Whether BLE is supported on the device.
      */
     public static boolean isLeAvailable(Context context) {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 // >= 18
+        return Build.VERSION.SDK_INT >= 18 // 18, 4.3, JELLY_BEAN_MR2
             && context.getPackageManager().hasSystemFeature(FEATURE_BLUETOOTH_LE);
     }
 

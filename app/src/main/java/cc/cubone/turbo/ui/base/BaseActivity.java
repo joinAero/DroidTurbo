@@ -49,7 +49,7 @@ public class BaseActivity extends AppCompatActivity {
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(false);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             // if enable immersive mode with `initSystemUI()`
             ViewGroup contentParent = ButterKnife.findById(this, android.R.id.content);
             setFitsSystemWindows(contentParent.getChildAt(0), false, false);
@@ -103,10 +103,10 @@ public class BaseActivity extends AppCompatActivity {
         Window win = getWindow();
 
         // StatusBar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             win.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) { // 21, 5.0
+        if (Build.VERSION.SDK_INT >= 21) { // 21, 5.0, LOLLIPOP
             win.getAttributes().systemUiVisibility |=
                     (View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
@@ -116,7 +116,7 @@ public class BaseActivity extends AppCompatActivity {
         }
 
         // Setup immersive mode on third-party rom
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) { // 19, 4.4
+        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             //FlymeUtils.setStatusBarDarkIcon(win, false);
             MIUIUtils.setStatusBar(win, MIUIUtils.StatusBarMode.TRANSPARENT);
         }

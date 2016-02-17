@@ -82,7 +82,7 @@ public class PackageBroadcast {
                 // EXTRA_REPLACING is available Kitkat onwards. For lower devices, it is broadcasted
                 // when moving a package or mounting/un-mounting external storage. Assume that
                 // it is a replacing operation.
-                final boolean ATLEAST_KITKAT = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
+                final boolean ATLEAST_KITKAT = Build.VERSION.SDK_INT >= 19; // 19, 4.4, KITKAT
                 final boolean replacing = intent.getBooleanExtra(Intent.EXTRA_REPLACING, ATLEAST_KITKAT);
                 String[] packages = intent.getStringArrayExtra(Intent.EXTRA_CHANGED_PACKAGE_LIST);
                 callback.onPackagesAvailable(packages, replacing);
