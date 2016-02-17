@@ -153,6 +153,9 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
 
         // update title appended with number of apps
         updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
+
+        // async load apps with rx
+        //loadApps(mRecyclerView, displayFlags, layoutId);
     }
 
     private List<AppInfo> createAppInfos(int displayFlags) {
@@ -356,12 +359,6 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
     }
 
     @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
-    @Override
     public void onPackageAdded(String packageName) {
         ToastUtils.show(this, "add " + packageName);
         updateAdapter();
@@ -393,4 +390,41 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
         public void exec();
     }
 
+    /*private void loadApps(final RecyclerView recyclerView,
+                          final int displayFlags,
+                          @LayoutRes final int itemResId) {
+        Observable.create(new Observable.OnSubscribe<List<AppInfo>>() {
+            @Override
+            public void call(Subscriber<? super List<AppInfo>> subscriber) {
+                if (subscriber.isUnsubscribed()) {
+                    return;
+                }
+                subscriber.onNext(createAppInfos(displayFlags));
+            }
+        })
+        .subscribeOn(Schedulers.newThread())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new Subscriber<List<AppInfo>>() {
+            @Override
+            public void onCompleted() {
+            }
+            @Override
+            public void onError(Throwable e) {
+            }
+            @Override
+            public void onNext(List<AppInfo> dataList) {
+                InfoRecyclerViewAdapter<AppInfo, InfoRecyclerViewAdapter.ViewHolder2> adapter =
+                        InfoRecyclerViewAdapter.create(dataList, itemResId,
+                                (view, appInfo) -> {
+                                    view.setText(appInfo.getType().name().toLowerCase()
+                                            + ", " + appInfo.getState().name().toLowerCase());
+                                });
+                adapter.setOnItemViewClickListener(AllAppsActivity.this);
+                recyclerView.setAdapter(adapter);
+
+                // update title appended with number of apps
+                updateTitle(String.format("%s (%d)", getString(R.string.all_apps), adapter.getItemCount()));
+            }
+        });
+    }*/
 }

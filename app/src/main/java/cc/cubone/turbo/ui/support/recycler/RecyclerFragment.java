@@ -59,7 +59,6 @@ public class RecyclerFragment extends ListSightFragment implements
     @Override
     public void onItemViewClick(View view, int position, DataInfo<Class> data) {
         ContextUtils.startActivity(getActivity(), data.getData());
-        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
 }

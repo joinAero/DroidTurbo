@@ -30,8 +30,10 @@ import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.arch.ArchFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
+import cc.cubone.turbo.ui.demo.TransparentStatusBarActivity;
 import cc.cubone.turbo.ui.fever.FeverFragment;
 import cc.cubone.turbo.ui.support.SupportFragment;
+import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.PermissionUtils;
 import cc.cubone.turbo.util.TintUtils;
 
@@ -220,15 +222,18 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    @Override
+    protected void onFinish() {
+    }
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            case R.id.nav_camera: break;
-            case R.id.nav_gallery: break;
-            case R.id.nav_slideshow: break;
-            case R.id.nav_manage: break;
+            case R.id.nav_status_bar_transparent:
+                ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
+                break;
             case R.id.nav_share: break;
             case R.id.nav_send: break;
         }

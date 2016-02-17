@@ -10,6 +10,8 @@
     <string name="all_apps">All Apps</string>
     <string name="rx_apps">Show Apps With RxJava</string>
 
+    <string name="transparent_status_bar">Transparent StatusBar</string>
+
     <!-- actions in all apps -->
     <string name="launch">Launch</string>
     <string name="details">Details</string>

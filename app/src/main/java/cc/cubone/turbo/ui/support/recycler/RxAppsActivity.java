@@ -64,12 +64,6 @@ public class RxAppsActivity extends BaseActivity implements
     public void onItemViewClick(View view, int position, DataInfo<Long> info) {
     }
 
-    @Override
-    public void finish() {
-        super.finish();
-        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-    }
-
     private Observable<DataInfo<Long>> observableApps() {
         return Observable.create(subscriber -> {
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);

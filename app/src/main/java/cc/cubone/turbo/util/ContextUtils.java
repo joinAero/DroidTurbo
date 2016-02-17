@@ -1,8 +1,11 @@
 package cc.cubone.turbo.util;
 
+import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
+
+import cc.cubone.turbo.R;
 
 public class ContextUtils {
 
@@ -27,6 +30,9 @@ public class ContextUtils {
         intent.addFlags(flags);
         try {
             context.startActivity(intent);
+            if (context instanceof Activity) {
+                ((Activity) context).overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+            }
             return true;
         } catch (ActivityNotFoundException e) {
             e.printStackTrace();

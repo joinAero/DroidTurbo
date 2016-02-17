@@ -68,17 +68,17 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void clipToStatusBar(Toolbar toolbar) {
+    protected void clipToStatusBar(View view) {
         final int statusBarHeight = UIUtils.getStatusBarHeight(this);
-        toolbar.getLayoutParams().height += statusBarHeight;
-        toolbar.setPadding(0, statusBarHeight, 0, 0);
+        view.getLayoutParams().height += statusBarHeight;
+        view.setPadding(0, statusBarHeight, 0, 0);
     }
 
-    /*protected void holdStatusBar(Toolbar toolbar, @ColorRes int resid) {
-        ViewGroup toolbarParent = (ViewGroup) toolbar.getParent();
+    /*protected void holdStatusBar(View view, @ColorRes int resid) {
+        ViewGroup toolbarParent = (ViewGroup) view.getParent();
         int i = 0;
         for (int n = toolbarParent.getChildCount(); i < n; i++) {
-            if (toolbarParent.getChildAt(i) == toolbar) break;
+            if (toolbarParent.getChildAt(i) == view) break;
         }
         View holderView = new View(this);
         holderView.setId(R.id.status_bar);
@@ -139,6 +139,16 @@ public class BaseActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        onFinish();
+    }
+
+    protected void onFinish() {
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
 }
