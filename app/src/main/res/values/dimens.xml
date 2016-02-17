@@ -7,6 +7,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <dimen name="nav_width">300dp</dimen>
+
     <!-- Toolbar -->
     <dimen name="bar_icon_size">24dp</dimen>
     <dimen name="bar_tab_padding">12dp</dimen>

@@ -29,6 +29,7 @@ import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.rom.RomCompat;
 import cc.cubone.turbo.core.util.Log;
 import cc.cubone.turbo.core.util.SysUtils;
+import cc.cubone.turbo.function.Action;
 import cc.cubone.turbo.model.AppInfo;
 import cc.cubone.turbo.model.DataInfo;
 import cc.cubone.turbo.persistence.PrefAllApps;
@@ -384,10 +385,6 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
     @Override
     public void onPackagesUnavailable(String[] packages, boolean replacing) {
         updateAdapter();
-    }
-
-    private interface Action {
-        public void exec();
     }
 
     /*private void loadApps(final RecyclerView recyclerView,

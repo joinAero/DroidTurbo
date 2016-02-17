@@ -14,15 +14,15 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -55,7 +55,7 @@ public class MainActivity extends BaseActivity
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
 
-    @Bind(R.id.drawer) DrawerLayout mDrawer;
+    @Bind(R.id.panel) SlidingPaneLayout mSlidingPane;
     @Bind(R.id.pager) ViewPager mPager;
 
     @Override
@@ -68,36 +68,48 @@ public class MainActivity extends BaseActivity
     }
 
     private void initViews(Bundle savedInstanceState) {
-        Toolbar toolbar = initToolbar();
+        final int dip60 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 60,
+                getResources().getDisplayMetrics());
+        mSlidingPane.setCoveredFadeColor(0);
+        mSlidingPane.setSliderFadeColor(0);
+        mSlidingPane.setParallaxDistance(dip60);
+        mSlidingPane.setShadowResourceLeft(R.drawable.shadow_left);
 
-        FloatingActionButton fab = ButterKnife.findById(this, R.id.fab);
-        fab.setOnClickListener((view) -> {
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
-                    .setAction("Action", null).show();
+        Toolbar toolbar = initToolbar();
+        toolbar.setNavigationIcon(R.drawable.ic_menu);
+        toolbar.setNavigationOnClickListener((view) -> {
+            if (mSlidingPane.isOpen()) {
+                mSlidingPane.closePane();
+            } else {
+                mSlidingPane.openPane();
+            }
         });
 
-        NavigationView nav = ButterKnife.findById(this, R.id.nav);
-        nav.setNavigationItemSelectedListener(this);
+        final View content = mSlidingPane;
 
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawer.setDrawerListener(toggle);
-        toggle.syncState();
+        NavigationView nav = ButterKnife.findById(content, R.id.nav);
+        nav.setNavigationItemSelectedListener(this);
 
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
         mPager.setAdapter(adapter);
         // retain all pagers
         mPager.setOffscreenPageLimit(adapter.getCount());
 
-        TabLayout barTab = ButterKnife.findById(this, R.id.tab);
+        TabLayout barTab = ButterKnife.findById(content, R.id.tab);
         barTab.setupWithViewPager(mPager);
         adapter.customTabViews(barTab);
+
+        FloatingActionButton fab = ButterKnife.findById(content, R.id.fab);
+        fab.setOnClickListener((view) -> {
+            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
+                    .setAction("Action", null).show();
+        });
     }
 
     @Override
     protected void onToolbarCreated(Toolbar toolbar) {
         if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
-            setFitsSystemWindows(mDrawer, false, true);
+            setFitsSystemWindows(mSlidingPane, false, true);
             clipToStatusBar(toolbar);
         }
     }
@@ -209,8 +221,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (mDrawer.isDrawerOpen(GravityCompat.START)) {
-            mDrawer.closeDrawer(GravityCompat.START);
+        if (mSlidingPane.isOpen()) {
+            mSlidingPane.closePane();
         } else {
             super.onBackPressed();
         }
@@ -227,11 +239,13 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_status_bar_transparent:
                 ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
+                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_stay);
                 break;
-            case R.id.nav_share: break;
-            case R.id.nav_send: break;
+            case R.id.nav_share:
+            case R.id.nav_send:
+                mSlidingPane.closePane();
+                break;
         }
-        mDrawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
