@@ -92,12 +92,6 @@ public class MainActivity extends BaseActivity
         TabLayout barTab = ButterKnife.findById(this, R.id.tab);
         barTab.setupWithViewPager(mPager);
         adapter.customTabViews(barTab);
-
-        // How to set StatusBar to transparent?
-        // Issue: Could not set StatusBar to transparent if using DrawerLayout
-        // Google: DrawerLayout setStatusBarBackground
-        /*drawer.setScrimColor(Color.TRANSPARENT);
-        drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);*/
     }
 
     @Override
