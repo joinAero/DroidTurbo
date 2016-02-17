@@ -50,6 +50,7 @@ public class RxAppsActivity extends BaseActivity implements
     private void initViews() {
         initToolbar();
 
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary, R.color.colorAccent);
         mSwipeRefreshLayout.setOnRefreshListener(this::refreshApps);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
