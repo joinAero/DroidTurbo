@@ -15,12 +15,14 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:insetForeground="@color/transparent"
         app:headerLayout="@layout/nav_header_main"
         app:menu="@menu/nav_menu_main" />
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/white"
         android:fitsSystemWindows="true">
 
         <include layout="@layout/toolbar_tab" />

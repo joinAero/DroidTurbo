@@ -89,6 +89,10 @@ public class MainActivity extends BaseActivity
 
         NavigationView nav = ButterKnife.findById(content, R.id.nav);
         nav.setNavigationItemSelectedListener(this);
+        if (Build.VERSION.SDK_INT >= 21) { // 21, 5.0, LOLLIPOP
+            // Ensure `NavigationView` is behind the content.
+            nav.setZ(-1);
+        }
 
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager(), this);
         mPager.setAdapter(adapter);
@@ -239,7 +243,7 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_status_bar_transparent:
                 ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
-                overridePendingTransition(R.anim.slide_in_bottom, R.anim.slide_stay);
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.nav_share:
             case R.id.nav_send:

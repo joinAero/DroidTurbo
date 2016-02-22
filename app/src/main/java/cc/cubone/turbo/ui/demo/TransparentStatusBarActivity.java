@@ -52,13 +52,13 @@ public class TransparentStatusBarActivity extends AppCompatActivity {
         initDrawer(toolbar);
         initStatusBar(toolbar);
 
-        // Set the cross indicator to close this
+        // Set the back arrow in the toolbar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(false);
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
-            actionBar.setHomeActionContentDescription("Close");
+            /*actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
+            actionBar.setHomeActionContentDescription("Close");*/
         }
 
         initRecyclerView();
@@ -78,7 +78,7 @@ public class TransparentStatusBarActivity extends AppCompatActivity {
             ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                     this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
             drawer.setDrawerListener(toggle);
-            //toggle.setDrawerIndicatorEnabled(false);
+            toggle.setDrawerIndicatorEnabled(false);
             toggle.syncState();
             mDrawerToggle = toggle;
         }
@@ -207,7 +207,7 @@ public class TransparentStatusBarActivity extends AppCompatActivity {
     @Override
     public void finish() {
         super.finish();
-        overridePendingTransition(R.anim.slide_stay, R.anim.slide_out_bottom);
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
 
     private boolean isDrawerOpen(int drawerGravity) {
