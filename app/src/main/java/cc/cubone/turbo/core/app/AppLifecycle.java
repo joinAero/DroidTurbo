@@ -16,7 +16,7 @@ import android.os.Bundle;
  */
 public class AppLifecycle implements Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
 
-    private boolean mAppBackground = false;
+    private boolean mAppBackground = true;
 
     public AppLifecycle(Application app) {
         app.registerActivityLifecycleCallbacks(this);
