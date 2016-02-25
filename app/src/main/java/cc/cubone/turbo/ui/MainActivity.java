@@ -243,7 +243,6 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_status_bar_transparent:
                 ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
-                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
                 break;
             case R.id.nav_share:
             case R.id.nav_send:
