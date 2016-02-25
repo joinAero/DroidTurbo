@@ -23,7 +23,9 @@ public class PagerSlidingPaneLayout extends SlidingPaneLayout {
 
     private float mInitialMotionX;
     private float mInitialMotionY;
-    private float mEdgeSlop;
+
+    // edge to open pane instead of sliding page
+    private float mEdgeSlop = 16; // px;
 
     public PagerSlidingPaneLayout(Context context) {
         this(context, null);
@@ -37,7 +39,7 @@ public class PagerSlidingPaneLayout extends SlidingPaneLayout {
         super(context, attrs, defStyle);
 
         ViewConfiguration config = ViewConfiguration.get(context);
-        mEdgeSlop = config.getScaledEdgeSlop();
+        mEdgeSlop += config.getScaledEdgeSlop();
     }
 
     @Override
