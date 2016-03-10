@@ -11,6 +11,7 @@
     <string name="rx_apps">Show Apps With RxJava</string>
 
     <string name="transparent_status_bar">Transparent StatusBar</string>
+    <string name="snake_surface_view">Snake SurfaceView</string>
 
     <!-- actions in all apps -->
     <string name="launch">Launch</string>
@@ -22,5 +23,7 @@
     <string name="permission_autostart">Permission AutoStart</string>
     <string name="permission_floatwindow">Permission FloatWindow</string>
     <string name="permission_root">Permission Root</string>
+
+    <string name="hint_say_sth">Say hello :)</string>
 
 </resources>

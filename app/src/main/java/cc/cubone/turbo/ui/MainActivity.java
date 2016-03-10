@@ -30,6 +30,7 @@ import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.arch.ArchFragment;
 import cc.cubone.turbo.ui.base.BaseActivity;
+import cc.cubone.turbo.ui.demo.SnakeSurfaceViewActivity;
 import cc.cubone.turbo.ui.demo.TransparentStatusBarActivity;
 import cc.cubone.turbo.ui.fever.FeverFragment;
 import cc.cubone.turbo.ui.support.SupportFragment;
@@ -108,14 +109,6 @@ public class MainActivity extends BaseActivity
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_SHORT)
                     .setAction("Action", null).show();
         });
-    }
-
-    @Override
-    protected void onToolbarCreated(Toolbar toolbar) {
-        if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
-            setFitsSystemWindows(mSlidingPane, false, true);
-            clipToStatusBar(toolbar);
-        }
     }
 
     /**
@@ -243,6 +236,9 @@ public class MainActivity extends BaseActivity
         switch (item.getItemId()) {
             case R.id.nav_status_bar_transparent:
                 ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
+                break;
+            case R.id.nav_snake_surface_view:
+                ContextUtils.startActivity(this, SnakeSurfaceViewActivity.class);
                 break;
             case R.id.nav_share:
             case R.id.nav_send:

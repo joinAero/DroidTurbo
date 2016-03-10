@@ -5,6 +5,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
 import android.support.annotation.IdRes;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,6 +24,8 @@ import cc.cubone.turbo.core.rom.MIUIUtils;
 import cc.cubone.turbo.core.util.UIUtils;
 
 public class BaseActivity extends AppCompatActivity {
+
+    private boolean mStatusBarTinted = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,17 +49,54 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected void onToolbarCreated(Toolbar toolbar) {
+        initActionBar();
+        initStatusBar(toolbar);
+    }
+
+    protected void initActionBar() {
         // Set the back arrow in the toolbar
-        ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setDisplayHomeAsUpEnabled(true);
-            ab.setHomeButtonEnabled(false);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(false);
         }
+    }
+
+    protected void initStatusBar(View view) {
+        // Ensure `setStatusBarImmersiveMode()`
         if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
-            // if enable immersive mode with `initSystemUI()`
-            ViewGroup contentParent = ButterKnife.findById(this, android.R.id.content);
-            setFitsSystemWindows(contentParent.getChildAt(0), false, false);
-            clipToStatusBar(toolbar);
+            // Ensure content view `fitsSystemWindows` is false.
+            ViewGroup contentParent = (ViewGroup) findViewById(android.R.id.content);
+            View content = contentParent.getChildAt(0);
+
+            boolean needHold;
+            if (content instanceof DrawerLayout
+                    || content instanceof SlidingPaneLayout
+                    || content instanceof CoordinatorLayout) {
+                // Should set `fitsSystemWindows` true in xml if using these layouts. Besides, also
+                // set true for each subviews if `SlidingPaneLayout`.
+                needHold = true;
+            } else {
+                needHold = Build.VERSION.SDK_INT < 21; // 21, 5.0, LOLLIPOP
+            }
+
+            if (needHold) {
+                // Should set `fitsSystemWindows` false here programmatically.
+                setFitsSystemWindows(content, false, true);
+                // However, must ensure set `fitsSystemWindows` false for its all subviews.
+                // Because in some roms, such as MIUI, if using `NavigationView` in `DrawerLayout`
+                // or `SlidingPaneLayout`, it will have padding on its top.
+
+                // Add padding to hold the status bar place.
+                clipToStatusBar(view);
+
+                // Add a view to hold the status bar place.
+                // Note: if using appbar_scrolling_view_behavior of CoordinatorLayout, however,
+                // the holder view could be scrolled to outside as it above the app bar.
+                //holdStatusBar(toolbar, R.color.colorPrimary);
+            }
+
+            mStatusBarTinted = !needHold;
         }
     }
 
@@ -99,7 +142,7 @@ public class BaseActivity extends AppCompatActivity {
      * <li><a href="http://developer.android.com/training/system-ui/immersive.html">Using Immersive Full-Screen Mode</a>
      * </ul>
      */
-    protected void initSystemUI(@ColorInt int color) {
+    protected void setStatusBarImmersiveMode(@ColorInt int color) {
         Window win = getWindow();
 
         // StatusBar
@@ -128,8 +171,9 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
-        initSystemUI(Color.TRANSPARENT);
-        //initSystemUI(ContextCompat.getColor(this, R.color.colorPrimary));
+        setStatusBarImmersiveMode(mStatusBarTinted
+                ? ContextCompat.getColor(this, R.color.colorPrimary)
+                : Color.TRANSPARENT);
     }
 
     @Override
@@ -150,5 +194,4 @@ public class BaseActivity extends AppCompatActivity {
     protected void onFinish() {
         overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
     }
-
 }
