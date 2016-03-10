@@ -15,16 +15,35 @@ public class GameLayer extends Layer {
     private Snake mSnake;
     private Stat mStat;
 
+    private Level mLevel;
+
+    private long mTickTime;
+    private long mTickInterval;
+
     @Override
     public void draw(Canvas canvas, Painter painter, Status status) {
         if (mGrid == null) {
             mGrid = new Grid(canvas, (int) painter.dp2px(16));
             mSnake = new Snake();
             mStat = new Stat();
+
+            mLevel = new Level();
+            mTickTime = 0;
+            mTickInterval = mLevel.tickInterval();
+        }
+        final long elapsed = status.getTimeElapsed();
+        final long tickDiff = (elapsed - mTickTime) - mTickInterval;
+        if (tickDiff >= 0) {
+            mTickTime = elapsed - tickDiff;
+            onTick();
         }
         mGrid.draw(canvas, painter, status);
         mSnake.draw(canvas, painter, status);
+        mStat.level = mLevel.value();
         mStat.draw(canvas, painter, status);
+    }
+
+    private void onTick() {
     }
 
     private static class Snake implements Drawable {
