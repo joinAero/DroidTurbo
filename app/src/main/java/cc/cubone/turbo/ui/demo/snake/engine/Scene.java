@@ -1,10 +1,9 @@
 package cc.cubone.turbo.ui.demo.snake.engine;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.text.TextPaint;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -12,6 +11,7 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import cc.cubone.turbo.ui.demo.snake.engine.util.FPS;
 import cc.cubone.turbo.util.TimeUtils;
 
 public class Scene {
@@ -105,27 +105,12 @@ public class Scene {
             }
         }
 
-        drawDebugInfo(canvas);
-    }
-
-    private void drawDebugInfo(Canvas canvas) {
-        if (!mStatus.debug) return;
-
-        String info = String.format("Time: %s, FPS: %.1f",
-                TimeUtils.readableSeconds(mStatus.timeElapsed / 1000), mFPS.get());
-
-        mPainter.reset();
-        TextPaint pencil = mPainter.pencil;
-        Paint.FontMetrics fontMetrics = pencil.getFontMetrics();
-
-        /*Rect rect = mPainter.rect;
-        pencil.getTextBounds(info, 0, info.length(), rect);
-        float x = canvas.getWidth() - rect.width();*/
-        float x = 0;
-        float y = 0 - fontMetrics.top;
-
-        pencil.setColor(Color.GREEN);
-        canvas.drawText(info, x, y, pencil);
+        if (mStatus.debug) {
+            TextPaint pencil = mPainter.resetPencil();
+            String info = String.format("Time: %s, FPS: %.1f",
+                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000), mFPS.get());
+            mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, pencil);
+        }
     }
 
     private void onDraw(Canvas canvas, long elapsed) {

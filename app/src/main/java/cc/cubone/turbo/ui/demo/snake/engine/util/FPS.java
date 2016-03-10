@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.demo.snake.engine;
+package cc.cubone.turbo.ui.demo.snake.engine.util;
 
 import java.util.Vector;
 
