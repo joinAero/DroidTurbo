@@ -26,8 +26,8 @@ public class FPS {
     }
 
     public float get() {
-        final int n = mFrames.size();
-        return n <= 1 ? 0 : 1000f * n / (mFrames.get(n - 1) - mFrames.get(0));
+        final int n = mFrames.size() - 1;
+        return n <= 0 ? 0 : 1000f * n / (mFrames.get(n) - mFrames.get(0));
     }
 
 }
