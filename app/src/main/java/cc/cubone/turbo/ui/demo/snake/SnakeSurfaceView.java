@@ -23,6 +23,8 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     private TipLayer mTipLayer;
 
+    private boolean mUpdateNeededOnResume = false;
+
     public SnakeSurfaceView(Context context) {
         super(context);
         init(context);
@@ -87,8 +89,18 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
         update(true);
     }
 
+    public void onResume() {
+        if (mUpdateNeededOnResume) {
+            update(true);
+        }
+    }
+
     public void onPause() {
+        // not redraw immediately to update scene
         pause(false);
+        // need update on resume if turn screen off using power button directly
+        // because the surface view will not be destroyed
+        mUpdateNeededOnResume = true;
     }
 
     private void update(boolean redraw) {
@@ -144,7 +156,7 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // will recreate every resume
+        // will recreate every resume from background
         update(true);
     }
 
@@ -154,6 +166,7 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        mUpdateNeededOnResume = false;
     }
 
 }

@@ -21,6 +21,12 @@ public class SnakeSurfaceViewActivity extends BaseActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mSnakeSurfaceView.onResume();
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         mSnakeSurfaceView.onPause();
