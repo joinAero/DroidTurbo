@@ -7,6 +7,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.util.TypedValue;
 import android.view.Gravity;
@@ -59,13 +61,58 @@ public class Painter {
                 context.getResources().getDisplayMetrics());
     }
 
-    public void drawText(Canvas canvas, String text, int gravity, Paint paint) {
-        Paint.FontMetrics fontMetrics = paint.getFontMetrics();
-        paint.getTextBounds(text, 0, text.length(), rect);
-        final int height = (int) (fontMetrics.bottom - fontMetrics.top);
-        final int diff = height - rect.height();
-        rect2.set(0, 0, canvas.getWidth(), canvas.getHeight());
-        Gravity.apply(gravity, rect.width() + diff, height, rect2, rect);
-        canvas.drawText(text, rect.left + diff * 0.5f, rect.top - fontMetrics.top, pencil);
+    public void drawText(Canvas canvas, String text, int gravity) {
+        drawText(canvas, text, gravity, false, pencil);
     }
+
+    public void drawText(Canvas canvas, String text, int gravity, boolean multiline) {
+        drawText(canvas, text, gravity, multiline, pencil);
+    }
+
+    public void drawText(Canvas canvas, String text, int gravity, boolean multiline, TextPaint paint) {
+        rect.set(10, 0, canvas.getWidth() - 10, canvas.getHeight());
+        drawText(canvas, text, rect, gravity, multiline, paint);
+    }
+
+    public void drawText(Canvas canvas, String text, Rect container, int gravity,
+                         boolean multiline, TextPaint paint) {
+        final Rect rect = rect2;
+        if (multiline) {
+            final StaticLayout layout = new StaticLayout(text, paint, container.width(),
+                    Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
+            final float w = getLineWidthMax(layout);
+            final int h = layout.getHeight();
+            Gravity.apply(gravity, (int) w, h, container, rect);
+            float dx = rect.left;
+            switch (paint.getTextAlign()) {
+                case LEFT: dx = rect.left; break;
+                case CENTER: dx += w * 0.5f; break;
+                case RIGHT: dx += w; break;
+            }
+            canvas.save();
+            canvas.translate(dx, rect.top);
+            layout.draw(canvas);
+            canvas.restore();
+        } else {
+            paint.getTextBounds(text, 0, text.length(), rect);
+            Paint.FontMetrics fontMetrics = paint.getFontMetrics();
+            final int height = (int) (fontMetrics.bottom - fontMetrics.top);
+            Gravity.apply(gravity, rect.width(), height, container, rect);
+            canvas.drawText(text, rect.left, rect.top - fontMetrics.top, paint);
+        }
+    }
+
+    private float getLineWidthMax(StaticLayout layout) {
+        float width;
+        float widthMax = 0.0f;
+        final int lineCount = layout.getLineCount();
+        for(int i = 0; i < lineCount; i++) {
+            width = layout.getLineWidth(i);
+            if (width > widthMax) {
+                widthMax = width;
+            }
+        }
+        return widthMax;
+    }
+
 }

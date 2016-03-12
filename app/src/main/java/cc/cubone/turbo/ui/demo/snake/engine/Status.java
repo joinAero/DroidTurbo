@@ -2,19 +2,12 @@ package cc.cubone.turbo.ui.demo.snake.engine;
 
 public class Status {
 
-    /*package*/ boolean debug = false;
+    public static boolean DEBUG = false;
+
     /*package*/ boolean started = false;
-    /*package*/ boolean pausing = false;
+    /*package*/ boolean running = false;
     /*package*/ long timeStart;
     /*package*/ long timeElapsed;
-
-    public boolean isDebug() {
-        return debug;
-    }
-
-    public void setDebug(boolean debug) {
-        this.debug = debug;
-    }
 
     public boolean isStarted() {
         return started;
@@ -25,18 +18,18 @@ public class Status {
     }
 
     public boolean isRunning() {
-        return started && !pausing;
+        return running;
     }
 
     public boolean isPausing() {
-        return pausing;
-    }
-
-    public long getTimeStart() {
-        return timeStart;
+        return !running;
     }
 
     public long getTimeElapsed() {
         return timeElapsed;
+    }
+
+    public long getTimeStart() {
+        return timeStart;
     }
 }

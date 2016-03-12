@@ -10,7 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import cc.cubone.turbo.BuildConfig;
-import cc.cubone.turbo.ui.demo.snake.engine.Painter;
+import cc.cubone.turbo.ui.demo.snake.engine.LifeCircle;
 import cc.cubone.turbo.ui.demo.snake.engine.Scene;
 import cc.cubone.turbo.ui.demo.snake.engine.Status;
 import cc.cubone.turbo.ui.demo.snake.game.GameLayer;
@@ -19,11 +19,10 @@ import cc.cubone.turbo.ui.demo.snake.game.TipLayer;
 public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
 
     private Scene mScene;
-    private Status mStatus;
+    private boolean mResumeNeeded = false;
 
+    private GameLayer mGameLayer;
     private TipLayer mTipLayer;
-
-    private boolean mUpdateNeededOnResume = false;
 
     public SnakeSurfaceView(Context context) {
         super(context);
@@ -48,106 +47,78 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private void init(Context context) {
         getHolder().addCallback(this);
 
-        mScene = new Scene(this);
-        mStatus = mScene.getStatus();
-        mStatus.setDebug(BuildConfig.DEBUG);
+        Status.DEBUG = BuildConfig.DEBUG;
 
-        Painter painter = mScene.getPainter();
+        Scene scene = new Scene(this);
+        scene.addCallback(mSceneCallback);
 
-        GameLayer gameLayer = new GameLayer();
+        GameLayer gameLayer = new GameLayer(scene);
+        gameLayer.addCallback(mGameCallback);
+        mGameLayer = gameLayer;
 
-        TipLayer tipLayer = new TipLayer();
+        TipLayer tipLayer = new TipLayer(scene);
         tipLayer.setBackgroundColor(0x33ffffff);
         tipLayer.setTextColor(Color.WHITE);
-        tipLayer.setTextSize(painter.dp2px(60));
-
+        tipLayer.setTextSize(scene.getPainter().dp2px(60));
+        tipLayer.setText("Click\nTo\nStart");
         mTipLayer = tipLayer;
-        mScene.addLayers(gameLayer, tipLayer);
-    }
 
-    public void start() {
-        mScene.start();
-        update(false);
-    }
-
-    public void resume() {
-        mScene.resume();
-        update(false);
-    }
-
-    public void pause() {
-        pause(true);
-    }
-
-    private void pause(boolean update) {
-        mScene.pause();
-        if (update) update(true);
-    }
-
-    public void stop() {
-        mScene.stop();
-        update(true);
+        scene.addLayers(gameLayer, tipLayer);
+        mScene = scene;
     }
 
     public void onResume() {
-        if (mUpdateNeededOnResume) {
-            update(true);
+        if (mResumeNeeded) {
+            mScene.resume();
         }
     }
 
     public void onPause() {
-        // not redraw immediately to update scene
-        pause(false);
-        // need update on resume if turn screen off using power button directly
-        // because the surface view will not be destroyed
-        mUpdateNeededOnResume = true;
+        // the surface view will not be destroyed if turn screen off using power button directly
+        mScene.pause();
+        mResumeNeeded = true;
     }
 
-    private void update(boolean redraw) {
-        updateTipLayer();
-        if (redraw) {
-            mScene.draw();
+    private LifeCircle.Callback mSceneCallback = new LifeCircle.Callback() {
+        @Override
+        public void onLifeStart() {
         }
-    }
+        @Override
+        public void onLifeResume() {
+        }
+        @Override
+        public void onLifePause() {
+            mGameLayer.pause();
+        }
+        @Override
+        public void onLifeStop() {
+        }
+    };
 
-    private void updateTipLayer() {
-        mTipLayer.setVisible(true);
-        if (mStatus.isPausing()) {
-            // click to resume
-            mTipLayer.setText("Click\nTo\nResume");
-        } else if (mStatus.isStopped()) {
-            // click to start
-            mTipLayer.setText("Click\nTo\nStart");
-        } else {
-            // running
+    private LifeCircle.Callback mGameCallback = new LifeCircle.Callback() {
+        @Override
+        public void onLifeStart() {
             mTipLayer.setVisible(false);
         }
-    }
+        @Override
+        public void onLifeResume() {
+            mTipLayer.setVisible(false);
+        }
+        @Override
+        public void onLifePause() {
+            mTipLayer.setText("Click\nTo\nResume");
+            mTipLayer.setVisible(true);
+        }
+        @Override
+        public void onLifeStop() {
+            mTipLayer.setText("Click\nTo\nStart");
+            mTipLayer.setVisible(true);
+        }
+    };
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
-        final int action = ev.getAction();
-        boolean handled = false;
-        switch (action) {
-            case MotionEvent.ACTION_DOWN:
-                handled = true;
-                break;
-            case MotionEvent.ACTION_UP:
-                onClick();
-                handled = true;
-                break;
-        }
-        return handled || super.onTouchEvent(ev);
-        //return mScene.onTouchEvent(ev) || super.onTouchEvent(ev);
-    }
-
-    private void onClick() {
-        if (mStatus.isRunning()) {
-            pause();
-        } else {
-            // resume if pausing and start if stopped
-            resume();
-        }
+        return mScene.onTouchEvent(ev) || super.onTouchEvent(ev);
     }
 
     @Override
@@ -156,8 +127,7 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        // will recreate every resume from background
-        update(true);
+        mScene.resume();
     }
 
     @Override
@@ -166,7 +136,8 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        mUpdateNeededOnResume = false;
+        // will resume on surface created
+        mResumeNeeded = false;
     }
 
 }

@@ -2,13 +2,12 @@ package cc.cubone.turbo.ui.demo.snake.game;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.text.Layout;
-import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.view.Gravity;
 
-import cc.cubone.turbo.ui.demo.snake.engine.Layer;
 import cc.cubone.turbo.ui.demo.snake.engine.Painter;
-import cc.cubone.turbo.ui.demo.snake.engine.Status;
+import cc.cubone.turbo.ui.demo.snake.engine.Scene;
+import cc.cubone.turbo.ui.demo.snake.engine.view.Layer;
 
 public class TipLayer extends Layer {
 
@@ -18,26 +17,23 @@ public class TipLayer extends Layer {
     private float mTextSize;
     private int mTextColor;
 
+    public TipLayer(Scene scene) {
+        super(scene);
+    }
+
     @Override
-    public void draw(Canvas canvas, Painter painter, Status status) {
+    protected void onDraw(Canvas canvas, Scene scene) {
+        final Painter painter = scene.getPainter();
         if (mBackgroundColor != 0) {
             canvas.drawColor(mBackgroundColor);
         }
-        if (mText != null && !mText.isEmpty() && mTextSize > 0) {
+        if (mText != null) {
             TextPaint pencil = painter.pencil;
             pencil.setTextSize(mTextSize);
             pencil.setColor(mTextColor);
             pencil.setTextAlign(Paint.Align.CENTER);
-
-            StaticLayout layout = new StaticLayout(mText, pencil, canvas.getWidth(),
-                    Layout.Alignment.ALIGN_NORMAL, 1.0F, 0.0F, true);
-            canvas.save();
-            canvas.translate(canvas.getWidth() * 0.5f,
-                    (canvas.getHeight() - layout.getHeight()) * 0.5f);
-            layout.draw(canvas);
-            canvas.restore();
+            painter.drawText(canvas, mText, Gravity.CENTER, true);
         }
-
     }
 
     public void setBackgroundColor(int color) {

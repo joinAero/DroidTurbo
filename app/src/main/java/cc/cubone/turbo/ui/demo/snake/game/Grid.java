@@ -4,15 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.text.TextPaint;
-import android.view.Gravity;
 
-import cc.cubone.turbo.ui.demo.snake.engine.Drawable;
 import cc.cubone.turbo.ui.demo.snake.engine.Painter;
-import cc.cubone.turbo.ui.demo.snake.engine.Status;
 import cc.cubone.turbo.ui.demo.snake.engine.util.Rand;
 
-public class Grid implements Drawable {
+public class Grid {
 
     private int mColumn;
     private int mRow;
@@ -27,10 +23,41 @@ public class Grid implements Drawable {
     private Cell[][] mCells;
 
     private Rand.Color mRandColor;
-    private String mInfo;
 
     public Grid(Canvas canvas, int cellSize) {
         init(canvas, cellSize);
+    }
+
+    public int column() {
+        return mColumn;
+    }
+
+    public int row() {
+        return mRow;
+    }
+
+    public float left() {
+        return mLeft;
+    }
+
+    public float top() {
+        return mTop;
+    }
+
+    public int width() {
+        return mWidth;
+    }
+
+    public int height() {
+        return mHeight;
+    }
+
+    public int cellSize() {
+        return mCellSize;
+    }
+
+    public Cell[][] cells() {
+        return mCells;
     }
 
     public void init(Canvas canvas, int cellSize) {
@@ -58,18 +85,11 @@ public class Grid implements Drawable {
                 mCells[i][j] = new Cell(mLeft + j * cellSize, y, cellSize);
             }
         }
-
-        mInfo = String.format("Gird: %dx%d", mRow, mColumn);
     }
 
-    @Override
-    public void draw(Canvas canvas, Painter painter, Status status) {
-        if (status.isDebug()) {
-            drawGird(canvas, painter);
-            //drawCells(canvas, painter);
-            TextPaint pencil = painter.resetPencil();
-            painter.drawText(canvas, mInfo, Gravity.END | Gravity.BOTTOM, pencil);
-        }
+    public void draw(Canvas canvas, Painter painter) {
+        drawGird(canvas, painter);
+        //drawCells(canvas, painter);
     }
 
     private void drawGird(Canvas canvas, Painter painter) {

@@ -1,8 +1,8 @@
 package cc.cubone.turbo.ui.demo.snake.engine;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PorterDuff;
-import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -11,36 +11,39 @@ import android.view.SurfaceView;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import cc.cubone.turbo.ui.demo.snake.engine.feature.Drawable;
+import cc.cubone.turbo.ui.demo.snake.engine.feature.Touchable;
 import cc.cubone.turbo.ui.demo.snake.engine.util.FPS;
+import cc.cubone.turbo.ui.demo.snake.engine.view.Layer;
 import cc.cubone.turbo.util.TimeUtils;
 
-public class Scene {
+public class Scene extends LifeCircle implements Drawable, Touchable {
 
     private SurfaceHolder mHolder;
     private DrawThread mDrawThread;
 
     private final Painter mPainter;
-    private final Status mStatus;
 
     private ArrayList<Layer> mLayers;
-
-    private long mTimeElapsedBase;
+    private Toast mToast;
 
     private FPS mFPS = new FPS();
 
     public Scene(SurfaceView surfaceView) {
         mHolder = surfaceView.getHolder();
         mPainter = new Painter(surfaceView.getContext());
-        mStatus = new Status();
         mLayers = new ArrayList<>();
+        mToast = new Toast(this, Toast.SHORT);
+        mToast.setTextColor(Color.GREEN);
     }
 
     public Painter getPainter() {
         return mPainter;
     }
 
-    public Status getStatus() {
-        return mStatus;
+    public void addLayer(Layer layer) {
+        if (layer == null) return;
+        mLayers.add(layer);
     }
 
     public void addLayers(Layer... layers) {
@@ -48,41 +51,32 @@ public class Scene {
         mLayers.addAll(Arrays.asList(layers));
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
-        return false;
+    public void toast(String text) {
+        mToast.setText(text);
+        mToast.show();
     }
 
-    public synchronized void start() {
-        if (mStatus.started) return;
-        mStatus.started = true;
-        mStatus.pausing = false;
-        mStatus.timeStart = System.currentTimeMillis();
-        startDrawThread();
+    @Override
+    protected void onStart() {
     }
 
-    public synchronized void resume() {
-        if (mStatus.pausing) {
-            // resume if pausing
-            mStatus.pausing = false;
-            startDrawThread();
-        } else if (!mStatus.started) {
-            // start if not running
-            start();
-        }
+    @Override
+    protected void onResume() {
+        if (mDrawThread != null) return;
+        mFPS.reset();
+        mDrawThread = new DrawThread();
+        mDrawThread.start();
     }
 
-    public synchronized void pause() {
-        if (mStatus.isRunning()) {
-            mStatus.pausing = true;
-            stopDrawThread();
-        }
+    @Override
+    protected void onPause() {
+        if (mDrawThread == null) return;
+        mDrawThread.cancel();
+        mDrawThread = null;
     }
 
-    public synchronized void stop() {
-        if (!mStatus.started) return;
-        mStatus.started = false;
-        mStatus.pausing = false;
-        stopDrawThread();
+    @Override
+    protected void onStop() {
     }
 
     public void draw() {
@@ -93,55 +87,52 @@ public class Scene {
         }
     }
 
-    private void draw(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
+        update();
+        mFPS.update();
+        onDraw(canvas);
+    }
+
+    protected void onDraw(Canvas canvas) {
         //canvas.drawColor(Color.WHITE);
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
 
         // java.util.stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
         for (Layer layer : mLayers) {
             if (layer.isVisible()) {
-                //mPainter.reset();
-                layer.draw(canvas, mPainter, mStatus);
+                layer.draw(canvas);
             }
         }
+        mToast.draw(canvas);
 
-        if (mStatus.debug) {
-            TextPaint pencil = mPainter.resetPencil();
-            String info = String.format("Time: %s, FPS: %.1f",
-                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000), mFPS.get());
-            mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, pencil);
+        if (Status.DEBUG) {
+            mPainter.resetPencil();
+            String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
+                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
+            mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, true);
         }
+
+        mPainter.reset();
     }
 
-    private void onDraw(Canvas canvas, long elapsed) {
-        mStatus.timeElapsed = mTimeElapsedBase + elapsed;
-        mFPS.update();
-        draw(canvas);
-    }
-
-    private void startDrawThread() {
-        if (mDrawThread != null) return;
-        mTimeElapsedBase = mStatus.timeElapsed;
-        mFPS.reset();
-        mDrawThread = new DrawThread();
-        mDrawThread.start();
-    }
-
-    private void stopDrawThread() {
-        try {
-            mDrawThread.cancel();
-            mDrawThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        Layer layer;
+        for (int i = mLayers.size() - 1; i >= 0; --i) {
+            layer = mLayers.get(i);
+            if (layer.isTouchable()) {
+                if (layer.onTouchEvent(ev)) {
+                    return true;
+                }
+            }
         }
-        mDrawThread = null;
+        return false;
     }
 
     private final class DrawThread extends Thread {
 
         private volatile Thread mBlinker;
-
-        private long mTimeStart;
 
         public DrawThread() {
         }
@@ -149,7 +140,6 @@ public class Scene {
         @Override
         public synchronized void start() {
             mBlinker = this;
-            mTimeStart = System.currentTimeMillis();
             super.start();
         }
 
@@ -161,14 +151,8 @@ public class Scene {
         public void run() {
             Thread thisThread = Thread.currentThread();
             while (mBlinker == thisThread) {
-                if (!mHolder.getSurface().isValid()) {
-                    continue;
-                }
-                Canvas canvas = mHolder.lockCanvas();
-                onDraw(canvas, System.currentTimeMillis() - mTimeStart);
-                mHolder.unlockCanvasAndPost(canvas);
+                draw();
             }
         }
     }
-
 }
