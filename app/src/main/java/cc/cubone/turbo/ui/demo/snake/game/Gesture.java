@@ -58,13 +58,13 @@ public class Gesture {
                             if (deltaX < deltaY) {
                                 mCallback.onGestureMove(MOVE_LEFT);
                             } else {
-                                mCallback.onGestureMove(MOVE_DOWN);
+                                mCallback.onGestureMove(MOVE_UP);
                             }
                         } else { // deltaY >= 0
                             if (-deltaX > deltaY) {
                                 mCallback.onGestureMove(MOVE_LEFT);
                             } else {
-                                mCallback.onGestureMove(MOVE_UP);
+                                mCallback.onGestureMove(MOVE_DOWN);
                             }
                         }
                     } else { // deltaX >= 0
@@ -72,13 +72,13 @@ public class Gesture {
                             if (deltaX > -deltaY) {
                                 mCallback.onGestureMove(MOVE_RIGHT);
                             } else {
-                                mCallback.onGestureMove(MOVE_DOWN);
+                                mCallback.onGestureMove(MOVE_UP);
                             }
                         } else { // deltaY >= 0
                             if (deltaX > deltaY) {
                                 mCallback.onGestureMove(MOVE_RIGHT);
                             } else {
-                                mCallback.onGestureMove(MOVE_UP);
+                                mCallback.onGestureMove(MOVE_DOWN);
                             }
                         }
                     }
