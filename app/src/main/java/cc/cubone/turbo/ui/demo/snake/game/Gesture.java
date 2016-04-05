@@ -4,15 +4,6 @@ import android.view.MotionEvent;
 
 public class Gesture {
 
-    public static final int MOVE_LEFT   = 0;
-    public static final int MOVE_UP     = 1;
-    public static final int MOVE_RIGHT  = 2;
-    public static final int MOVE_DOWN   = 3;
-
-    /*public*/ static final String[] MOVE_NAMES = new String[] {
-            "Move Left", "Move Up", "Move Right", "Move Down",
-    };
-
     private Callback mCallback;
 
     private float mDownX;
@@ -28,10 +19,6 @@ public class Gesture {
         if (callback == null) throw new IllegalArgumentException();
         mCallback = callback;
         mMoveSlopSquare = moveSlop * moveSlop;
-    }
-
-    public static String moveName(int direction) {
-        return MOVE_NAMES[direction];
     }
 
     public boolean onTouchEvent(MotionEvent e) {
@@ -56,29 +43,29 @@ public class Gesture {
                     if (deltaX < 0) {
                         if (deltaY < 0) {
                             if (deltaX < deltaY) {
-                                mCallback.onGestureMove(MOVE_LEFT);
+                                mCallback.onGestureMove(Direction.LEFT);
                             } else {
-                                mCallback.onGestureMove(MOVE_UP);
+                                mCallback.onGestureMove(Direction.UP);
                             }
                         } else { // deltaY >= 0
                             if (-deltaX > deltaY) {
-                                mCallback.onGestureMove(MOVE_LEFT);
+                                mCallback.onGestureMove(Direction.LEFT);
                             } else {
-                                mCallback.onGestureMove(MOVE_DOWN);
+                                mCallback.onGestureMove(Direction.DOWN);
                             }
                         }
                     } else { // deltaX >= 0
                         if (deltaY < 0) {
                             if (deltaX > -deltaY) {
-                                mCallback.onGestureMove(MOVE_RIGHT);
+                                mCallback.onGestureMove(Direction.RIGHT);
                             } else {
-                                mCallback.onGestureMove(MOVE_UP);
+                                mCallback.onGestureMove(Direction.UP);
                             }
                         } else { // deltaY >= 0
                             if (deltaX > deltaY) {
-                                mCallback.onGestureMove(MOVE_RIGHT);
+                                mCallback.onGestureMove(Direction.RIGHT);
                             } else {
-                                mCallback.onGestureMove(MOVE_DOWN);
+                                mCallback.onGestureMove(Direction.DOWN);
                             }
                         }
                     }
@@ -99,7 +86,7 @@ public class Gesture {
 
     public interface Callback {
         public boolean onGestureDown();
-        public void onGestureMove(int direction);
+        public void onGestureMove(Direction direction);
         public void onGestureUp(boolean moved);
     }
 

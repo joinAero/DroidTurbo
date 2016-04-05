@@ -93,9 +93,9 @@ public class GameLayer extends LifeLayer implements Gesture.Callback {
     }
 
     @Override
-    public void onGestureMove(int direction) {
+    public void onGestureMove(Direction direction) {
         if (getStatus().isPausing()) return;
-        getScene().toast(Gesture.moveName(direction));
+        getScene().toast("Move " + direction.name().toLowerCase());
     }
 
     @Override
