@@ -7,6 +7,11 @@ import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.MotionEvent;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Random;
+
 import cc.cubone.turbo.ui.demo.snake.engine.Painter;
 import cc.cubone.turbo.ui.demo.snake.engine.Scene;
 import cc.cubone.turbo.ui.demo.snake.engine.Status;
@@ -14,6 +19,7 @@ import cc.cubone.turbo.ui.demo.snake.engine.part.Direction;
 import cc.cubone.turbo.ui.demo.snake.engine.util.Gesture;
 import cc.cubone.turbo.ui.demo.snake.engine.util.Tick;
 import cc.cubone.turbo.ui.demo.snake.engine.view.LifeLayer;
+import cc.cubone.turbo.ui.demo.snake.game.base.Cell;
 import cc.cubone.turbo.ui.demo.snake.game.base.Grid;
 import cc.cubone.turbo.ui.demo.snake.game.sprite.Fruit;
 import cc.cubone.turbo.ui.demo.snake.game.sprite.Snake;
@@ -33,6 +39,14 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         mGesture = new Gesture(this);
         mTick = new Tick(getStatus(), this);
         mController = new Controller(scene);
+    }
+
+    public void setTickInterval(long interval) {
+        mTick.setInterval(interval);
+    }
+
+    public void setCallback(Callback callback) {
+        mController.setCallback(callback);
     }
 
     @Override
@@ -63,8 +77,9 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
     @Override
     public void onGestureMove(Direction direction) {
         if (getStatus().isPausing()) return;
-        getScene().toast("Move " + direction.name().toLowerCase());
-        mController.setDirection(direction);
+        if (mController.setDirection(direction) && Status.DEBUG) {
+            getScene().toast("Move " + direction.name().toLowerCase());
+        }
     }
 
     @Override
@@ -151,28 +166,89 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         public Controller(Scene scene) {
             mSnake = new Snake(scene);
             mFruit = new Fruit(scene);
+            mDirection = Direction.RIGHT;
         }
 
         public void init(Grid grid) {
             mGrid = grid;
             if (mSnake.init(grid)) {
-                mFruit.grow(grid);
+                growFruit();
             } else if (mCallback != null) {
                 // fail cause not enough cells
                 mCallback.onGameFail();
             }
-            mDirection = Direction.RIGHT;
         }
 
         public void setCallback(Callback callback) {
             mCallback = callback;
         }
 
-        public void setDirection(Direction direction) {
+        public boolean setDirection(Direction direction) {
+            if (Direction.isOpposite(mDirection, direction)) {
+                return false;
+            }
             mDirection = direction;
+            return true;
         }
 
         public void move() {
+            LinkedList<Cell> snakeCells = mSnake.get();
+            Cell snakeHead = snakeCells.getFirst();
+            Cell snakeTail = snakeCells.getLast();
+
+            Cell nextCell = next(snakeHead);
+            if (Cell.isWalkable(nextCell)) {
+                snakeCells.addFirst(nextCell);
+                snakeCells.removeLast();
+                snakeTail.setStyle(Cell.Style.EMPTY);
+            } else {
+            }
+        }
+
+        public Cell next(Cell cell) {
+            int row = cell.row();
+            int col = cell.column();
+            switch (mDirection) {
+                case LEFT:  col -= 1; if (col < 0) col = mGrid.column() - 1; break;
+                case UP:    row -= 1; if (row < 0) row = mGrid.row() - 1; break;
+                case RIGHT: col += 1; if (col >= mGrid.column()) col = 0; break;
+                case DOWN:  row += 1; if (row >= mGrid.row()) row = 0; break;
+                default: throw new IllegalArgumentException();
+            }
+            return mGrid.cell(row, col);
+        }
+
+        private boolean growFruit() {
+            List<Cell> emptyCells = cells(mGrid, Cell.Style.EMPTY);
+            int n = emptyCells.size();
+            if (n <= 0) {
+                mFruit.reset();
+                return false;
+            }
+            int randLoc = new Random(System.currentTimeMillis()).nextInt(n);
+            mFruit.grow(emptyCells.get(randLoc));
+            return true;
+        }
+
+        private List<Cell> cells(Grid grid, Cell.Style... styles) {
+            if (styles == null) return null;
+            List<Cell> resultCells = new ArrayList<>();
+            Cell[][] cells = grid.cells();
+            int row = grid.row();
+            int column = grid.column();
+            Cell cell;
+            for (int i = 0; i < row; i++) {
+                for (int j = 0; j < column; j++) {
+                    cell = cells[i][j];
+                    for (Cell.Style style : styles) {
+                        if (cell.getStyle() == style) {
+                            resultCells.add(cell);
+                            break;
+                        }
+                    }
+                }
+            }
+            return resultCells;
         }
 
         public void draw(Canvas canvas, Status status) {

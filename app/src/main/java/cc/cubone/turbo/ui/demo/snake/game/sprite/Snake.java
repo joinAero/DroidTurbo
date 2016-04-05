@@ -6,7 +6,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 
 import java.util.LinkedList;
-import java.util.List;
 
 import cc.cubone.turbo.ui.demo.snake.engine.Painter;
 import cc.cubone.turbo.ui.demo.snake.engine.Scene;
@@ -16,7 +15,7 @@ import cc.cubone.turbo.ui.demo.snake.game.base.Grid;
 
 public class Snake extends Sprite {
 
-    private List<Cell> mCells = new LinkedList<>();
+    private LinkedList<Cell> mCells = new LinkedList<>();
     private int mColor = Color.GREEN;
 
     public Snake(Scene scene) {
@@ -32,13 +31,13 @@ public class Snake extends Sprite {
         Cell cell;
         for (int i = 0; i < 3; i++) {
             cell = grid.cell(row, col-i);
-            cell.setStyle(Cell.Style.FILL);
+            cell.setStyle(Cell.Style.SNAKE);
             mCells.add(cell);
         }
         return true;
     }
 
-    public List<Cell> get() {
+    public LinkedList<Cell> get() {
         return mCells;
     }
 
@@ -48,6 +47,29 @@ public class Snake extends Sprite {
 
     public void setColor(int color) {
         mColor = color;
+    }
+
+    public void growFirst(Cell walkableCell) {
+        if (!Cell.isWalkable(walkableCell)) {
+            throw new IllegalStateException("cell is not walkable");
+        }
+        walkableCell.setStyle(Cell.Style.SNAKE);
+        mCells.addFirst(walkableCell);
+    }
+
+    public void growLast(Cell walkableCell) {
+        if (!Cell.isWalkable(walkableCell)) {
+            throw new IllegalStateException("cell is not walkable");
+        }
+        walkableCell.setStyle(Cell.Style.SNAKE);
+        mCells.addLast(walkableCell);
+    }
+
+    public void reset() {
+        for (Cell cell : mCells) {
+            cell.setStyle(Cell.Style.EMPTY);
+        }
+        mCells.clear();
     }
 
     @Override

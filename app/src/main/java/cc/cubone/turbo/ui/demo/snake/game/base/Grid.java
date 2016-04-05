@@ -77,7 +77,7 @@ public class Grid {
         for (int i = 0; i < mRow; i++) {
             y = mTop + i * cellSize;
             for (int j = 0; j < mColumn; j++) {
-                mCells[i][j] = new Cell(mLeft + j * cellSize, y, cellSize);
+                mCells[i][j] = new Cell(i, j, mLeft + j * cellSize, y, cellSize);
             }
         }
     }

@@ -25,4 +25,14 @@ public enum Direction {
             default: throw new IllegalArgumentException();
         }
     }
+
+    public static boolean isOpposite(Direction lhs, Direction rhs) {
+        switch (lhs) {
+            case LEFT:  return rhs == RIGHT;
+            case UP:    return rhs == DOWN;
+            case RIGHT: return rhs == LEFT;
+            case DOWN:  return rhs == UP;
+            default: throw new IllegalArgumentException();
+        }
+    }
 }

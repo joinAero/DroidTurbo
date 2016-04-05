@@ -57,6 +57,12 @@ public class SnakeGame {
 
         scene.addLayers(gameLayer, statLayer, tipLayer);
         mScene = scene;
+
+        updateTickInterval();
+    }
+
+    private void updateTickInterval() {
+        mGameLayer.setTickInterval(LEVEL_TICK_INTERVAL[mLevel.value()]);
     }
 
     public void setDebug(boolean debug) {
