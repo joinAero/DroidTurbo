@@ -40,6 +40,7 @@ public class LifeCircle {
         mStatus.started = true;
         mStatus.running = false;
         mStatus.timeStart = System.currentTimeMillis();
+        mStatus.timeElapsed = 0;
         onStart();
         if (mCallbacks != null) {
             for (Callback callback : mCallbacks) {

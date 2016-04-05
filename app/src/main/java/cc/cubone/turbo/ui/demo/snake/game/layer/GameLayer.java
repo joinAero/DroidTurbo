@@ -3,6 +3,8 @@ package cc.cubone.turbo.ui.demo.snake.game.layer;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.text.TextPaint;
 import android.view.Gravity;
 import android.view.MotionEvent;
@@ -34,6 +36,8 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
     private Controller mController;
 
+    private boolean mRestartNeeded = true;
+
     public GameLayer(Scene scene) {
         super(scene, true);
         mGesture = new Gesture(this);
@@ -49,18 +53,47 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         mController.setCallback(callback);
     }
 
+    public boolean isGameReady() {
+        return mController.isGameReady();
+    }
+
+    public boolean isGameOver() {
+        return mController.isGameOver();
+    }
+
+    public boolean isGameOverPerfect() {
+        return mController.isGameOverPerfect();
+    }
+
+    @Override
+    public void start() {
+        super.start();
+        mController.onStart();
+    }
+
+    public void restart() {
+        mRestartNeeded = true;
+        mTick.reset();
+        start();
+    }
+
     @Override
     protected void onDraw(Canvas canvas, Scene scene) {
         final Painter painter = scene.getPainter();
-        if (mGrid == null) {
-            mGrid = new Grid(canvas, (int) painter.dp2px(12));
-            mController.init(mGrid);
+        if (mRestartNeeded) {
+            Grid grid = new Grid(canvas, (int) painter.dp2px(16));
+            mController.init(grid);
+            mGrid = grid;
+            mRestartNeeded = false;
         }
         mTick.update();
 
         if (Status.DEBUG) drawGird(canvas, painter);
-        mController.draw(canvas, getStatus());
-        if (Status.DEBUG) drawInfo(canvas, painter);
+        mController.onDraw(canvas, getStatus());
+        if (Status.DEBUG) {
+            //drawCells(canvas, painter);
+            drawInfo(canvas, painter);
+        }
     }
 
     @Override
@@ -87,7 +120,11 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         //getScene().toast("Up");
         final Status status = getStatus();
         if (status.isStopped()) {
-            start();
+            if (isGameOver()) {
+                if (!moved) restart();
+            } else {
+                start();
+            }
         } else if (status.isRunning()) {
             if (!moved) pause();
         } else {
@@ -97,7 +134,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
     @Override
     public void onTick() {
-        mController.move();
+        mController.onMove();
     }
 
     private void drawGird(Canvas canvas, Painter painter) {
@@ -125,22 +162,38 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             x = left + j * cellSize;
             canvas.drawLine(x, top, x, bottom, brush);
         }
+    }
 
-        /*RectF rectF = painter.rectF;
+    private void drawCells(Canvas canvas, Painter painter) {
+        int row = mGrid.row();
+        int column = mGrid.column();
+
+        TextPaint pencil = painter.pencil;
+        pencil.setColor(Color.RED);
+
+        Rect rect = painter.rect;
+        RectF rectF = painter.rectF;
+
         Cell[][] cells = mGrid.cells();
         Cell cell;
+        Cell.Style style;
         for (int i = 0; i < row; i++) {
             for (int j = 0; j < column; j++) {
                 cell = cells[i][j];
                 cell.getBounds(rectF);
-                brush.setColor(mRandColor.get());
-                canvas.drawRect(rectF, brush);
+                style = cell.getStyle();
+
+                rect.set((int) rectF.left, (int) rectF.top,
+                        (int) rectF.right, (int) rectF.bottom);
+                painter.drawText(canvas, style.name().substring(0, 1), rect,
+                        Gravity.CENTER, false, pencil);
             }
-        }*/
+        }
     }
 
     private void drawInfo(Canvas canvas, Painter painter) {
         final TextPaint pencil = painter.pencil;
+        pencil.setColor(Color.GREEN);
         pencil.setTextAlign(Paint.Align.RIGHT);
         String info = String.format("%dx%d\nGame: %s",
                 mGrid.row(), mGrid.column(),
@@ -151,7 +204,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
     public interface Callback {
         public void onGameFail();
         public void onGameGrow();
-        public void onGameOver();
+        public void onGameOver(boolean perfect);
     }
 
     private static class Controller {
@@ -162,21 +215,29 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
         private Callback mCallback;
         private Direction mDirection;
+        private Direction mDirectionNew;
+
+        private boolean mGameReady = false;
+        private boolean mGameOver = false;
+        private boolean mGameOverPerfect = false;
 
         public Controller(Scene scene) {
             mSnake = new Snake(scene);
             mFruit = new Fruit(scene);
-            mDirection = Direction.RIGHT;
         }
 
         public void init(Grid grid) {
             mGrid = grid;
-            if (mSnake.init(grid)) {
+            mDirection = Direction.RIGHT;
+
+            boolean ready = mSnake.init(grid);
+            if (ready) {
                 growFruit();
             } else if (mCallback != null) {
                 // fail cause not enough cells
                 mCallback.onGameFail();
             }
+            mGameReady = ready;
         }
 
         public void setCallback(Callback callback) {
@@ -187,25 +248,73 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             if (Direction.isOpposite(mDirection, direction)) {
                 return false;
             }
-            mDirection = direction;
+            mDirectionNew = direction;
             return true;
         }
 
-        public void move() {
-            LinkedList<Cell> snakeCells = mSnake.get();
-            Cell snakeHead = snakeCells.getFirst();
-            Cell snakeTail = snakeCells.getLast();
+        public boolean isGameReady() {
+            return mGameReady;
+        }
 
-            Cell nextCell = next(snakeHead);
-            if (Cell.isWalkable(nextCell)) {
-                snakeCells.addFirst(nextCell);
-                snakeCells.removeLast();
-                snakeTail.setStyle(Cell.Style.EMPTY);
-            } else {
+        public boolean isGameOver() {
+            return mGameOver;
+        }
+
+        public boolean isGameOverPerfect() {
+            return mGameOverPerfect;
+        }
+
+        public void onStart() {
+            mGameOver = false;
+            mGameOverPerfect = false;
+        }
+
+        public void onDraw(Canvas canvas, Status status) {
+            mSnake.draw(canvas);
+            if (status.isStarted() || isGameOver()) {
+                mFruit.draw(canvas);
             }
         }
 
-        public Cell next(Cell cell) {
+        public void onMove() {
+            if (!mGameReady || mGameOver) return;
+
+            // apply new properties
+            if (mDirectionNew != null) {
+                mDirection = mDirectionNew;
+                mDirectionNew = null;
+            }
+
+            LinkedList<Cell> snakeCells = mSnake.get();
+            Cell snakeHead = snakeCells.getFirst();
+
+            Cell nextCell = next(snakeHead);
+            Cell.Style nextCellStyle = nextCell.getStyle();
+            if (nextCellStyle == Cell.Style.EMPTY) {
+                // EMPTY, go ahead
+                snakeCells.addFirst(nextCell);
+                nextCell.setStyle(Cell.Style.SNAKE);
+                Cell snakeTail = snakeCells.removeLast();
+                snakeTail.setStyle(Cell.Style.EMPTY);
+            } else if (nextCellStyle == Cell.Style.FRUIT) {
+                // FRUIT, grow snake
+                if (growSnake(nextCell)) {
+                    if (mCallback != null) mCallback.onGameGrow();
+                } else {
+                    // fail, all cells are SNAKE
+                    mGameOver = true;
+                    mGameOverPerfect = true;
+                    if (mCallback != null) mCallback.onGameOver(true);
+                }
+            } else {
+                // not walkable, game over
+                mGameOver = true;
+                mGameOverPerfect = false;
+                if (mCallback != null) mCallback.onGameOver(false);
+            }
+        }
+
+        private Cell next(Cell cell) {
             int row = cell.row();
             int col = cell.column();
             switch (mDirection) {
@@ -216,6 +325,13 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
                 default: throw new IllegalArgumentException();
             }
             return mGrid.cell(row, col);
+        }
+
+        private boolean growSnake(Cell fruitCell) {
+            mSnake.get().addFirst(fruitCell);
+            mSnake.setColor(mFruit.getColor());
+            fruitCell.setStyle(Cell.Style.SNAKE);
+            return growFruit();
         }
 
         private boolean growFruit() {
@@ -230,8 +346,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             return true;
         }
 
-        private List<Cell> cells(Grid grid, Cell.Style... styles) {
-            if (styles == null) return null;
+        private List<Cell> cells(Grid grid, Cell.Style style) {
             List<Cell> resultCells = new ArrayList<>();
             Cell[][] cells = grid.cells();
             int row = grid.row();
@@ -240,22 +355,12 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             for (int i = 0; i < row; i++) {
                 for (int j = 0; j < column; j++) {
                     cell = cells[i][j];
-                    for (Cell.Style style : styles) {
-                        if (cell.getStyle() == style) {
-                            resultCells.add(cell);
-                            break;
-                        }
+                    if (cell.getStyle() == style) {
+                        resultCells.add(cell);
                     }
                 }
             }
             return resultCells;
-        }
-
-        public void draw(Canvas canvas, Status status) {
-            mSnake.draw(canvas);
-            if (status.isStarted()) {
-                mFruit.draw(canvas);
-            }
         }
     }
 }

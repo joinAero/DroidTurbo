@@ -22,6 +22,15 @@ public class Tick {
         mTickInterval = interval;
     }
 
+    public void reset() {
+        mTickTime = 0;
+    }
+
+    public void reset(Status status) {
+        mStatus = status;
+        mTickTime = 0;
+    }
+
     public void setInterval(long interval) {
         mTickInterval = interval;
     }

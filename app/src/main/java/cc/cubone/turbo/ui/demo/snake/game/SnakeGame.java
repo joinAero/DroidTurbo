@@ -14,7 +14,7 @@ import cc.cubone.turbo.ui.demo.snake.game.layer.TipLayer;
 import cc.cubone.turbo.ui.demo.snake.game.status.Level;
 import cc.cubone.turbo.ui.demo.snake.game.status.Score;
 
-public class SnakeGame {
+public class SnakeGame implements GameLayer.Callback {
 
     private Scene mScene;
     private boolean mResumeNeeded = false;
@@ -24,7 +24,7 @@ public class SnakeGame {
     private TipLayer mTipLayer;
 
     private final int LEVEL_TICK_INTERVAL[] = {
-            500, 400, 300, 200, 100,
+            250, 200, 150, 100, 50,
     };
 
     private Score mScore;
@@ -43,6 +43,7 @@ public class SnakeGame {
 
         GameLayer gameLayer = new GameLayer(scene);
         gameLayer.addCallback(mGameCallback);
+        gameLayer.setCallback(this);
         mGameLayer = gameLayer;
 
         StatLayer statLayer = new StatLayer(scene, mScore, mLevel);
@@ -94,6 +95,21 @@ public class SnakeGame {
         return mScene.onTouchEvent(e);
     }
 
+    @Override
+    public void onGameFail() {
+        mScene.toast("Game fail");
+    }
+
+    @Override
+    public void onGameGrow() {
+        mScene.toast("Game grow");
+    }
+
+    @Override
+    public void onGameOver(boolean perfect) {
+        mGameLayer.stop();
+    }
+
     private LifeCircle.Callback mSceneCallback = new LifeCircle.Callback() {
         @Override
         public void onLifeStart() {
@@ -126,7 +142,15 @@ public class SnakeGame {
         }
         @Override
         public void onLifeStop() {
-            mTipLayer.setText("Click\nTo\nStart");
+            if (mGameLayer.isGameOver()) {
+                if (mGameLayer.isGameOverPerfect()) {
+                    mTipLayer.setText("Game Over\nPerfect");
+                } else {
+                    mTipLayer.setText("Game Over\nFailed");
+                }
+            } else {
+                mTipLayer.setText("Click\nTo\nStart");
+            }
             mTipLayer.setVisible(true);
         }
     };

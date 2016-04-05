@@ -40,9 +40,6 @@ public class Fruit extends Sprite {
     }
 
     public void reset() {
-        if (mCell != null) {
-            mCell.setStyle(Cell.Style.EMPTY);
-        }
         mCell = null;
     }
 

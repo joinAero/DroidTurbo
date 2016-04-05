@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import cc.cubone.turbo.ui.demo.snake.engine.Painter;
 import cc.cubone.turbo.ui.demo.snake.engine.Scene;
+import cc.cubone.turbo.ui.demo.snake.engine.Status;
 import cc.cubone.turbo.ui.demo.snake.engine.view.Sprite;
 import cc.cubone.turbo.ui.demo.snake.game.base.Cell;
 import cc.cubone.turbo.ui.demo.snake.game.base.Grid;
@@ -23,16 +24,24 @@ public class Snake extends Sprite {
     }
 
     public boolean init(Grid grid) {
-        if (grid.row() < 1 || grid.column() < 6) {
+        if (grid.row() < 2 || grid.column() < 2) {
             return false;
         }
+        mCells.clear();
+
         int row = grid.row() / 2;
-        int col = grid.column() / 2 - 1;
+        int col = grid.column() / 2;
         Cell cell;
-        for (int i = 0; i < 3; i++) {
-            cell = grid.cell(row, col-i);
+        if (col < 2) {
+            cell = grid.cell(row, col);
             cell.setStyle(Cell.Style.SNAKE);
             mCells.add(cell);
+        } else {
+            for (int i = 0; i < 3; i++) {
+                cell = grid.cell(row, col-i);
+                cell.setStyle(Cell.Style.SNAKE);
+                mCells.add(cell);
+            }
         }
         return true;
     }
@@ -50,7 +59,7 @@ public class Snake extends Sprite {
     }
 
     public void growFirst(Cell walkableCell) {
-        if (!Cell.isWalkable(walkableCell)) {
+        if (Status.DEBUG && !Cell.isWalkable(walkableCell)) {
             throw new IllegalStateException("cell is not walkable");
         }
         walkableCell.setStyle(Cell.Style.SNAKE);
@@ -58,7 +67,7 @@ public class Snake extends Sprite {
     }
 
     public void growLast(Cell walkableCell) {
-        if (!Cell.isWalkable(walkableCell)) {
+        if (Status.DEBUG && !Cell.isWalkable(walkableCell)) {
             throw new IllegalStateException("cell is not walkable");
         }
         walkableCell.setStyle(Cell.Style.SNAKE);
