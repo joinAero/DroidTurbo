@@ -2,7 +2,7 @@ package cc.cubone.turbo.core.persistence;
 
 import android.database.sqlite.SQLiteDatabase;
 
-/*package*/ interface Db {
+public interface Db {
 
     /**
      * Get database.

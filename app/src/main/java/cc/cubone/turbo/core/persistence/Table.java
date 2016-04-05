@@ -21,7 +21,17 @@ public abstract class Table {
         return mName;
     }
 
-    public boolean add(ContentValues values) {
+    public boolean insert(ContentValues values) {
+        final SQLiteDatabase db = mDb.getDatabase();
+        try {
+            final long id = db.insert(mName, null, values);
+            return id != -1;
+        } finally {
+            mDb.closeDatabase();
+        }
+    }
+
+    public boolean replace(ContentValues values) {
         final SQLiteDatabase db = mDb.getDatabase();
         try {
             // INSERT OR REPLACE
