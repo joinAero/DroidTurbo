@@ -101,28 +101,27 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
         // java.util.stream: https://docs.oracle.com/javase/8/docs/api/java/util/stream/package-summary.html
         for (Layer layer : mLayers) {
             if (layer.isVisible()) {
+                mPainter.reset();
                 layer.draw(canvas);
             }
         }
-        mToast.draw(canvas);
 
+        mPainter.resetPencil();
+        mToast.draw(canvas);
         if (Status.DEBUG) {
-            mPainter.resetPencil();
             String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
                     TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
             mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, true);
         }
-
-        mPainter.reset();
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(MotionEvent e) {
         Layer layer;
         for (int i = mLayers.size() - 1; i >= 0; --i) {
             layer = mLayers.get(i);
             if (layer.isTouchable()) {
-                if (layer.onTouchEvent(ev)) {
+                if (layer.onTouchEvent(e)) {
                     return true;
                 }
             }

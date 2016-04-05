@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.demo.snake.game;
+package cc.cubone.turbo.ui.demo.snake.game.base;
 
 import android.graphics.RectF;
 

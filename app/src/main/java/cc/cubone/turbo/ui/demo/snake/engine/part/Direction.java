@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.demo.snake.game;
+package cc.cubone.turbo.ui.demo.snake.engine.part;
 
 public enum Direction {
     LEFT,

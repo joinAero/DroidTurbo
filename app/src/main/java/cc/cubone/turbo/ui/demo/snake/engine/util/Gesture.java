@@ -1,6 +1,8 @@
-package cc.cubone.turbo.ui.demo.snake.game;
+package cc.cubone.turbo.ui.demo.snake.engine.util;
 
 import android.view.MotionEvent;
+
+import cc.cubone.turbo.ui.demo.snake.engine.part.Direction;
 
 public class Gesture {
 
@@ -14,6 +16,10 @@ public class Gesture {
     private final int mMoveSlopSquare;
 
     private boolean mMoved;
+
+    public Gesture(Callback callback) {
+        this(20, callback); // 20px
+    }
 
     public Gesture(int moveSlop, Callback callback) {
         if (callback == null) throw new IllegalArgumentException();
