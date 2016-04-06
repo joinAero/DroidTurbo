@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import cc.cubone.turbo.BuildConfig;
 import cc.cubone.turbo.ui.demo.snake.game.SnakeGame;
 
 public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callback2 {
@@ -37,7 +38,10 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
     private void init(Context context) {
         getHolder().addCallback(this);
         mSnakeGame = new SnakeGame(this);
-        //mSnakeGame.setDebug(BuildConfig.DEBUG);
+        //boolean debug = false;
+        boolean debug = BuildConfig.DEBUG;
+        mSnakeGame.setDebug(debug);
+        mSnakeGame.getScene().setInfoVisible(debug);
     }
 
     public void onResume() {

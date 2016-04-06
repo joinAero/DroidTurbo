@@ -111,10 +111,13 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
         drawGird(canvas, painter);
         mController.onDraw(canvas, getStatus());
+
+        String info = TimeUtils.readableSeconds(getStatus().getTimeElapsed() / 1000);
         if (Status.DEBUG) {
-            drawCells(canvas, painter);
+            //drawCells(canvas, painter);
+            info = String.format("%dx%d\nGame: %s", mGrid.row(), mGrid.column(), info);
         }
-        drawInfo(canvas, painter);
+        drawInfo(canvas, painter, info);
     }
 
     @Override
@@ -212,14 +215,11 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         }
     }
 
-    private void drawInfo(Canvas canvas, Painter painter) {
+    private void drawInfo(Canvas canvas, Painter painter, String text) {
         final TextPaint pencil = painter.pencil;
         pencil.setColor(Color.GREEN);
         pencil.setTextAlign(Paint.Align.RIGHT);
-        String info = String.format("%dx%d\nGame: %s",
-                mGrid.row(), mGrid.column(),
-                TimeUtils.readableSeconds(getStatus().getTimeElapsed() / 1000));
-        painter.drawText(canvas, info, Gravity.END | Gravity.BOTTOM, true);
+        painter.drawText(canvas, text, Gravity.END | Gravity.BOTTOM, true);
     }
 
     public interface Callback {

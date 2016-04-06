@@ -65,11 +65,15 @@ public class SnakeGame implements GameLayer.Callback {
     private void initGame() {
         mScore.set(0);
         mLevel.set(1);
-        updateLevel();
+        updateLevelStatus();
     }
 
-    private void updateLevel() {
+    private void updateLevelStatus() {
         mGameLayer.setTickInterval(LEVEL_TICK_INTERVAL[mLevel.value() - 1]);
+    }
+
+    public Scene getScene() {
+        return mScene;
     }
 
     public void setDebug(boolean debug) {
@@ -112,7 +116,7 @@ public class SnakeGame implements GameLayer.Callback {
             int levelNew = (size - 3) / 5 + 1;
             if (mLevel.value() < levelNew) {
                 mLevel.up();
-                updateLevel();
+                updateLevelStatus();
                 mScene.toast("Level up " + levelNew);
             }
         }

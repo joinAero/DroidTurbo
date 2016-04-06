@@ -29,6 +29,9 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
 
     private FPS mFPS = new FPS();
 
+    private boolean mInfoVisible = false;
+    private int mInfoGravity = Gravity.START | Gravity.BOTTOM;
+
     public Scene(SurfaceView surfaceView) {
         mHolder = surfaceView.getHolder();
         mPainter = new Painter(surfaceView.getContext());
@@ -54,6 +57,14 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
     public void toast(String text) {
         mToast.setText(text);
         mToast.show();
+    }
+
+    public void setInfoVisible(boolean visible) {
+        mInfoVisible = visible;
+    }
+
+    public void setInfoGravity(int gravity) {
+        mInfoGravity = gravity;
     }
 
     @Override
@@ -109,11 +120,14 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
         // draw toast
         mPainter.resetPencil();
         mToast.draw(canvas);
-        // draw fps and time
-        mPainter.resetPencil();
-        String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
-                TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
-        mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, true);
+
+        if (mInfoVisible) {
+            // draw fps and time
+            mPainter.resetPencil();
+            String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
+                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
+            mPainter.drawText(canvas, info, mInfoGravity, true);
+        }
     }
 
     @Override
