@@ -36,6 +36,8 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
     private Controller mController;
 
+    private Callback mCallback;
+
     private boolean mRestartNeeded = true;
 
     public GameLayer(Scene scene) {
@@ -43,6 +45,21 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         mGesture = new Gesture(this);
         mTick = new Tick(getStatus(), this);
         mController = new Controller(scene);
+        mController.setCallback(new Callback() {
+            @Override
+            public void onGameFail() {
+                if (mCallback != null) mCallback.onGameFail();
+            }
+            @Override
+            public void onGameGrow() {
+                if (mCallback != null) mCallback.onGameGrow();
+            }
+            @Override
+            public void onGameOver(boolean perfect) {
+                stop();
+                if (mCallback != null) mCallback.onGameOver(perfect);
+            }
+        });
     }
 
     public void setTickInterval(long interval) {
@@ -50,7 +67,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
     }
 
     public void setCallback(Callback callback) {
-        mController.setCallback(callback);
+        mCallback = callback;
     }
 
     public boolean isGameReady() {
@@ -292,10 +309,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             Cell.Style nextCellStyle = nextCell.getStyle();
             if (nextCellStyle == Cell.Style.EMPTY) {
                 // EMPTY, go ahead
-                snakeCells.addFirst(nextCell);
-                nextCell.setStyle(Cell.Style.SNAKE);
-                Cell snakeTail = snakeCells.removeLast();
-                snakeTail.setStyle(Cell.Style.EMPTY);
+                moveSnake(nextCell);
             } else if (nextCellStyle == Cell.Style.FRUIT) {
                 // FRUIT, grow snake
                 if (growSnake(nextCell)) {
@@ -307,10 +321,15 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
                     if (mCallback != null) mCallback.onGameOver(true);
                 }
             } else {
-                // not walkable, game over
-                mGameOver = true;
-                mGameOverPerfect = false;
-                if (mCallback != null) mCallback.onGameOver(false);
+                if (nextCell == snakeCells.getLast()) {
+                    // move to snake tail
+                    moveSnake(nextCell);
+                } else {
+                    // not walkable, game over
+                    mGameOver = true;
+                    mGameOverPerfect = false;
+                    if (mCallback != null) mCallback.onGameOver(false);
+                }
             }
         }
 
@@ -327,7 +346,17 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             return mGrid.cell(row, col);
         }
 
+        private void moveSnake(Cell nextCell) {
+            // remove snake tail
+            Cell snakeTail = mSnake.get().removeLast();
+            snakeTail.setStyle(Cell.Style.EMPTY);
+            // add snake head
+            mSnake.get().addFirst(nextCell);
+            nextCell.setStyle(Cell.Style.SNAKE);
+        }
+
         private boolean growSnake(Cell fruitCell) {
+            // add snake head cause by eating fruit
             mSnake.get().addFirst(fruitCell);
             mSnake.setColor(mFruit.getColor());
             fruitCell.setStyle(Cell.Style.SNAKE);

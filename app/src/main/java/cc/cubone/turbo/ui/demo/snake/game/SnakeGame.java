@@ -97,7 +97,6 @@ public class SnakeGame implements GameLayer.Callback {
 
     @Override
     public void onGameFail() {
-        mScene.toast("Game fail");
     }
 
     @Override
@@ -107,7 +106,15 @@ public class SnakeGame implements GameLayer.Callback {
 
     @Override
     public void onGameOver(boolean perfect) {
-        mGameLayer.stop();
+    }
+
+    private void showTip(String text) {
+        mTipLayer.setText(text);
+        mTipLayer.setVisible(true);
+    }
+
+    private void hideTip() {
+        mTipLayer.setVisible(false);
     }
 
     private LifeCircle.Callback mSceneCallback = new LifeCircle.Callback() {
@@ -129,29 +136,27 @@ public class SnakeGame implements GameLayer.Callback {
     private LifeCircle.Callback mGameCallback = new LifeCircle.Callback() {
         @Override
         public void onLifeStart() {
-            mTipLayer.setVisible(false);
+            hideTip();
         }
         @Override
         public void onLifeResume() {
-            mTipLayer.setVisible(false);
+            hideTip();
         }
         @Override
         public void onLifePause() {
-            mTipLayer.setText("Click\nTo\nResume");
-            mTipLayer.setVisible(true);
+            showTip("Click\nTo\nResume");
         }
         @Override
         public void onLifeStop() {
             if (mGameLayer.isGameOver()) {
                 if (mGameLayer.isGameOverPerfect()) {
-                    mTipLayer.setText("Game Over\nPerfect");
+                    showTip("Fantastic");
                 } else {
-                    mTipLayer.setText("Game Over\nFailed");
+                    showTip("Game Over");
                 }
             } else {
-                mTipLayer.setText("Click\nTo\nStart");
+                showTip("Click\nTo\nStart");
             }
-            mTipLayer.setVisible(true);
         }
     };
 
