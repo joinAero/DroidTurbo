@@ -1,5 +1,6 @@
 package cc.cubone.turbo.ui.demo.snake.engine;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -19,6 +20,7 @@ import cc.cubone.turbo.util.TimeUtils;
 
 public class Scene extends LifeCircle implements Drawable, Touchable {
 
+    private Context mContext;
     private SurfaceHolder mHolder;
     private DrawThread mDrawThread;
 
@@ -33,11 +35,16 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
     private int mInfoGravity = Gravity.START | Gravity.BOTTOM;
 
     public Scene(SurfaceView surfaceView) {
+        mContext = surfaceView.getContext();
         mHolder = surfaceView.getHolder();
-        mPainter = new Painter(surfaceView.getContext());
+        mPainter = new Painter(mContext);
         mLayers = new ArrayList<>();
         mToast = new Toast(this, Toast.SHORT);
         mToast.setTextColor(Color.GREEN);
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     public Painter getPainter() {

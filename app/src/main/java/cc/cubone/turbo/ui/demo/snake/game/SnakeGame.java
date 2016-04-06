@@ -1,5 +1,7 @@
 package cc.cubone.turbo.ui.demo.snake.game;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -20,7 +22,7 @@ public class SnakeGame implements GameLayer.Callback {
     private boolean mResumeNeeded = false;
 
     private GameLayer mGameLayer;
-    //private StatLayer mStatLayer;
+    private StatLayer mStatLayer;
     private TipLayer mTipLayer;
 
     private final int LEVEL_TICK_INTERVAL[] = {
@@ -30,6 +32,8 @@ public class SnakeGame implements GameLayer.Callback {
     private Score mScore;
     private Level mLevel;
 
+    private Storage mStorage;
+
     public SnakeGame(SurfaceView surfaceView) {
         init(surfaceView);
     }
@@ -37,6 +41,8 @@ public class SnakeGame implements GameLayer.Callback {
     private void init(SurfaceView surfaceView) {
         mScore = new Score();
         mLevel = new Level(1, LEVEL_TICK_INTERVAL.length);
+
+        mStorage = new Storage(surfaceView.getContext());
 
         Scene scene = new Scene(surfaceView);
         scene.addCallback(mSceneCallback);
@@ -47,7 +53,8 @@ public class SnakeGame implements GameLayer.Callback {
         mGameLayer = gameLayer;
 
         StatLayer statLayer = new StatLayer(scene, mScore, mLevel);
-        //mStatLayer = statLayer;
+        statLayer.setHighScore(mStorage.getHighScore());
+        mStatLayer = statLayer;
 
         TipLayer tipLayer = new TipLayer(scene);
         tipLayer.setBackgroundColor(0x33ffffff);
@@ -111,7 +118,10 @@ public class SnakeGame implements GameLayer.Callback {
 
     @Override
     public void onGameGrow(int size) {
+        // update score
         mScore.add(mLevel);
+        mStatLayer.updateHighScore();
+        // update level
         if (!mLevel.isMax()) {
             int levelNew = (size - 3) / 5 + 1;
             if (mLevel.value() < levelNew) {
@@ -124,6 +134,7 @@ public class SnakeGame implements GameLayer.Callback {
 
     @Override
     public void onGameOver(boolean perfect) {
+        mStorage.putHighScore(mStatLayer.getHighScore());
     }
 
     private void showTip(String text) {
@@ -179,4 +190,20 @@ public class SnakeGame implements GameLayer.Callback {
         }
     };
 
+    private static class Storage {
+
+        private SharedPreferences mPref;
+
+        public Storage(Context context) {
+            mPref = context.getSharedPreferences("game_snake", Context.MODE_PRIVATE);
+        }
+
+        public void putHighScore(int highScore) {
+            mPref.edit().putInt("high_score", highScore).apply();
+        }
+
+        public int getHighScore() {
+            return mPref.getInt("high_score", 0);
+        }
+    }
 }
