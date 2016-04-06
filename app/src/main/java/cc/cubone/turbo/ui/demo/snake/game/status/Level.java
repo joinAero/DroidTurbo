@@ -2,23 +2,43 @@ package cc.cubone.turbo.ui.demo.snake.game.status;
 
 public class Level {
 
-    private int mMax = 0;
     private int mValue = 0;
+    private int mMax = 0;
 
     public Level(int max) {
-        mMax = max;
+        this(0, max);
     }
 
-    public int max() {
-        return mMax;
+    public Level(int value, int max) {
+        if (value > max) {
+            throw new IllegalArgumentException();
+        }
+        mValue = value;
+        mMax = max;
     }
 
     public int value() {
         return mValue;
     }
 
+    public int max() {
+        return mMax;
+    }
+
+    public void set(int value) {
+        mValue = value;
+    }
+
+    public void setMax(int max) {
+        mMax = max;
+    }
+
+    public boolean isMax() {
+        return mValue == mMax;
+    }
+
     public void up() {
-        if (mValue >= mMax) return;
+        if (isMax()) return;
         ++mValue;
     }
 }

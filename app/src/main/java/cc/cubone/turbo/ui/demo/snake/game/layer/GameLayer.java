@@ -51,8 +51,8 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
                 if (mCallback != null) mCallback.onGameFail();
             }
             @Override
-            public void onGameGrow() {
-                if (mCallback != null) mCallback.onGameGrow();
+            public void onGameGrow(int size) {
+                if (mCallback != null) mCallback.onGameGrow(size);
             }
             @Override
             public void onGameOver(boolean perfect) {
@@ -82,6 +82,10 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         return mController.isGameOverPerfect();
     }
 
+    public int getSnakeSize() {
+        return mController.getSnakeSize();
+    }
+
     @Override
     public void start() {
         super.start();
@@ -105,12 +109,12 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         }
         mTick.update();
 
-        if (Status.DEBUG) drawGird(canvas, painter);
+        drawGird(canvas, painter);
         mController.onDraw(canvas, getStatus());
         if (Status.DEBUG) {
-            //drawCells(canvas, painter);
-            drawInfo(canvas, painter);
+            drawCells(canvas, painter);
         }
+        drawInfo(canvas, painter);
     }
 
     @Override
@@ -220,7 +224,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
 
     public interface Callback {
         public void onGameFail();
-        public void onGameGrow();
+        public void onGameGrow(int size);
         public void onGameOver(boolean perfect);
     }
 
@@ -281,6 +285,10 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             return mGameOverPerfect;
         }
 
+        public int getSnakeSize() {
+            return mSnake.get().size();
+        }
+
         public void onStart() {
             mGameOver = false;
             mGameOverPerfect = false;
@@ -313,7 +321,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
             } else if (nextCellStyle == Cell.Style.FRUIT) {
                 // FRUIT, grow snake
                 if (growSnake(nextCell)) {
-                    if (mCallback != null) mCallback.onGameGrow();
+                    if (mCallback != null) mCallback.onGameGrow(snakeCells.size());
                 } else {
                     // fail, all cells are SNAKE
                     mGameOver = true;

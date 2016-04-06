@@ -8,6 +8,10 @@ public class Score {
         return mValue;
     }
 
+    public void set(int value) {
+        mValue = value;
+    }
+
     public void add(Level level) {
         add(level.value() * 10);
     }

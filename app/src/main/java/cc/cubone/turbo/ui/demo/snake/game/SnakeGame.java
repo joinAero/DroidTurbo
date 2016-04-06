@@ -36,7 +36,7 @@ public class SnakeGame implements GameLayer.Callback {
 
     private void init(SurfaceView surfaceView) {
         mScore = new Score();
-        mLevel = new Level(LEVEL_TICK_INTERVAL.length);
+        mLevel = new Level(1, LEVEL_TICK_INTERVAL.length);
 
         Scene scene = new Scene(surfaceView);
         scene.addCallback(mSceneCallback);
@@ -59,11 +59,17 @@ public class SnakeGame implements GameLayer.Callback {
         scene.addLayers(gameLayer, statLayer, tipLayer);
         mScene = scene;
 
-        updateTickInterval();
+        initGame();
     }
 
-    private void updateTickInterval() {
-        mGameLayer.setTickInterval(LEVEL_TICK_INTERVAL[mLevel.value()]);
+    private void initGame() {
+        mScore.set(0);
+        mLevel.set(1);
+        updateLevel();
+    }
+
+    private void updateLevel() {
+        mGameLayer.setTickInterval(LEVEL_TICK_INTERVAL[mLevel.value() - 1]);
     }
 
     public void setDebug(boolean debug) {
@@ -100,8 +106,16 @@ public class SnakeGame implements GameLayer.Callback {
     }
 
     @Override
-    public void onGameGrow() {
-        mScene.toast("Game grow");
+    public void onGameGrow(int size) {
+        mScore.add(mLevel);
+        if (!mLevel.isMax()) {
+            int levelNew = (size - 3) / 5 + 1;
+            if (mLevel.value() < levelNew) {
+                mLevel.up();
+                updateLevel();
+                mScene.toast("Level up " + levelNew);
+            }
+        }
     }
 
     @Override
@@ -137,6 +151,7 @@ public class SnakeGame implements GameLayer.Callback {
         @Override
         public void onLifeStart() {
             hideTip();
+            initGame();
         }
         @Override
         public void onLifeResume() {

@@ -106,14 +106,14 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
             }
         }
 
+        // draw toast
         mPainter.resetPencil();
         mToast.draw(canvas);
-        if (Status.DEBUG) {
-            mPainter.resetPencil();
-            String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
-                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
-            mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, true);
-        }
+        // draw fps and time
+        mPainter.resetPencil();
+        String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
+                TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
+        mPainter.drawText(canvas, info, Gravity.START | Gravity.BOTTOM, true);
     }
 
     @Override
