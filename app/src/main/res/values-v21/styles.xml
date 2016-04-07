@@ -26,6 +26,7 @@
 
         VectorDrawableCompat:
         * http://developer.android.com/tools/support-library/index.html#rev23-2-0
+        * http://android-developers.blogspot.com/2016/02/android-support-library-232.html
         * http://stackoverflow.com/questions/35633410/appcompat-23-2-use-vectordrawablecompat-with-remoteviews-appwidget-on-api21
         -->
         <item name="android:tint">@color/bar_icon_color</item>
