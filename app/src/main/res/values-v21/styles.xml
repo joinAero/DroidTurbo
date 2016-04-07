@@ -23,6 +23,10 @@
             <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
                 android:src="@drawable/ic_search"
                 android:tint="@color/white"/>
+
+        VectorDrawableCompat:
+        * http://developer.android.com/tools/support-library/index.html#rev23-2-0
+        * http://stackoverflow.com/questions/35633410/appcompat-23-2-use-vectordrawablecompat-with-remoteviews-appwidget-on-api21
         -->
         <item name="android:tint">@color/bar_icon_color</item>
     </style>
