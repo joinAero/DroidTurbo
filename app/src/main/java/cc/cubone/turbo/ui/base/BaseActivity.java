@@ -171,6 +171,7 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
+        //noinspection ResourceAsColor
         setStatusBarImmersiveMode(mStatusBarTinted
                 ? ContextCompat.getColor(this, R.color.colorPrimary)
                 : Color.TRANSPARENT);
