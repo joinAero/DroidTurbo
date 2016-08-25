@@ -18,6 +18,10 @@ public class PrefAllApps extends Pref {
     @Retention(RetentionPolicy.SOURCE)
     public @interface FlagDisplay {}
 
+    @IntDef({SORT_NAME, SORT_PACKAGE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Sort {}
+
     public static final int LAYOUT_LIST = 0;
     public static final int LAYOUT_GRID = 1;
 
@@ -28,8 +32,12 @@ public class PrefAllApps extends Pref {
     public static final int FLAG_DISPLAY_STOPPED = 0x00000100;
     public static final int FLAG_DISPLAY_RUNNING = FLAG_DISPLAY_STOPPED<<1;
 
+    public static final int SORT_NAME = 0;
+    public static final int SORT_PACKAGE = 1;
+
     static final String KEY_LAYOUT = "layout";
     static final String KEY_DISPLAY_FLAGS = "display_flags";
+    static final String KEY_SORT = "sort";
 
     public PrefAllApps(Context context) {
         super(context, "all_apps");
@@ -55,5 +63,15 @@ public class PrefAllApps extends Pref {
 
     public void setDisplayFlags(@FlagDisplay int displayFlags) {
         mSp.edit().putInt(KEY_DISPLAY_FLAGS, displayFlags).apply();
+    }
+
+    @SuppressWarnings("ResourceType")
+    @Sort
+    public int getSort() {
+        return mSp.getInt(KEY_SORT, SORT_NAME);
+    }
+
+    public void setSort(@Layout int layout) {
+        mSp.edit().putInt(KEY_SORT, layout).apply();
     }
 }

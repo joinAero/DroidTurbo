@@ -47,6 +47,8 @@ import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_SYSTEM;
 import static cc.cubone.turbo.persistence.PrefAllApps.FLAG_DISPLAY_USER;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_GRID;
 import static cc.cubone.turbo.persistence.PrefAllApps.LAYOUT_LIST;
+import static cc.cubone.turbo.persistence.PrefAllApps.SORT_NAME;
+import static cc.cubone.turbo.persistence.PrefAllApps.SORT_PACKAGE;
 
 public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Callback,
         InfoRecyclerViewAdapter.OnItemViewClickListener<AppInfo> {
@@ -102,7 +104,7 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
             return; // same layout
         }
         mPrefAllApps.setLayout(layout);
-        updateAdapter(layout, mPrefAllApps.getDisplayFlags());
+        updateAdapter(layout, mPrefAllApps.getDisplayFlags(), mPrefAllApps.getSort());
     }
 
     private void updateDisplayFlag(int displayFlag, boolean checked) {
@@ -122,14 +124,24 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
             displayFlags = displayFlags & (~displayFlag);
         }
         mPrefAllApps.setDisplayFlags(displayFlags);
-        updateAdapter(mPrefAllApps.getLayout(), displayFlags);
+        updateAdapter(mPrefAllApps.getLayout(), displayFlags, mPrefAllApps.getSort());
+    }
+
+    private void updateSort(int sort) {
+        Log.i(TAG, "updateSort: " + sort);
+        int sortNow = mPrefAllApps.getSort();
+        if (sort == sortNow) {
+            return; // same sort
+        }
+        mPrefAllApps.setSort(sort);
+        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplayFlags(), sort);
     }
 
     private void updateAdapter() {
-        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplayFlags());
+        updateAdapter(mPrefAllApps.getLayout(), mPrefAllApps.getDisplayFlags(), mPrefAllApps.getSort());
     }
 
-    private void updateAdapter(int layout, int displayFlags) {
+    private void updateAdapter(int layout, int displayFlags, int sort) {
         Log.i(TAG, "updateAdapter: " + layout + ", 0x" + Integer.toHexString(displayFlags));
         int layoutId;
         if (layout == LAYOUT_LIST) {
@@ -144,7 +156,7 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
         }
 
         InfoRecyclerViewAdapter<AppInfo, InfoRecyclerViewAdapter.ViewHolder2> adapter =
-                InfoRecyclerViewAdapter.create(createAppInfos(displayFlags), layoutId,
+                InfoRecyclerViewAdapter.create(createAppInfos(displayFlags, sort), layoutId,
                         (view, appInfo) -> {
                             view.setText(appInfo.getType().name().toLowerCase()
                                     + ", " + appInfo.getState().name().toLowerCase());
@@ -159,7 +171,7 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
         //loadApps(mRecyclerView, displayFlags, layoutId);
     }
 
-    private List<AppInfo> createAppInfos(int displayFlags) {
+    private List<AppInfo> createAppInfos(int displayFlags, int sort) {
         List<AppInfo> infos = new ArrayList<>();
         final PackageManager pm = getPackageManager();
         List<ApplicationInfo> packages = pm.getInstalledApplications(0);
@@ -188,13 +200,26 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
             appInfo.setState(isStopped ? AppInfo.State.STOPPED : AppInfo.State.RUNNING);
             infos.add(appInfo);
         }
-        Collections.sort(infos, new Comparator<DataInfo<ApplicationInfo>>() {
-            @Override
-            public int compare(DataInfo<ApplicationInfo> lhs, DataInfo<ApplicationInfo> rhs) {
-                return lhs.getTitle().compareTo(rhs.getTitle());
-            }
-        });
+        sort(infos, sort);
         return infos;
+    }
+
+    private void sort(List<AppInfo> infos, int sort) {
+        if (sort == SORT_PACKAGE) {
+            Collections.sort(infos, new Comparator<DataInfo<ApplicationInfo>>() {
+                @Override
+                public int compare(DataInfo<ApplicationInfo> lhs, DataInfo<ApplicationInfo> rhs) {
+                    return lhs.getDescription().compareTo(rhs.getDescription());
+                }
+            });
+        } else { // SORT_NAME
+            Collections.sort(infos, new Comparator<DataInfo<ApplicationInfo>>() {
+                @Override
+                public int compare(DataInfo<ApplicationInfo> lhs, DataInfo<ApplicationInfo> rhs) {
+                    return lhs.getTitle().compareTo(rhs.getTitle());
+                }
+            });
+        }
     }
 
     @Override
@@ -296,6 +321,12 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
         menu.findItem(R.id.display_running).setChecked((displayFlags & FLAG_DISPLAY_RUNNING) > 0);
         menu.findItem(R.id.display_stopped).setChecked((displayFlags & FLAG_DISPLAY_STOPPED) > 0);
 
+        final int sort = mPrefAllApps.getSort();
+        switch (sort) {
+            case SORT_NAME: menu.findItem(R.id.sort_name).setChecked(true); break;
+            case SORT_PACKAGE: menu.findItem(R.id.sort_package).setChecked(true); break;
+        }
+
         TintUtils.tintList(this, menu.findItem(R.id.refresh), R.color.bar_icon_color);
 
         return super.onCreateOptionsMenu(menu);
@@ -303,36 +334,41 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.refresh:
-                updateAdapter();
-                return true;
-            case R.id.layout_list:
-                toggleChecked(item);
-                updateLayout(LAYOUT_LIST);
-                return true;
-            case R.id.layout_grid:
-                toggleChecked(item);
-                updateLayout(LAYOUT_GRID);
-                return true;
-            case R.id.display_user:
-                toggleChecked(item);
-                updateDisplayFlag(FLAG_DISPLAY_USER, item.isChecked());
-                return true;
-            case R.id.display_system:
-                toggleChecked(item);
-                updateDisplayFlag(FLAG_DISPLAY_SYSTEM, item.isChecked());
-                return true;
-            case R.id.display_running:
-                toggleChecked(item);
-                updateDisplayFlag(FLAG_DISPLAY_RUNNING, item.isChecked());
-                return true;
-            case R.id.display_stopped:
-                toggleChecked(item);
-                updateDisplayFlag(FLAG_DISPLAY_STOPPED, item.isChecked());
-                return true;
+        final int itemId = item.getItemId();
+        if (itemId == R.id.refresh) {
+            updateAdapter();
+            return true;
+        } else {
+            toggleChecked(item);
+            switch (itemId) {
+                case R.id.layout_list:
+                    updateLayout(LAYOUT_LIST);
+                    return true;
+                case R.id.layout_grid:
+                    updateLayout(LAYOUT_GRID);
+                    return true;
+                case R.id.display_user:
+                    updateDisplayFlag(FLAG_DISPLAY_USER, item.isChecked());
+                    return true;
+                case R.id.display_system:
+                    updateDisplayFlag(FLAG_DISPLAY_SYSTEM, item.isChecked());
+                    return true;
+                case R.id.display_running:
+                    updateDisplayFlag(FLAG_DISPLAY_RUNNING, item.isChecked());
+                    return true;
+                case R.id.display_stopped:
+                    updateDisplayFlag(FLAG_DISPLAY_STOPPED, item.isChecked());
+                    return true;
+                case R.id.sort_name:
+                    updateSort(SORT_NAME);
+                    return true;
+                case R.id.sort_package:
+                    updateSort(SORT_PACKAGE);
+                    return true;
+                default:
+                    return super.onOptionsItemSelected(item);
+            }
         }
-        return super.onOptionsItemSelected(item);
     }
 
     private void toggleChecked(MenuItem item) {

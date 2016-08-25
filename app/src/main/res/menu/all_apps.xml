@@ -37,6 +37,18 @@
             android:id="@+id/display_stopped"
             android:title="Stopped" />
     </group>
+    <item android:title="Sort"
+          android:enabled="false" />
+    <group
+        android:id="@+id/group_sort"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/sort_name"
+            android:title="Name" />
+        <item
+            android:id="@+id/sort_package"
+            android:title="Package" />
+    </group>
 </menu>
 <!--
 * Menus: http://developer.android.com/guide/topics/ui/menus.html
