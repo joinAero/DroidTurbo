@@ -14,6 +14,7 @@ import android.support.v4.content.ContextCompat;
  * @see <a href="http://developer.android.com/samples/RuntimePermissions/src/
  * com.example.android.system.runtimepermissions/PermissionUtil.html">PermissionUtil.java</a>
  * @see <a href="https://github.com/tbruyelle/RxPermissions">RxPermissions</a>
+ * @see <a href="https://github.com/googlesamples/easypermissions">EasyPermissions</a>
  */
 public class PermissionUtils {
 
