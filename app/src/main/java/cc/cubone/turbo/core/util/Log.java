@@ -1,6 +1,7 @@
 package cc.cubone.turbo.core.util;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -93,6 +94,21 @@ public final class Log {
         println(priority, tag, msg, null);
     }
 
+    @Nullable
+    public static StackTraceElement element() {
+        boolean sawLogger = false;
+        final String logClassName = Log.class.getName();
+        for (StackTraceElement element : new Throwable().getStackTrace()) {
+            String current = element.getClassName();
+            if (current.startsWith(logClassName)) {
+                sawLogger = true;
+            } else if (sawLogger) {
+                return element;
+            }
+        }
+        return null;
+    }
+
     /**
      * Traces the class method which called this.
      * @param priority Log level of the data being logged. Verbose, Error, etc.
@@ -101,16 +117,9 @@ public final class Log {
         if (!LOG_ON) {
             return;
         }
-        boolean sawLogger = false;
-        final String logClassName = Log.class.getName();
-        for (StackTraceElement element : new Throwable().getStackTrace()) {
-            String current = element.getClassName();
-            if (current.startsWith(logClassName)) {
-                sawLogger = true;
-            } else if (sawLogger) {
-                println(priority, element.getClassName(), element.getMethodName());
-                break;
-            }
+        final StackTraceElement element = element();
+        if (element != null) {
+            println(priority, element.getClassName(), element.getMethodName());
         }
     }
 

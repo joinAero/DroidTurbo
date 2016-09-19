@@ -10,9 +10,9 @@ import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
 import cc.cubone.turbo.ui.ColorPageFragment;
 import cc.cubone.turbo.ui.base.TabSightFragment;
+import cc.cubone.turbo.ui.support.custom.CustomFragment;
 import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
 
-import static cc.cubone.turbo.ui.ColorPageFragment.PINK;
 import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
 
 /**
@@ -59,7 +59,7 @@ public class SupportFragment extends TabSightFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return RecyclerFragment.newInstance();
-                case 1: return ColorPageFragment.newInstance(1, PINK);
+                case 1: return CustomFragment.newInstance();
                 case 2: return ColorPageFragment.newInstance(2, PURPLE);
                 default: return null;
             }
@@ -69,6 +69,7 @@ public class SupportFragment extends TabSightFragment {
         public CharSequence getTabText(int position) {
             switch (position) {
                 case 0: return "Recycler";
+                case 1: return "Custom";
                 default: return "Tab " + position;
             }
         }
