@@ -101,7 +101,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
     @Override
     protected void onDraw(Canvas canvas, Scene scene) {
         final Painter painter = scene.getPainter();
-        if (mRestartNeeded) {
+        if (mRestartNeeded || scene.isChanged()) {
             Grid grid = new Grid(canvas, (int) painter.dp2px(16));
             mController.init(grid);
             mGrid = grid;

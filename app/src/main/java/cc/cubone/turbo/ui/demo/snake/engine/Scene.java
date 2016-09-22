@@ -34,6 +34,8 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
     private boolean mInfoVisible = false;
     private int mInfoGravity = Gravity.START | Gravity.BOTTOM;
 
+    private boolean mChanged = false;
+
     public Scene(SurfaceView surfaceView) {
         mContext = surfaceView.getContext();
         mHolder = surfaceView.getHolder();
@@ -74,6 +76,14 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
         mInfoGravity = gravity;
     }
 
+    public boolean isChanged() {
+        return mChanged;
+    }
+
+    public void setChanged(boolean changed) {
+        mChanged = changed;
+    }
+
     @Override
     protected void onStart() {
     }
@@ -110,6 +120,7 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
         update();
         mFPS.update();
         onDraw(canvas);
+        mChanged = false;
     }
 
     protected void onDraw(Canvas canvas) {

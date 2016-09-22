@@ -68,6 +68,7 @@ public class SnakeSurfaceView extends SurfaceView implements SurfaceHolder.Callb
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        mSnakeGame.onSurfaceChanged(holder, format, width, height);
     }
 
     @Override

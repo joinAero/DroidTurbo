@@ -103,6 +103,10 @@ public class SnakeGame implements GameLayer.Callback {
         mScene.resume();
     }
 
+    public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        mScene.setChanged(true);
+    }
+
     public void onSurfaceDestroyed(SurfaceHolder holder) {
         // will resume on surface created
         mResumeNeeded = false;
