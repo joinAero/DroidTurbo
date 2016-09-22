@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.support.recycler;
+package cc.cubone.turbo.ui.widget.support;
 
 import android.content.Intent;
 import android.content.pm.ComponentInfo;

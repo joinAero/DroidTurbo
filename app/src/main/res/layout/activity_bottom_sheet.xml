@@ -6,15 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="cc.cubone.turbo.ui.widget.support.AllAppsActivity">
+    tools:context="cc.cubone.turbo.ui.widget.design.BottomSheetActivity">
 
     <include layout="@layout/toolbar" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scrollbars="none"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 </android.support.design.widget.CoordinatorLayout>

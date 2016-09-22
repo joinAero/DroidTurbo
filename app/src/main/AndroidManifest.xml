@@ -43,14 +43,20 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".ui.support.recycler.AllAppsActivity"
+            android:name=".ui.widget.support.AllAppsActivity"
             android:label="@string/all_apps"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <activity
-            android:name=".ui.support.recycler.RxAppsActivity"
+            android:name=".ui.widget.support.RxAppsActivity"
             android:label="@string/rx_apps"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.widget.design.BottomSheetActivity"
+            android:label="@string/bottom_sheet"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />

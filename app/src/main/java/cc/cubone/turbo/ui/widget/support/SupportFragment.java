@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.support.recycler;
+package cc.cubone.turbo.ui.widget.support;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,14 +16,19 @@ import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.view.InfoRecyclerViewAdapter;
 import pl.droidsonroids.gif.GifDrawable;
 
-public class RecyclerFragment extends ListSightFragment implements
+/**
+ * Fragment for practicing new APIs in support libraries.
+ *
+ * <p>See `Support.md` for more introductions.
+ */
+public class SupportFragment extends ListSightFragment implements
         InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Class>> {
 
-    public RecyclerFragment() {
+    public SupportFragment() {
     }
 
-    public static RecyclerFragment newInstance() {
-        return new RecyclerFragment();
+    public static SupportFragment newInstance() {
+        return new SupportFragment();
     }
 
     @Override

@@ -33,7 +33,7 @@ import cc.cubone.turbo.ui.base.BaseActivity;
 import cc.cubone.turbo.ui.demo.SnakeSurfaceViewActivity;
 import cc.cubone.turbo.ui.demo.TransparentStatusBarActivity;
 import cc.cubone.turbo.ui.fever.FeverFragment;
-import cc.cubone.turbo.ui.support.SupportFragment;
+import cc.cubone.turbo.ui.widget.WidgetFragment;
 import cc.cubone.turbo.util.ContextUtils;
 import cc.cubone.turbo.util.PermissionUtils;
 import cc.cubone.turbo.util.TintUtils;
@@ -264,7 +264,7 @@ public class MainActivity extends BaseActivity
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return SupportFragment.newInstance();
+                case 0: return WidgetFragment.newInstance();
                 case 1: return FeverFragment.newInstance(1, PINK);
                 case 2: return ArchFragment.newInstance(2, PURPLE);
                 default: return null;

@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.support;
+package cc.cubone.turbo.ui.widget;
 
 import android.content.Context;
 import android.support.design.widget.TabLayout;
@@ -8,25 +8,18 @@ import android.support.v4.view.ViewPager;
 
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
-import cc.cubone.turbo.ui.ColorPageFragment;
 import cc.cubone.turbo.ui.base.TabSightFragment;
-import cc.cubone.turbo.ui.support.custom.CustomFragment;
-import cc.cubone.turbo.ui.support.recycler.RecyclerFragment;
+import cc.cubone.turbo.ui.widget.custom.CustomFragment;
+import cc.cubone.turbo.ui.widget.design.DesignFragment;
+import cc.cubone.turbo.ui.widget.support.SupportFragment;
 
-import static cc.cubone.turbo.ui.ColorPageFragment.PURPLE;
+public class WidgetFragment extends TabSightFragment {
 
-/**
- * Fragment for practicing new APIs in support libraries.
- *
- * <p>See `Support.md` for more introductions.
- */
-public class SupportFragment extends TabSightFragment {
-
-    public SupportFragment() {
+    public WidgetFragment() {
     }
 
-    public static SupportFragment newInstance() {
-        return new SupportFragment();
+    public static WidgetFragment newInstance() {
+        return new WidgetFragment();
     }
 
     @Override
@@ -58,9 +51,9 @@ public class SupportFragment extends TabSightFragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return RecyclerFragment.newInstance();
-                case 1: return CustomFragment.newInstance();
-                case 2: return ColorPageFragment.newInstance(2, PURPLE);
+                case 0: return SupportFragment.newInstance();
+                case 1: return DesignFragment.newInstance();
+                case 2: return CustomFragment.newInstance();
                 default: return null;
             }
         }
@@ -69,7 +62,8 @@ public class SupportFragment extends TabSightFragment {
         public CharSequence getTabText(int position) {
             switch (position) {
                 case 0: return "Recycler";
-                case 1: return "Custom";
+                case 1: return "Design";
+                case 2: return "Custom";
                 default: return "Tab " + position;
             }
         }

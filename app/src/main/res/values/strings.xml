@@ -10,6 +10,8 @@
     <string name="all_apps">All Apps</string>
     <string name="rx_apps">Show Apps With RxJava</string>
 
+    <string name="bottom_sheet">Bottom Sheet</string>
+
     <string name="transparent_status_bar">Transparent StatusBar</string>
     <string name="snake_surface_view">Snake SurfaceView</string>
 

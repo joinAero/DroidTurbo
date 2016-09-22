@@ -1,4 +1,4 @@
-package cc.cubone.turbo.ui.support.custom;
+package cc.cubone.turbo.ui.widget.custom;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
