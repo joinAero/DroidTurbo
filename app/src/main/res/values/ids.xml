@@ -3,5 +3,6 @@
     <item name="text" type="id" />
     <item name="icon" type="id" />
 
+    <item name="tool_bar" type="id" />
     <item name="status_bar" type="id" />
 </resources>

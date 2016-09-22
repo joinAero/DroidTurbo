@@ -4,7 +4,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorInt;
+import android.support.annotation.ColorRes;
 import android.support.annotation.IdRes;
+import android.support.annotation.IntDef;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -17,6 +19,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.RelativeLayout;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
@@ -25,6 +31,14 @@ import cc.cubone.turbo.core.util.UIUtils;
 
 public class BaseActivity extends AppCompatActivity {
 
+    @IntDef({STATUS_BAR_CLIP_TO, STATUS_BAR_HOLD_PLACE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface StatusBarMode {}
+
+    public static final int STATUS_BAR_CLIP_TO = 0;
+    public static final int STATUS_BAR_HOLD_PLACE = 1;
+
+    private int mStatusBarMode;
     private boolean mStatusBarTinted = false;
 
     @Override
@@ -33,24 +47,28 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     protected Toolbar initToolbar() {
-        return initToolbar(R.id.bar);
+        return initToolbar(R.id.tool_bar, STATUS_BAR_CLIP_TO);
     }
 
-    protected Toolbar initToolbar(@IdRes int id) {
+    protected Toolbar initToolbar(@StatusBarMode int statusBarMode) {
+        return initToolbar(R.id.tool_bar, statusBarMode);
+    }
+
+    protected Toolbar initToolbar(@IdRes int toolbarId, @StatusBarMode int statusBarMode) {
         // Toolbar: http://developer.android.com/reference/android/support/v7/widget/Toolbar.html
         // Adding the App Bar: http://developer.android.com/training/appbar/index.html
         // Using the App ToolBar: https://guides.codepath.com/android/Using-the-App-ToolBar
-        Toolbar bar = ButterKnife.findById(this, id);
+        Toolbar bar = ButterKnife.findById(this, toolbarId);
         if (bar != null) {
             setSupportActionBar(bar);
-            onToolbarCreated(bar);
+            onToolbarCreated(bar, statusBarMode);
         }
         return bar;
     }
 
-    protected void onToolbarCreated(Toolbar toolbar) {
+    protected void onToolbarCreated(Toolbar toolbar, @StatusBarMode int statusBarMode) {
         initActionBar();
-        initStatusBar(toolbar);
+        initStatusBar(toolbar, statusBarMode);
     }
 
     protected void initActionBar() {
@@ -62,7 +80,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void initStatusBar(View view) {
+    protected void initStatusBar(View toolbar, @StatusBarMode int mode) {
         // Ensure `setStatusBarImmersiveMode()`
         if (Build.VERSION.SDK_INT >= 19) { // 19, 4.4, KITKAT
             // Ensure content view `fitsSystemWindows` is false.
@@ -87,13 +105,15 @@ public class BaseActivity extends AppCompatActivity {
                 // Because in some roms, such as MIUI, if using `NavigationView` in `DrawerLayout`
                 // or `SlidingPaneLayout`, it will have padding on its top.
 
-                // Add padding to hold the status bar place.
-                clipToStatusBar(view);
-
-                // Add a view to hold the status bar place.
-                // Note: if using appbar_scrolling_view_behavior of CoordinatorLayout, however,
-                // the holder view could be scrolled to outside as it above the app bar.
-                //holdStatusBar(toolbar, R.color.colorPrimary);
+                if (mode == STATUS_BAR_CLIP_TO) {
+                    // Add padding to hold the status bar place.
+                    clipToStatusBar(toolbar);
+                } else { // STATUS_BAR_HOLD_PLACE
+                    // Add a view to hold the status bar place.
+                    // Note: if using appbar_scrolling_view_behavior of CoordinatorLayout, however,
+                    // the holder view could be scrolled to outside as it above the app bar.
+                    holdStatusBar(toolbar);
+                }
             }
 
             mStatusBarTinted = !needHold;
@@ -111,28 +131,40 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void clipToStatusBar(View view) {
+    protected void clipToStatusBar(View toolbar) {
         final int statusBarHeight = UIUtils.getStatusBarHeight(this);
-        view.getLayoutParams().height += statusBarHeight;
-        view.setPadding(0, statusBarHeight, 0, 0);
+        toolbar.getLayoutParams().height += statusBarHeight;
+        toolbar.setPadding(0, statusBarHeight, 0, 0);
     }
 
-    /*protected void holdStatusBar(View view, @ColorRes int resid) {
-        ViewGroup toolbarParent = (ViewGroup) view.getParent();
-        int i = 0;
-        for (int n = toolbarParent.getChildCount(); i < n; i++) {
-            if (toolbarParent.getChildAt(i) == view) break;
+    protected void holdStatusBar(View toolbar) {
+        holdStatusBar(toolbar, R.id.status_bar, R.color.colorPrimary);
+    }
+
+    protected void holdStatusBar(View toolbar, @IdRes int statusBarId, @ColorRes int colorId) {
+        ViewGroup toolbarParent = (ViewGroup) toolbar.getParent();
+        View holderView = toolbarParent.findViewById(statusBarId);
+        if (holderView != null) {
+            // for hold status bar in AppBarLayout
+            ViewGroup.LayoutParams params = holderView.getLayoutParams();
+            params.height = UIUtils.getStatusBarHeight(this);
+            holderView.setLayoutParams(params);
+        } else {
+            int i = 0;
+            for (int n = toolbarParent.getChildCount(); i < n; i++) {
+                if (toolbarParent.getChildAt(i) == toolbar) break;
+            }
+            holderView = new View(this);
+            holderView.setId(statusBarId);
+            toolbarParent.addView(holderView, i, new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getStatusBarHeight(this)));
+            if (toolbarParent instanceof RelativeLayout) {
+                ((RelativeLayout.LayoutParams) toolbarParent.getLayoutParams())
+                        .addRule(RelativeLayout.BELOW, statusBarId);
+            }
         }
-        View holderView = new View(this);
-        holderView.setId(R.id.status_bar);
-        holderView.setBackgroundColor(getResources().getColor(resid));
-        toolbarParent.addView(holderView, i, new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, UIUtils.getStatusBarHeight(this)));
-        if (toolbarParent instanceof RelativeLayout) {
-            ((RelativeLayout.LayoutParams) toolbarParent.getLayoutParams())
-                    .addRule(RelativeLayout.BELOW, R.id.status_bar);
-        }
-    }*/
+        holderView.setBackgroundColor(getResources().getColor(colorId));
+    }
 
     /**
      * Initialize system ui.

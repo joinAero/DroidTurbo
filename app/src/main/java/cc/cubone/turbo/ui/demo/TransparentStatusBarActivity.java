@@ -40,8 +40,8 @@ public class TransparentStatusBarActivity extends BaseActivity {
     }
 
     @Override
-    protected void onToolbarCreated(Toolbar toolbar) {
-        super.onToolbarCreated(toolbar);
+    protected void onToolbarCreated(Toolbar toolbar, @StatusBarMode int statusBarMode) {
+        super.onToolbarCreated(toolbar, statusBarMode);
         initDrawer(toolbar);
     }
 
