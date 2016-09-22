@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="HaloView">
-        <attr name="haloColor" format="color"/>
-        <attr name="haloAlphaBeg" format="integer"/>
-        <attr name="haloAlphaEnd" format="integer"/>
-        <attr name="haloRadiusBeg" format="dimension"/>
-        <attr name="haloRadiusEnd" format="dimension"/>
-        <attr name="haloDuration" format="integer"/>
-        <attr name="haloMaxAmount" format="integer"/>
-        <attr name="haloAnimated" format="boolean"/>
-        <attr name="haloOriginX" format="dimension"/>
-        <attr name="haloOriginY" format="dimension"/>
-        <attr name="haloOriginOffsetX" format="dimension"/>
-        <attr name="haloOriginOffsetY" format="dimension"/>
+        <attr name="haloColor" format="color" />
+        <attr name="haloAlphaBeg" format="integer" />
+        <attr name="haloAlphaEnd" format="integer" />
+        <attr name="haloRadiusBeg" format="dimension" />
+        <attr name="haloRadiusEnd" format="dimension" />
+        <attr name="haloDuration" format="integer" />
+        <attr name="haloMaxAmount" format="integer" />
+        <attr name="haloAnimated" format="boolean" />
+        <attr name="haloOriginX" format="dimension" />
+        <attr name="haloOriginY" format="dimension" />
+        <attr name="haloOriginOffsetX" format="dimension" />
+        <attr name="haloOriginOffsetY" format="dimension" />
     </declare-styleable>
     <declare-styleable name="PlateView">
-        <attr name="plateRadius" format="dimension"/>
-        <attr name="plateColor" format="color"/>
-        <attr name="plateBorderColor" format="color"/>
-        <attr name="plateBorderWidth" format="dimension"/>
-        <attr name="plateOutsideColor" format="color"/>
-        <attr name="plateBorderForeColor" format="color"/>
-        <attr name="plateBorderForeRatio" format="float"/>
-        <attr name="plateBorderForeRotation" format="float"/>
-        <attr name="plateBorderBlankSize" format="dimension"/>
-        <attr name="plateOriginX" format="dimension"/>
-        <attr name="plateOriginY" format="dimension"/>
-        <attr name="plateOriginOffsetX" format="dimension"/>
-        <attr name="plateOriginOffsetY" format="dimension"/>
+        <attr name="plateRadius" format="dimension" />
+        <attr name="plateColor" format="color" />
+        <attr name="plateBorderColor" format="color" />
+        <attr name="plateBorderWidth" format="dimension" />
+        <attr name="plateOutsideColor" format="color" />
+        <attr name="plateBorderForeColor" format="color" />
+        <attr name="plateBorderForeRatio" format="float" />
+        <attr name="plateBorderForeRotation" format="float" />
+        <attr name="plateBorderBlankSize" format="dimension" />
+        <attr name="plateOriginX" format="dimension" />
+        <attr name="plateOriginY" format="dimension" />
+        <attr name="plateOriginOffsetX" format="dimension" />
+        <attr name="plateOriginOffsetY" format="dimension" />
     </declare-styleable>
     <declare-styleable name="CircleView">
-        <attr name="circleColor" format="color"/>
-        <attr name="circleColorGradient" format="string"/>
-        <attr name="circleRadius" format="dimension"/>
-        <attr name="circleWidth" format="dimension"/>
-        <attr name="circleRatio" format="float"/>
-        <attr name="circleRotation" format="float"/>
-        <attr name="circleCounter" format="boolean"/>
-        <attr name="circleCapRound" format="boolean"/>
-        <attr name="circleAnimated" format="boolean"/>
-        <attr name="circleAnimDuration" format="integer"/>
+        <attr name="circleColor" format="color" />
+        <attr name="circleColorGradient" format="string" />
+        <attr name="circleRadius" format="dimension" />
+        <attr name="circleWidth" format="dimension" />
+        <attr name="circleRatio" format="float" />
+        <attr name="circleRotation" format="float" />
+        <attr name="circleCounter" format="boolean" />
+        <attr name="circleCapRound" format="boolean" />
+        <attr name="circleAnimated" format="boolean" />
+        <attr name="circleAnimDuration" format="integer" />
     </declare-styleable>
     <declare-styleable name="ArrowView">
-        <attr name="arrowColor" format="color"/>
+        <attr name="arrowColor" format="color" />
         <attr name="arrowDirection" format="enum">
-            <enum name="up" value="0"/>
-            <enum name="down" value="1"/>
-            <enum name="left" value="2"/>
-            <enum name="right" value="3"/>
+            <enum name="up" value="0" />
+            <enum name="down" value="1" />
+            <enum name="left" value="2" />
+            <enum name="right" value="3" />
         </attr>
-        <attr name="arrowRotation" format="float"/>
+        <attr name="arrowRotation" format="float" />
     </declare-styleable>
 </resources>

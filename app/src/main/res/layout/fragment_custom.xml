@@ -16,7 +16,7 @@
             app:haloColor="#0f0"
             app:haloRadiusBeg="60dp"
             app:haloOriginX="30dp"
-            app:haloOriginY="30dp"/>
+            app:haloOriginY="30dp" />
 
         <cc.cubone.turbo.widget.PlateView
             android:id="@+id/plate"
@@ -28,13 +28,13 @@
             app:plateBorderWidth="6dp"
             app:plateBorderColor="#ccc"
             app:plateBorderForeColor="#f0f"
-            app:plateBorderForeRatio="0.1"/>
+            app:plateBorderForeRatio="0.1" />
 
         <cc.cubone.turbo.widget.CircleView
             android:id="@+id/circle"
             android:layout_width="match_parent"
             android:layout_height="160dp"
-            app:circleColorGradient="#ff00ffff,#0000ffff"/>
+            app:circleColorGradient="#ff00ffff,#0000ffff" />
 
         <LinearLayout
             android:id="@+id/layout_arrows"
@@ -47,28 +47,28 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:arrowDirection="up"
-                app:arrowColor="#ff0"/>
+                app:arrowColor="#ff0" />
             <cc.cubone.turbo.widget.ArrowView
                 android:id="@+id/arrow_down"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:arrowDirection="down"
-                app:arrowColor="#f0f"/>
+                app:arrowColor="#f0f" />
             <cc.cubone.turbo.widget.ArrowView
                 android:id="@+id/arrow_left"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:arrowDirection="left"
-                app:arrowColor="#0ff"/>
+                app:arrowColor="#0ff" />
             <cc.cubone.turbo.widget.ArrowView
                 android:id="@+id/arrow_right"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:arrowDirection="right"
-                app:arrowColor="#00f"/>
+                app:arrowColor="#00f" />
         </LinearLayout>
 
     </LinearLayout>

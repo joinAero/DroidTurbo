@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="text" type="id"/>
-    <item name="icon" type="id"/>
+    <item name="text" type="id" />
+    <item name="icon" type="id" />
 
-    <item name="status_bar" type="id"/>
+    <item name="status_bar" type="id" />
 </resources>

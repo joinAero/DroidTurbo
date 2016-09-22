@@ -22,7 +22,7 @@
             <?xml version="1.0" encoding="utf-8"?>
             <bitmap xmlns:android="http://schemas.android.com/apk/res/android"
                 android:src="@drawable/ic_search"
-                android:tint="@color/white"/>
+                android:tint="@color/white" />
 
         VectorDrawableCompat:
         * http://developer.android.com/tools/support-library/index.html#rev23-2-0
