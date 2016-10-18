@@ -15,7 +15,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.util.Log;
@@ -36,8 +36,8 @@ public class RxAppsActivity extends BaseActivity implements
 
     private static final boolean DBG = false;
 
-    @Bind(R.id.swipe_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
-    @Bind(R.id.recycler) RecyclerView mRecyclerView;
+    @BindView(R.id.swipe_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.recycler) RecyclerView mRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

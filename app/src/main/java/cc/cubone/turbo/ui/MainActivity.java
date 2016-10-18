@@ -24,7 +24,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.TabFragmentPagerAdapter;
@@ -56,8 +56,8 @@ public class MainActivity extends BaseActivity
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
 
-    @Bind(R.id.panel) SlidingPaneLayout mSlidingPane;
-    @Bind(R.id.pager) ViewPager mPager;
+    @BindView(R.id.panel) SlidingPaneLayout mSlidingPane;
+    @BindView(R.id.pager) ViewPager mPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

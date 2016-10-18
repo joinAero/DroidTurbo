@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.ViewHolder>
@@ -16,8 +17,26 @@ public abstract class SimpleRecyclerViewAdapter<Data, VH extends RecyclerView.Vi
     private List<Data> mDataList;
     private OnItemViewClickListener<Data> mOnItemClickListener;
 
-    protected SimpleRecyclerViewAdapter(@NonNull List<Data> dataList) {
+    public SimpleRecyclerViewAdapter() {
+        this(new ArrayList<>());
+    }
+
+    public SimpleRecyclerViewAdapter(@NonNull List<Data> dataList) {
         mDataList = dataList;
+    }
+
+    public void addData(Data data) {
+        mDataList.add(data);
+        notifyDataSetChanged();
+    }
+
+    public List<Data> getDataList() {
+        return mDataList;
+    }
+
+    public void setDataList(@NonNull List<Data> dataList) {
+        mDataList = dataList;
+        notifyDataSetChanged();
     }
 
     public void setOnItemViewClickListener(@Nullable OnItemViewClickListener<Data> listener) {

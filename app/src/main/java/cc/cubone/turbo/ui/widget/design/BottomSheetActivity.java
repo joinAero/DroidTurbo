@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.ui.base.BaseActivity;
@@ -21,7 +21,7 @@ import cc.cubone.turbo.ui.base.BaseActivity;
  */
 public class BottomSheetActivity extends BaseActivity {
 
-    @Bind(R.id.bottom_sheet) View mBottomSheet;
+    @BindView(R.id.bottom_sheet) View mBottomSheet;
     AppBarLayout mBottomSheetBarLayout;
     Toolbar mBottomSheetToolbar;
 

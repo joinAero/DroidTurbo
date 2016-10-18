@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.rom.RomCompat;
@@ -71,7 +71,7 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
 
     private final int SPAN_COUNT = 3;
 
-    @Bind(R.id.recycler) RecyclerView mRecyclerView;
+    @BindView(R.id.recycler) RecyclerView mRecyclerView;
 
     private PrefAllApps mPrefAllApps;
 
@@ -157,10 +157,8 @@ public class AllAppsActivity extends BaseActivity implements PackageBroadcast.Ca
 
         InfoRecyclerViewAdapter<AppInfo, InfoRecyclerViewAdapter.ViewHolder2> adapter =
                 InfoRecyclerViewAdapter.create(createAppInfos(displayFlags, sort), layoutId,
-                        (view, appInfo) -> {
-                            view.setText(appInfo.getType().name().toLowerCase()
-                                    + ", " + appInfo.getState().name().toLowerCase());
-                        });
+                        (view, appInfo) -> view.setText(appInfo.getType().name().toLowerCase()
+                                + ", " + appInfo.getState().name().toLowerCase()));
         adapter.setOnItemViewClickListener(this);
         mRecyclerView.setAdapter(adapter);
 

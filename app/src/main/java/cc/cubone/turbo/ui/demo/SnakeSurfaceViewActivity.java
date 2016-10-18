@@ -5,7 +5,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.transition.Transition;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.ui.base.BaseActivity;
@@ -13,7 +13,7 @@ import cc.cubone.turbo.ui.demo.snake.SnakeSurfaceView;
 
 public class SnakeSurfaceViewActivity extends BaseActivity {
 
-    @Bind(R.id.surface) SnakeSurfaceView mSnakeSurfaceView;
+    @BindView(R.id.surface) SnakeSurfaceView mSnakeSurfaceView;
 
     private boolean mResumeSkipped = false;
 

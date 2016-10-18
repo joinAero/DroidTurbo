@@ -1,18 +1,21 @@
 buildscript {
     repositories {
         mavenCentral()
+        jcenter()
     }
     dependencies {
-        classpath 'me.tatarka:gradle-retrolambda:3.2.4'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        classpath 'me.tatarka:gradle-retrolambda:3.3.0'
     }
 }
 
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 24
-    buildToolsVersion "24.0.2"
+    buildToolsVersion "24.0.3"
 
     // Apache HTTP Client Removal - Android 6.0 Changes:
     // http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
@@ -20,13 +23,14 @@ android {
 
     defaultConfig {
         applicationId "cc.cubone.turbo"
-        minSdkVersion 14
+        minSdkVersion 18
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
         // Apps Over 65K Methods: http://developer.android.com/tools/building/multidex.html
         //multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -39,33 +43,65 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-    lintOptions {
-        // Butter Knife
-        disable 'InvalidPackage'
-    }
     packagingOptions {
-        // Butter Knife
-        exclude 'META-INF/services/javax.annotation.processing.Processor'
+        exclude 'LICENSE'
+        exclude 'LICENSE.txt'
     }
+}
+
+retrolambda {
+    javaVersion JavaVersion.VERSION_1_7
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
+
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     //compile 'com.android.support:multidex:1.0.1'
+
     // simplify
-    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+
     // behavior
-    compile 'io.reactivex:rxandroid:1.1.0'
-    compile 'io.reactivex:rxjava:1.1.0'
+    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'io.reactivex:rxjava:1.2.1'
+
     // view & widget
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.11'
+    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
+
     // using in demos
     //compile('com.mikepenz:materialdrawer:5.0.0@aar') { transitive = true }
+
+    // test
+    testCompile 'junit:junit:4.12'
+    // AssertJ: https://github.com/joel-costigliola/assertj-core
+    testCompile 'org.assertj:assertj-core:2.5.0'
+    // Mockito: https://github.com/mockito/mockito
+    testCompile 'org.mockito:mockito-core:2.2.5'
+
+    // android test
+    // Testing Support Library: https://developer.android.com/topic/libraries/testing-support-library/index.html
+    // android-unit-testing-tutorial: https://github.com/ChrisZou/android-unit-testing-tutorial
+    androidTestCompile 'com.android.support:support-annotations:24.2.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    // AssertJ Android: https://github.com/square/assertj-android
+    androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'
+    androidTestCompile 'com.squareup.assertj:assertj-android-support-v4:1.1.1@aar'
+    //androidTestCompile 'com.squareup.assertj:assertj-android-play-services:1.1.1@aar'
+    androidTestCompile 'com.squareup.assertj:assertj-android-appcompat-v7:1.1.1@aar'
+    androidTestCompile 'com.squareup.assertj:assertj-android-design:1.1.1@aar'
+    //androidTestCompile 'com.squareup.assertj:assertj-android-mediarouter-v7:1.1.1@aar'
+    //androidTestCompile 'com.squareup.assertj:assertj-android-gridlayout-v7:1.1.1@aar'
+    androidTestCompile 'com.squareup.assertj:assertj-android-cardview-v7:1.1.1@aar'
+    androidTestCompile 'com.squareup.assertj:assertj-android-recyclerview-v7:1.1.1@aar'
+    //androidTestCompile 'com.squareup.assertj:assertj-android-palette-v7:1.1.1@aar'
 }
 
 // Reference:

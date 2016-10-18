@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.view.SimpleRecyclerViewAdapter;
@@ -20,7 +20,7 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
 
     private int mResource;
 
-    public InfoRecyclerViewAdapter(@NonNull List<Data> dataList, @LayoutRes int resource) {
+    private InfoRecyclerViewAdapter(@NonNull List<Data> dataList, @LayoutRes int resource) {
         super(dataList);
         mResource = resource;
     }
@@ -80,9 +80,9 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @Bind(R.id.title) public TextView titleView;
-        @Bind(R.id.desc) public TextView descView;
-        @Bind(R.id.image) public ImageView imageView;
+        @BindView(R.id.title) public TextView titleView;
+        @BindView(R.id.desc) public TextView descView;
+        @BindView(R.id.image) public ImageView imageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -92,7 +92,7 @@ public abstract class InfoRecyclerViewAdapter<Data extends Info, VH extends Info
 
     public static class ViewHolder2 extends ViewHolder {
 
-        @Bind(R.id.info) public TextView infoView;
+        @BindView(R.id.info) public TextView infoView;
 
         public ViewHolder2(View itemView) {
             super(itemView);

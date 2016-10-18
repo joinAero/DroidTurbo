@@ -14,6 +14,7 @@ import android.view.animation.RotateAnimation;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import cc.cubone.turbo.R;
 import cc.cubone.turbo.core.app.SightFragment;
 import cc.cubone.turbo.core.util.Log;
@@ -26,6 +27,7 @@ import cc.cubone.turbo.widget.PlateView;
 public class CustomFragment extends SightFragment {
 
     private Animator mPlateAnim;
+    private Unbinder mUnbinder;
 
     public CustomFragment() {
     }
@@ -44,7 +46,7 @@ public class CustomFragment extends SightFragment {
 
     @Override
     protected void onViewCreatedFirstSight(View view) {
-        ButterKnife.bind(this, view);
+        mUnbinder = ButterKnife.bind(this, view);
     }
 
     @OnClick(R.id.halo)
@@ -115,6 +117,6 @@ public class CustomFragment extends SightFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        ButterKnife.unbind(this);
+        mUnbinder.unbind();
     }
 }
