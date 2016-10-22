@@ -103,7 +103,6 @@ public class PlateView extends BaseView {
         return mPlateBorderColor;
     }
 
-    @ColorInt
     public void setPlateBorderColor(@ColorInt int plateBorderColor) {
         mPlateBorderColor = plateBorderColor;
     }
