@@ -1,5 +1,6 @@
 package cc.cubone.turbo.ui.demo.snake.engine;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -16,7 +17,7 @@ import cc.cubone.turbo.ui.demo.snake.engine.feature.Drawable;
 import cc.cubone.turbo.ui.demo.snake.engine.feature.Touchable;
 import cc.cubone.turbo.ui.demo.snake.engine.util.FPS;
 import cc.cubone.turbo.ui.demo.snake.engine.view.Layer;
-import cc.cubone.turbo.util.TimeUtils;
+import cc.cubone.turbo.util.HumanReadable;
 
 public class Scene extends LifeCircle implements Drawable, Touchable {
 
@@ -123,6 +124,7 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
         mChanged = false;
     }
 
+    @SuppressLint("DefaultLocale")
     protected void onDraw(Canvas canvas) {
         //canvas.drawColor(Color.WHITE);
         canvas.drawColor(0, PorterDuff.Mode.CLEAR);
@@ -143,7 +145,7 @@ public class Scene extends LifeCircle implements Drawable, Touchable {
             // draw fps and time
             mPainter.resetPencil();
             String info = String.format("FPS: %.1f\nTime: %s", mFPS.get(),
-                    TimeUtils.readableSeconds(mStatus.timeElapsed / 1000));
+                    HumanReadable.seconds(mStatus.timeElapsed / 1000));
             mPainter.drawText(canvas, info, mInfoGravity, true);
         }
     }

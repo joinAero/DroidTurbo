@@ -1,5 +1,6 @@
 package cc.cubone.turbo.ui.demo.snake.game.layer;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -25,7 +26,7 @@ import cc.cubone.turbo.ui.demo.snake.game.base.Cell;
 import cc.cubone.turbo.ui.demo.snake.game.base.Grid;
 import cc.cubone.turbo.ui.demo.snake.game.sprite.Fruit;
 import cc.cubone.turbo.ui.demo.snake.game.sprite.Snake;
-import cc.cubone.turbo.util.TimeUtils;
+import cc.cubone.turbo.util.HumanReadable;
 
 public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callback {
 
@@ -98,6 +99,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         start();
     }
 
+    @SuppressLint("DefaultLocale")
     @Override
     protected void onDraw(Canvas canvas, Scene scene) {
         final Painter painter = scene.getPainter();
@@ -112,7 +114,7 @@ public class GameLayer extends LifeLayer implements Gesture.Callback, Tick.Callb
         drawGird(canvas, painter);
         mController.onDraw(canvas, getStatus());
 
-        String info = TimeUtils.readableSeconds(getStatus().getTimeElapsed() / 1000);
+        String info = HumanReadable.seconds(getStatus().getTimeElapsed() / 1000);
         if (Status.DEBUG) {
             //drawCells(canvas, painter);
             info = String.format("%dx%d\nGame: %s", mGrid.row(), mGrid.column(), info);
