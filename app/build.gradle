@@ -17,7 +17,7 @@ apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25"
+    buildToolsVersion "25.0.2"
 
     // Apache HTTP Client Removal - Android 6.0 Changes:
     // http://developer.android.com/about/versions/marshmallow/android-6.0-changes.html#behavior-apache-http-client
@@ -85,6 +85,10 @@ dependencies {
     // MaterialDrawer: https://github.com/mikepenz/MaterialDrawer
     //compile('com.mikepenz:materialdrawer:5.8.1@aar') { transitive = true }
 
+    // dependent libraries
+
+    compile project(':libsanangeles')
+
     // test
 
     testCompile 'junit:junit:4.12'
@@ -100,7 +104,9 @@ dependencies {
     androidTestCompile 'com.android.support:support-annotations:25.0.1'
     androidTestCompile 'com.android.support.test:runner:0.5'
     androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
     // AssertJ Android: https://github.com/square/assertj-android
     androidTestCompile 'com.squareup.assertj:assertj-android:1.1.1'

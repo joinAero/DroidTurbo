@@ -39,7 +39,6 @@ import cc.eevee.turbo.util.PermissionUtils;
 import cc.eevee.turbo.util.TintUtils;
 
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
-import static cc.eevee.turbo.ui.ColorPageFragment.PINK;
 import static cc.eevee.turbo.ui.ColorPageFragment.PURPLE;
 
 /**
@@ -264,8 +263,8 @@ public class MainActivity extends BaseActivity
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return WidgetFragment.newInstance();
-                case 1: return FeverFragment.newInstance(1, PINK);
+                case 0: return WidgetFragment.newInstance(/*0, RED*/);
+                case 1: return FeverFragment.newInstance(/*1, PINK*/);
                 case 2: return ArchFragment.newInstance(2, PURPLE);
                 default: return null;
             }

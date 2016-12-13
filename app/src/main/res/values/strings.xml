@@ -7,13 +7,23 @@
     <string name="action_search">Search</string>
     <string name="search_hint">Search hint here!</string>
 
+    <!-- menu -->
+
+    <string name="transparent_status_bar">Transparent StatusBar</string>
+    <string name="snake_surface_view">Snake SurfaceView</string>
+
+    <!-- widget -->
+
     <string name="all_apps">All Apps</string>
     <string name="rx_apps">Show Apps With RxJava</string>
 
     <string name="bottom_sheet">Bottom Sheet</string>
 
-    <string name="transparent_status_bar">Transparent StatusBar</string>
-    <string name="snake_surface_view">Snake SurfaceView</string>
+    <!-- fever -->
+
+    <string name="san_angeles">San Angeles</string>
+
+    <!-- arch -->
 
     <!-- actions in all apps -->
     <string name="launch">Launch</string>
