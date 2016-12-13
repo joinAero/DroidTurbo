@@ -9,7 +9,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <cc.cubone.turbo.ui.demo.snake.SnakeSurfaceView
+    <cc.eevee.turbo.ui.demo.snake.SnakeSurfaceView
         android:id="@+id/surface"
         android:layout_width="match_parent"
         android:layout_height="0dp"

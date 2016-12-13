@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="cc.cubone.turbo.ui.widget.design.BottomSheetActivity">
+    tools:context="cc.eevee.turbo.ui.widget.design.BottomSheetActivity">
 
     <include layout="@layout/toolbar" />
 
