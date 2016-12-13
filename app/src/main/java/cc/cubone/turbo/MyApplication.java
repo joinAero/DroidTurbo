@@ -10,9 +10,12 @@ import static cc.cubone.turbo.BuildConfig.DEBUG;
 
 public class MyApplication extends Application {
 
+    public static MyApplication INSTANCE;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        INSTANCE = this;
         Log.setLog(DEBUG);
         if (DEBUG) {
             setupStrictMode();
