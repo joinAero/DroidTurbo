@@ -10,7 +10,7 @@
 
     <include layout="@layout/toolbar" />
 
-    <cc.eevee.turbo.libsanangeles.SanAngelesGLSurfaceView
+    <cc.eevee.turbo.libgldraw.SanAngelesGLSurfaceView
         android:id="@+id/surface"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

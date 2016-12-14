@@ -24,7 +24,6 @@
 
 #include <stdlib.h>
 #include <math.h>
-#include <float.h>
 #include <assert.h>
 
 #include "importgl.h"

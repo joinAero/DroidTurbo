@@ -1,4 +1,4 @@
-package cc.eevee.turbo.libsanangeles;
+package cc.eevee.turbo.libgldraw;
 
 import android.opengl.GLSurfaceView;
 

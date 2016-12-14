@@ -5,7 +5,7 @@ import android.os.Bundle;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.eevee.turbo.R;
-import cc.eevee.turbo.libsanangeles.SanAngelesGLSurfaceView;
+import cc.eevee.turbo.libgldraw.SanAngelesGLSurfaceView;
 import cc.eevee.turbo.ui.base.BaseActivity;
 
 public class SanAngelesActivity extends BaseActivity {

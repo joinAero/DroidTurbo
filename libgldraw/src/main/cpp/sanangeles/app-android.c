@@ -19,9 +19,7 @@
  */
 #include <jni.h>
 #include <sys/time.h>
-#include <time.h>
 #include <android/log.h>
-#include <stdint.h>
 #include "importgl.h"
 #include "app.h"
 
@@ -45,7 +43,7 @@ _getTime(void)
 
 /* Call to initialize the graphics state */
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeInit( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesRenderer_nativeInit( JNIEnv*  env )
 {
     importGLInit();
     appInit();
@@ -53,7 +51,7 @@ Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeInit( JNIEnv*  env )
 }
 
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeResize( JNIEnv*  env, jobject  thiz, jint w, jint h )
+Java_cc_eevee_turbo_libgldraw_SanAngelesRenderer_nativeResize( JNIEnv*  env, jobject  thiz, jint w, jint h )
 {
     sWindowWidth  = w;
     sWindowHeight = h;
@@ -62,7 +60,7 @@ Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeResize( JNIEnv*  env,
 
 /* Call to finalize the graphics state */
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeDone( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesRenderer_nativeDone( JNIEnv*  env )
 {
     appDeinit();
     importGLDeinit();
@@ -90,7 +88,7 @@ void _resume()
 
 
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesGLSurfaceView_nativeTogglePauseResume( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesGLSurfaceView_nativeTogglePauseResume( JNIEnv*  env )
 {
     sDemoStopped = !sDemoStopped;
     if (sDemoStopped)
@@ -100,20 +98,20 @@ Java_cc_eevee_turbo_libsanangeles_SanAngelesGLSurfaceView_nativeTogglePauseResum
 }
 
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesGLSurfaceView_nativePause( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesGLSurfaceView_nativePause( JNIEnv*  env )
 {
     _pause();
 }
 
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesGLSurfaceView_nativeResume( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesGLSurfaceView_nativeResume( JNIEnv*  env )
 {
     _resume();
 }
 
 /* Call to render the next GL frame */
 void
-Java_cc_eevee_turbo_libsanangeles_SanAngelesRenderer_nativeRender( JNIEnv*  env )
+Java_cc_eevee_turbo_libgldraw_SanAngelesRenderer_nativeRender( JNIEnv*  env )
 {
     long   curTime;
 

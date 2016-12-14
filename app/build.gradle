@@ -87,7 +87,7 @@ dependencies {
 
     // dependent libraries
 
-    compile project(':libsanangeles')
+    compile project(':libgldraw')
 
     // test
 

@@ -1,8 +1,6 @@
-package cc.eevee.turbo.libsanangeles;
+package cc.eevee.turbo.libgldraw;
 
 import android.content.Context;
-import android.graphics.Paint;
-import android.graphics.Path;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;

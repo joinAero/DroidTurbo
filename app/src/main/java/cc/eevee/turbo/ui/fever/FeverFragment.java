@@ -68,7 +68,7 @@ public class FeverFragment extends TabSightFragment {
         @Override
         public CharSequence getTabText(int position) {
             switch (position) {
-                case 0: return "NDK";
+                case 0: return "OpenGL ES";
                 default: return "Tab " + position;
             }
         }
