@@ -156,6 +156,8 @@ void nativeResize(int width, int height) {
     glOrthof(-2, 2, -2*ratio, 2*ratio, -2, 2);
 }
 
+static GLfloat g_angle = 0;
+
 void nativeRender() {
     // Draw background color
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -167,6 +169,8 @@ void nativeRender() {
     // When using GL_MODELVIEW, you must set the view point
     gluLookAt(1,1,1, 0,0,0, 0,1,0);
 
+    glRotatef(g_angle, 1.0f,1.0f,1.0f);
+
     // Draw axis
     glLineWidth(2);
     glDrawAxis(1);
@@ -176,6 +180,19 @@ void nativeRender() {
 }
 
 extern "C" {
+
+JNIEXPORT void JNICALL Java_cc_eevee_turbo_libgldraw_HelloCubeView_nativeResume(
+        JNIEnv * env, jobject obj) {
+}
+
+JNIEXPORT void JNICALL Java_cc_eevee_turbo_libgldraw_HelloCubeView_nativePause(
+        JNIEnv * env, jobject obj) {
+}
+
+JNIEXPORT void JNICALL Java_cc_eevee_turbo_libgldraw_HelloCubeView_nativeTouchRotate(
+        JNIEnv * env, jobject obj, jfloat angle) {
+    g_angle += angle;
+}
 
 JNIEXPORT void JNICALL Java_cc_eevee_turbo_libgldraw_HelloCubeRenderer_nativeInit(
         JNIEnv * env, jobject obj) {
