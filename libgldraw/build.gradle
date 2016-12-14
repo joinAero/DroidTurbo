@@ -12,13 +12,17 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
+        ndk {
+            abiFilters 'x86', 'x86_64', 'armeabi', 'armeabi-v7a', 'arm64-v8a'
+        }
         externalNativeBuild {
             cmake {
-                cppFlags "-std=c++11 -frtti -fexceptions"
                 // C++ Library Support: https://developer.android.com/ndk/guides/cpp-support.html
                 // Android NDK Native APIs: https://developer.android.com/ndk/guides/stable_apis.html
+                cppFlags "-std=c++11 -frtti -fexceptions"
+                // Available argumetns are inside ${SDK}/cmake/.../android.toolchain.cmake file
                 arguments '-DANDROID_PLATFORM=android-9',
-                        '-DANDROID_TOOLCHAIN=gcc'
+                        '-DANDROID_TOOLCHAIN=clang', '-DANDROID_STL=gnustl_static'
             }
         }
     }
@@ -33,14 +37,15 @@ android {
             path "CMakeLists.txt"
         }
     }
-    splits {
+    // Configure APK Splits: https://developer.android.com/studio/build/configure-apk-splits.html
+    /*splits {
         abi {
             enable true
             reset()
             include 'armeabi-v7a', 'arm64-v8a','mips', 'x86'
             universalApk false
         }
-    }
+    }*/
 }
 
 dependencies {

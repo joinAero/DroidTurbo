@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.4.1)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 add_definitions("-DANDROID_NDK -DDISABLE_IMPORTGL")
 
 set(SRC_DIR src/main/cpp)
@@ -12,6 +13,15 @@ set(SRC_DIR src/main/cpp)
 #     endif()
 # endforeach()
 
+# hellogl2
+add_library(hellogl2 SHARED
+    ${SRC_DIR}/hellogl2/gl_code.cpp)
+target_link_libraries(hellogl2
+    android
+    log
+    EGL
+    GLESv2)
+
 # sanangeles
 include_directories(${SRC_DIR}/sanangeles)
 add_library(sanangeles SHARED
@@ -19,13 +29,8 @@ add_library(sanangeles SHARED
     ${SRC_DIR}/sanangeles/demo.c
     ${SRC_DIR}/sanangeles/importgl.c)
 target_link_libraries(sanangeles
-    # Android native application APIs
-    android
-    # Dynamic linker library
-    dl
-    # OpenGL ES 1.x Library
-    GLESv1_CM
-    # Android-specific log support
-    log
-    # Mathematics
-    m)
+    android   # Android native application APIs
+    log       # Android-specific log support
+    dl        # Dynamic linker library
+    GLESv1_CM # OpenGL ES 1.x Library
+    m)        # Mathematics

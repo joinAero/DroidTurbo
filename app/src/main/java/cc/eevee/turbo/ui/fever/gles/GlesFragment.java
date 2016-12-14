@@ -1,4 +1,4 @@
-package cc.eevee.turbo.ui.fever.ndk;
+package cc.eevee.turbo.ui.fever.gles;
 
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,14 +16,14 @@ import cc.eevee.turbo.util.ContextUtils;
 import cc.eevee.turbo.view.InfoRecyclerViewAdapter;
 import pl.droidsonroids.gif.GifDrawable;
 
-public class NdkFragment extends ListSightFragment implements
+public class GlesFragment extends ListSightFragment implements
         InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Class>> {
 
-    public NdkFragment() {
+    public GlesFragment() {
     }
 
-    public static NdkFragment newInstance() {
-        return new NdkFragment();
+    public static GlesFragment newInstance() {
+        return new GlesFragment();
     }
 
     @Override
@@ -37,7 +37,9 @@ public class NdkFragment extends ListSightFragment implements
 
     private List<DataInfo<Class>> createInfos() {
         List<DataInfo<Class>> infos = new ArrayList<>();
-        infos.add(createInfo(R.string.san_angeles, "How to using bottom sheet.",
+        infos.add(createInfo(R.string.hello_gl2, "Draws a triangle using GLES 2.0 API.",
+                null, HelloGL2Activity.class));
+        infos.add(createInfo(R.string.san_angeles, "San Angeles Observation OpenGL ES version example.",
                 null, SanAngelesActivity.class));
         return infos;
     }

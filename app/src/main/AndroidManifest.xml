@@ -82,8 +82,14 @@
         <!-- fever -->
 
         <activity
-            android:name=".ui.fever.ndk.SanAngelesActivity"
+            android:name=".ui.fever.gles.SanAngelesActivity"
             android:label="@string/san_angeles"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.fever.gles.HelloGL2Activity"
+            android:label="@string/hello_gl2"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />

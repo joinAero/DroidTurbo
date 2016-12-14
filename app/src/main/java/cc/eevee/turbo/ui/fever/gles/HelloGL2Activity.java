@@ -1,21 +1,21 @@
-package cc.eevee.turbo.ui.fever.ndk;
+package cc.eevee.turbo.ui.fever.gles;
 
 import android.os.Bundle;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import cc.eevee.turbo.R;
-import cc.eevee.turbo.libgldraw.SanAngelesGLSurfaceView;
+import cc.eevee.turbo.libgldraw.HelloGL2View;
 import cc.eevee.turbo.ui.base.BaseActivity;
 
-public class SanAngelesActivity extends BaseActivity {
+public class HelloGL2Activity extends BaseActivity {
 
-    @BindView(R.id.surface) SanAngelesGLSurfaceView mGLView;
+    @BindView(R.id.surface) HelloGL2View mGLView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_san_angeles);
+        setContentView(R.layout.activity_hello_gl2);
         ButterKnife.bind(this);
         initToolbar();
     }

@@ -10,7 +10,7 @@ import cc.eevee.turbo.R;
 import cc.eevee.turbo.core.view.TabFragmentPagerAdapter;
 import cc.eevee.turbo.ui.ColorPageFragment;
 import cc.eevee.turbo.ui.base.TabSightFragment;
-import cc.eevee.turbo.ui.fever.ndk.NdkFragment;
+import cc.eevee.turbo.ui.fever.gles.GlesFragment;
 
 import static cc.eevee.turbo.ui.ColorPageFragment.PINK;
 import static cc.eevee.turbo.ui.ColorPageFragment.PURPLE;
@@ -58,7 +58,7 @@ public class FeverFragment extends TabSightFragment {
         @Override
         public Fragment getItem(int position) {
             switch (position) {
-                case 0: return NdkFragment.newInstance();
+                case 0: return GlesFragment.newInstance();
                 case 1: return ColorPageFragment.newInstance(1, PINK);
                 case 2: return ColorPageFragment.newInstance(2, PURPLE);
                 default: return null;
