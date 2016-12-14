@@ -39,6 +39,8 @@ public class GlesFragment extends ListSightFragment implements
         List<DataInfo<Class>> infos = new ArrayList<>();
         infos.add(createInfo(R.string.hello_gl2, "Draws a triangle using GLES 2.0 API.",
                 null, HelloGL2Activity.class));
+        infos.add(createInfo(R.string.hello_cube, "Draws a cube using GLES 1.x API.",
+                null, HelloCubeActivity.class));
         infos.add(createInfo(R.string.san_angeles, "San Angeles Observation OpenGL ES version example.",
                 null, SanAngelesActivity.class));
         return infos;

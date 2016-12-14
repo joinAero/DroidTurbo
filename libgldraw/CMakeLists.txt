@@ -22,6 +22,13 @@ target_link_libraries(hellogl2
     EGL
     GLESv2)
 
+# hellocube
+add_library(hellocube SHARED
+    ${SRC_DIR}/hellocube/gl_cube.cpp)
+target_link_libraries(hellocube
+    GLESv1_CM
+    m)
+
 # sanangeles
 include_directories(${SRC_DIR}/sanangeles)
 add_library(sanangeles SHARED
