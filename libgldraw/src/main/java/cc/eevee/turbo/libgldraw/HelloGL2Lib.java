@@ -18,7 +18,7 @@ package cc.eevee.turbo.libgldraw;
 
 // Wrapper for native library
 
-public class HelloGL2Lib {
+class HelloGL2Lib {
 
      static {
          System.loadLibrary("hellogl2");
