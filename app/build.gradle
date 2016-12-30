@@ -83,9 +83,12 @@ android {
             }
             def version = variant.versionName
             def build = variant.buildType.name
-            def date = new Date().format('MMddHHmm')
-            //def date = new Date().format('yyyyMMdd_HHmmssSSS')
-            apkName += '-v' + version + '-' + build + '_' + date + '.apk'
+            if (build == 'release') {
+                def date = new Date().format('MMddHHmm')
+                //def date = new Date().format('yyyyMMdd_HHmmssSSS')
+                build += '_' + date
+            }
+            apkName += '-v' + version + '-' + build + '.apk'
             output.outputFile = new File(output.outputFile.parent, apkName)
         }
     }
