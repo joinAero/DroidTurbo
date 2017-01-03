@@ -116,7 +116,9 @@ dependencies {
 
     // RxAndroid: https://github.com/ReactiveX/RxAndroid
     compile 'io.reactivex:rxandroid:1.2.1'
-    compile 'io.reactivex:rxjava:1.2.3'
+    compile 'io.reactivex:rxjava:1.2.4'
+    // RxJavaProGuardRules: https://github.com/artem-zinnatullin/RxJavaProGuardRules
+    compile 'com.artemzin.rxjava:proguard-rules:1.2.4.0'
 
     // view & widget
 
@@ -130,7 +132,9 @@ dependencies {
 
     // dependent libraries
 
-    compile project(':libgldraw')
+    //compile project(':libgldraw')
+    debugCompile project(path: ':libgldraw', configuration: 'debug')
+    releaseCompile project(path: ':libgldraw', configuration: 'release')
 
     // test
 
