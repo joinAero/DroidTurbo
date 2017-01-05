@@ -61,7 +61,7 @@ public class WidgetFragment extends TabSightFragment {
         @Override
         public CharSequence getTabText(int position) {
             switch (position) {
-                case 0: return "Recycler";
+                case 0: return "Support";
                 case 1: return "Design";
                 case 2: return "Custom";
                 default: return "Tab " + position;

@@ -14,45 +14,71 @@ $ ./get_ready.sh
 
 ## Sample modules
 
-### 1) Support
+### Menu
+
+* Transparent StatusBar
+* Snake SurfaceView
+
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/menu/menu.png?raw=true)
+
+### Widget
 
 Samples about new APIs in support libraries.
 
-**Toolbar, TabLayout**
+#### Support
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/toolbar.gif?raw=true)
+* All Apps: Show all apps in list or grid. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/all_apps.gif?raw=true)
+* Rx Apps: Show all apps with RxJava. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/rx_apps.gif?raw=true)
 
-#### 1.1) Recycler
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/support.png?raw=true)
 
-**All Apps: Show all apps in list or grid.**
+#### Design
 
-![](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/all_apps.gif?raw=true)
+* Bottom Sheet: How to using bottom sheet.
 
-**Rx Apps: Show all apps with RxJava.**
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/design.png?raw=true)
 
-![](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/rx_apps.gif?raw=true)
+#### Custom
 
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/custom.png?raw=true)
 
-### 2) Fever
+#### Extras
+
+* Toolbar, TabLayout. [GIF](https://github.com/joinAero/DroidTurbo/blob/master/images/toolbar.gif?raw=true)
+
+### Fever
 
 Samples about fever things.
 
+#### OpenGL ES
 
-### 3) Architecture
+* Hello GL2: Draws a triangle using GLES 2.0 API.
+* Hello Cube: Draws a cube using GLES 1.x API.
+* San Angeles: San Angeles Observation OpenGL ES version example.
+
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/gles.png?raw=true)
+
+#### OpenCV
+
+* Tutorial 1: OpenCV Tutorial 1: Camera Preview.
+* Tutorial 2: OpenCV Tutorial 2: Mixed Processing.
+* Tutorial 3: OpenCV Tutorial 3: Camera Control.
+
+![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
+
+### Arch
 
 Samples about latest architectures.
-
 
 ## Third Party
 
 * [Butter Knife](https://github.com/JakeWharton/butterknife)
-* [android-gif-drawable](https://github.com/koral--/android-gif-drawable)
 * [RxAndroid](https://github.com/ReactiveX/RxAndroid)
+* [android-gif-drawable](https://github.com/koral--/android-gif-drawable)
 
 **Studio Plugin**
 
 * [Gradle Retrolambda Plugin](https://github.com/evant/gradle-retrolambda)
-
 
 ## License
 
