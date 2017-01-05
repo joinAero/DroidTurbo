@@ -14,28 +14,28 @@ set(SRC_DIR src/main/cpp)
 # endforeach()
 
 # hellogl2
-add_library(hellogl2 SHARED
+add_library(gles_hellogl2 SHARED
     ${SRC_DIR}/hellogl2/gl_code.cpp)
-target_link_libraries(hellogl2
+target_link_libraries(gles_hellogl2
     android
     log
     EGL
     GLESv2)
 
 # hellocube
-add_library(hellocube SHARED
+add_library(gles_hellocube SHARED
     ${SRC_DIR}/hellocube/gl_cube.cpp)
-target_link_libraries(hellocube
+target_link_libraries(gles_hellocube
     GLESv1_CM
     m)
 
 # sanangeles
 include_directories(${SRC_DIR}/sanangeles)
-add_library(sanangeles SHARED
+add_library(gles_sanangeles SHARED
     ${SRC_DIR}/sanangeles/app-android.c
     ${SRC_DIR}/sanangeles/demo.c
     ${SRC_DIR}/sanangeles/importgl.c)
-target_link_libraries(sanangeles
+target_link_libraries(gles_sanangeles
     android   # Android native application APIs
     log       # Android-specific log support
     dl        # Dynamic linker library

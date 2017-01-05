@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 public class HelloCubeView extends GLSurfaceView {
 
     static {
-        System.loadLibrary("hellocube");
+        System.loadLibrary("gles_hellocube");
     }
 
     HelloCubeRenderer mRenderer;

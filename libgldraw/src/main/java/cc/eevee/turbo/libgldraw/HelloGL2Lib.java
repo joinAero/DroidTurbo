@@ -21,7 +21,7 @@ package cc.eevee.turbo.libgldraw;
 class HelloGL2Lib {
 
      static {
-         System.loadLibrary("hellogl2");
+         System.loadLibrary("gles_hellogl2");
      }
 
     /**

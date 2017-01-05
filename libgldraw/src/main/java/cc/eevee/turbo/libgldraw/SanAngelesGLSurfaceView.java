@@ -8,7 +8,7 @@ import android.view.MotionEvent;
 public class SanAngelesGLSurfaceView extends GLSurfaceView {
 
     static {
-        System.loadLibrary("sanangeles");
+        System.loadLibrary("gles_sanangeles");
     }
 
     SanAngelesRenderer mRenderer;
