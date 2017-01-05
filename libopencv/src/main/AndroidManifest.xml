@@ -34,6 +34,18 @@
                   android:theme="@style/OcvTheme.OverlayActionBar"
                   android:screenOrientation="landscape"
                   android:configChanges="keyboardHidden|orientation" />
+
+        <activity android:name=".calib.CameraCalibrationActivity"
+                  android:label="@string/ocv_calib"
+                  android:theme="@style/OcvTheme.OverlayActionBar"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation" />
+
+        <activity android:name=".facedetect.FaceDetectionActivity"
+                  android:label="@string/ocv_face_detect"
+                  android:theme="@style/OcvTheme.OverlayActionBar"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation" />
     </application>
 
 </manifest>

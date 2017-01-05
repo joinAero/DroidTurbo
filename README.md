@@ -63,6 +63,8 @@ Samples about fever things.
 * Tutorial 1: OpenCV Tutorial 1: Camera Preview.
 * Tutorial 2: OpenCV Tutorial 2: Mixed Processing.
 * Tutorial 3: OpenCV Tutorial 3: Camera Control.
+* Camera Calibration: OpenCV Camera Calibration.
+* Face Detection: OpenCV Face Detection.
 
 ![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
 

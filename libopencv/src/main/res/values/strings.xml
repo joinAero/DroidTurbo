@@ -3,4 +3,20 @@
     <string name="ocv_t1">OpenCV Tutorial 1: Camera Preview</string>
     <string name="ocv_t2">OpenCV Tutorial 2: Mixed Processing</string>
     <string name="ocv_t3">OpenCV Tutorial 3: Camera Control</string>
+
+    <string name="ocv_calib">OpenCV Camera Calibration</string>
+    <string name="ocv_action_calibrate">Calibrate</string>
+    <string name="ocv_calibration">Calibration</string>
+    <string name="ocv_undistortion">Undistortion</string>
+    <string name="ocv_comparison">Comparison</string>
+    <string name="ocv_preview_mode">Preview mode</string>
+    <string name="ocv_calibration_successful">Successfully calibrated!\nAvg. re-projection error:</string>
+    <string name="ocv_calibration_unsuccessful">Unsuccessful calibration.\nTry again</string>
+    <string name="ocv_more_samples">Please, capture more samples</string>
+    <string name="ocv_calibrating">Calibrating...</string>
+    <string name="ocv_please_wait">Please, wait</string>
+    <string name="ocv_original">Original</string>
+    <string name="ocv_undistorted">Undistorted</string>
+
+    <string name="ocv_face_detect">OpenCV Face Detection</string>
 </resources>

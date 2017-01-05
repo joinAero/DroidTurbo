@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cc.eevee.turbo.R;
+import cc.eevee.turbo.libopencv.calib.CameraCalibrationActivity;
+import cc.eevee.turbo.libopencv.facedetect.FaceDetectionActivity;
 import cc.eevee.turbo.libopencv.tutorial1.Tutorial1Activity;
 import cc.eevee.turbo.libopencv.tutorial2.Tutorial2Activity;
 import cc.eevee.turbo.libopencv.tutorial3.Tutorial3Activity;
@@ -43,6 +45,8 @@ public class OcvFragment extends ListSightFragment implements
         infos.add(createInfo("Tutorial 1", R.string.ocv_t1, null, Tutorial1Activity.class));
         infos.add(createInfo("Tutorial 2", R.string.ocv_t2, null, Tutorial2Activity.class));
         infos.add(createInfo("Tutorial 3", R.string.ocv_t3, null, Tutorial3Activity.class));
+        infos.add(createInfo("Camera Calibration", R.string.ocv_calib, null, CameraCalibrationActivity.class));
+        infos.add(createInfo("Face Detection", R.string.ocv_face_detect, null, FaceDetectionActivity.class));
         return infos;
     }
 
