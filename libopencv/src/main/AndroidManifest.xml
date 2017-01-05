@@ -1,0 +1,39 @@
+<manifest package="cc.eevee.turbo.libopencv"
+          xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.autofocus" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front" android:required="false" />
+    <uses-feature android:name="android.hardware.camera.front.autofocus" android:required="false" />
+
+    <supports-screens android:resizeable="true"
+                      android:smallScreens="true"
+                      android:normalScreens="true"
+                      android:largeScreens="true"
+                      android:anyDensity="true" />
+
+    <application android:allowBackup="false"
+                 android:supportsRtl="true">
+
+        <activity android:name=".tutorial1.Tutorial1Activity"
+                  android:label="@string/ocv_t1"
+                  android:theme="@style/OcvTheme.NoActionBar"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation" />
+
+        <activity android:name=".tutorial2.Tutorial2Activity"
+                  android:label="@string/ocv_t2"
+                  android:theme="@style/OcvTheme.OverlayActionBar"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation" />
+
+        <activity android:name=".tutorial3.Tutorial3Activity"
+                  android:label="@string/ocv_t3"
+                  android:theme="@style/OcvTheme.OverlayActionBar"
+                  android:screenOrientation="landscape"
+                  android:configChanges="keyboardHidden|orientation" />
+    </application>
+
+</manifest>

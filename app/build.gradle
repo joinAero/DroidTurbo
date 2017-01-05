@@ -166,6 +166,10 @@ dependencies {
     debugCompile project(path: ':libgldraw', configuration: 'debug')
     releaseCompile project(path: ':libgldraw', configuration: 'release')
 
+    //compile project(':libopencv')
+    debugCompile project(path: ':libopencv', configuration: 'debug')
+    releaseCompile project(path: ':libopencv', configuration: 'release')
+
     // test
 
     testCompile 'junit:junit:4.12'

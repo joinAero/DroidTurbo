@@ -1,1 +1,2 @@
-include ':app', ':libgldraw'
+include ':app', ':libgldraw', ':libopencv'
+include ':openCVLibrary320'

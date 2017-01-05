@@ -11,8 +11,8 @@ import cc.eevee.turbo.core.view.TabFragmentPagerAdapter;
 import cc.eevee.turbo.ui.ColorPageFragment;
 import cc.eevee.turbo.ui.base.TabSightFragment;
 import cc.eevee.turbo.ui.fever.gles.GlesFragment;
+import cc.eevee.turbo.ui.fever.ocv.OcvFragment;
 
-import static cc.eevee.turbo.ui.ColorPageFragment.PINK;
 import static cc.eevee.turbo.ui.ColorPageFragment.PURPLE;
 
 /**
@@ -59,7 +59,7 @@ public class FeverFragment extends TabSightFragment {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0: return GlesFragment.newInstance();
-                case 1: return ColorPageFragment.newInstance(1, PINK);
+                case 1: return OcvFragment.newInstance();
                 case 2: return ColorPageFragment.newInstance(2, PURPLE);
                 default: return null;
             }
@@ -69,6 +69,7 @@ public class FeverFragment extends TabSightFragment {
         public CharSequence getTabText(int position) {
             switch (position) {
                 case 0: return "OpenGL ES";
+                case 1: return "OpenCV";
                 default: return "Tab " + position;
             }
         }

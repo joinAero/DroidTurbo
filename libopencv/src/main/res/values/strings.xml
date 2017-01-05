@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="ocv_t1">OpenCV Tutorial 1: Camera Preview</string>
+    <string name="ocv_t2">OpenCV Tutorial 2: Mixed Processing</string>
+    <string name="ocv_t3">OpenCV Tutorial 3: Camera Control</string>
+</resources>

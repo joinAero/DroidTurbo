@@ -1,0 +1,28 @@
+<resources>
+
+    <style name="OcvTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="OcvTheme.NoActionBar">
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="OcvTheme.OverlayActionBar">
+        <item name="android:windowActionBarOverlay">true</item>
+        <item name="android:actionBarStyle">@style/OcvActionBar</item>
+        <item name="windowActionBarOverlay">true</item>
+        <item name="actionBarStyle">@style/OcvActionBar</item>
+    </style>
+
+    <color name="ocv_action_bar_bg">#80000000</color>
+
+    <style name="OcvActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:background">@color/ocv_action_bar_bg</item>
+        <item name="background">@color/ocv_action_bar_bg</item>
+    </style>
+
+</resources>

@@ -3,6 +3,14 @@
 
 Android sample project shows new stuff about support library, architecture, etc.
 
+## Get ready
+
+* Download dependencies (using curl): OpenCV4Android.
+
+```
+$ cd DroidTurbo/
+$ ./get_ready.sh
+```
 
 ## Sample modules
 
