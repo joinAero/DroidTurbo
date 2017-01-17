@@ -117,7 +117,7 @@ public class CameraCalibrationActivity extends AppCompatActivity implements CvCa
     public boolean onPrepareOptionsMenu (Menu menu) {
         super.onPrepareOptionsMenu(menu);
         menu.findItem(R.id.preview_mode).setEnabled(true);
-        if (!mCalibrator.isCalibrated())
+        if (mCalibrator == null || !mCalibrator.isCalibrated())
             menu.findItem(R.id.preview_mode).setEnabled(false);
         return true;
     }
