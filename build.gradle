@@ -16,9 +16,22 @@ allprojects {
     repositories {
         jcenter()
         mavenCentral()
+        //maven { url 'file:///Users/John/Repository/' }
     }
 }
 
 task clean(type: Delete) {
     delete rootProject.buildDir
+}
+
+ext {
+    versionBuildTools = '25.0.2'
+    versionCompileSdk = 25
+    versionMinSdk = 18
+    versionTargetSdk = 25
+
+    versionSupportLib = '25.1.0'  // keep support lib consistent
+
+    javaSourceCompatibility = JavaVersion.VERSION_1_8
+    javaTargetCompatibility = JavaVersion.VERSION_1_8
 }
