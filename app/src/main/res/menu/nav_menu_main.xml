@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/nav_status_bar_transparent"
+        android:id="@+id/nav_terminal"
+        android:title="@string/terminal" />
+    <item
+        android:id="@+id/nav_transparent_status_bar"
         android:title="@string/transparent_status_bar" />
     <item
         android:id="@+id/nav_snake_surface_view"

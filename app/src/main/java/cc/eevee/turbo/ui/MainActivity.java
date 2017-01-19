@@ -31,6 +31,7 @@ import cc.eevee.turbo.core.view.TabFragmentPagerAdapter;
 import cc.eevee.turbo.ui.arch.ArchFragment;
 import cc.eevee.turbo.ui.base.BaseActivity;
 import cc.eevee.turbo.ui.demo.SnakeSurfaceViewActivity;
+import cc.eevee.turbo.ui.demo.TerminalActivity;
 import cc.eevee.turbo.ui.demo.TransparentStatusBarActivity;
 import cc.eevee.turbo.ui.fever.FeverFragment;
 import cc.eevee.turbo.ui.widget.WidgetFragment;
@@ -233,7 +234,10 @@ public class MainActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         switch (item.getItemId()) {
-            case R.id.nav_status_bar_transparent:
+            case R.id.nav_terminal:
+                ContextUtils.startActivity(this, TerminalActivity.class);
+                break;
+            case R.id.nav_transparent_status_bar:
                 ContextUtils.startActivity(this, TransparentStatusBarActivity.class);
                 break;
             case R.id.nav_snake_surface_view:
