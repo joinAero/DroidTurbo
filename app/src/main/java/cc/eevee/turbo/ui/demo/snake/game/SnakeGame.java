@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+import cc.eevee.turbo.R;
 import cc.eevee.turbo.ui.demo.snake.engine.LifeCircle;
 import cc.eevee.turbo.ui.demo.snake.engine.Scene;
 import cc.eevee.turbo.ui.demo.snake.engine.Status;
@@ -17,6 +18,8 @@ import cc.eevee.turbo.ui.demo.snake.game.status.Level;
 import cc.eevee.turbo.ui.demo.snake.game.status.Score;
 
 public class SnakeGame implements GameLayer.Callback {
+
+    private SurfaceView mView;
 
     private Scene mScene;
     private boolean mResumeNeeded = false;
@@ -34,7 +37,10 @@ public class SnakeGame implements GameLayer.Callback {
 
     private Storage mStorage;
 
+    private Runnable mSceneResumeRunnable;
+
     public SnakeGame(SurfaceView surfaceView) {
+        mView = surfaceView;
         init(surfaceView);
     }
 
@@ -100,11 +106,30 @@ public class SnakeGame implements GameLayer.Callback {
     }
 
     public void onSurfaceCreated(SurfaceHolder holder) {
-        mScene.resume();
+        doSceneResumeDelayed();
     }
 
     public void onSurfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-        mScene.setChanged(true);
+        if (mSceneResumeRunnable == null) {
+            mScene.setChanged(true);
+        } else {
+            doSceneResumeDelayed();
+        }
+    }
+
+    private void doSceneResumeDelayed() {
+        doSceneResumeDelayed(mView.getResources().getInteger(R.integer.config_animTime));
+    }
+
+    private void doSceneResumeDelayed(long delayMillis) {
+        if (mSceneResumeRunnable != null) {
+            mView.removeCallbacks(mSceneResumeRunnable);
+        }
+        mSceneResumeRunnable = () -> {
+            mScene.resume();
+            mSceneResumeRunnable = null;
+        };
+        mView.postDelayed(mSceneResumeRunnable, delayMillis);
     }
 
     public void onSurfaceDestroyed(SurfaceHolder holder) {
