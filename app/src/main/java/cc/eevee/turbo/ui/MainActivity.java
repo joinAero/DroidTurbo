@@ -39,6 +39,7 @@ import cc.eevee.turbo.util.ContextUtils;
 import cc.eevee.turbo.util.PermissionUtils;
 import cc.eevee.turbo.util.TintUtils;
 
+import static android.Manifest.permission.CAMERA;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 import static cc.eevee.turbo.ui.ColorPageFragment.PURPLE;
 
@@ -55,6 +56,7 @@ public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     final int REQ_WRITE_EXTERNAL_STORAGE = 1;
+    final int REQ_CAMERA = 2;
 
     @BindView(R.id.panel) SlidingPaneLayout mSlidingPane;
     @BindView(R.id.pager) ViewPager mPager;
@@ -130,6 +132,12 @@ public class MainActivity extends BaseActivity
             requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE},
                     "Request WRITE_EXTERNAL_STORAGE to write the data to external storage.",
                     REQ_WRITE_EXTERNAL_STORAGE);
+        }
+        // CAMERA for libopencv
+        if (!PermissionUtils.checkPermissionGranted(this, CAMERA)) {
+            requestPermissions(new String[]{CAMERA},
+                    "Request CAMERA to access camera or capture images/video from the device.",
+                    REQ_CAMERA);
         }
     }
 
