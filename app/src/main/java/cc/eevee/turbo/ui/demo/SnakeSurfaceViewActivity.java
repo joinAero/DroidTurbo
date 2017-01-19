@@ -22,7 +22,7 @@ public class SnakeSurfaceViewActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_snake_surface_view);
         ButterKnife.bind(this);
-        initToolbar(STATUS_BAR_HOLD_PLACE);
+        initToolbar();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().getSharedElementEnterTransition().addListener(new TransitionListenerAdapter() {
                 @Override

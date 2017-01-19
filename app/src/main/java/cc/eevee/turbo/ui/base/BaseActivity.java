@@ -38,7 +38,7 @@ public class BaseActivity extends AppCompatActivity {
     public static final int STATUS_BAR_CLIP_TO = 0;
     public static final int STATUS_BAR_HOLD_PLACE = 1;
 
-    private int mStatusBarMode;
+    //private int mStatusBarMode;
     private boolean mStatusBarTinted = false;
 
     @Override
@@ -93,6 +93,9 @@ public class BaseActivity extends AppCompatActivity {
                     || content instanceof CoordinatorLayout) {
                 // Should set `fitsSystemWindows` true in xml if using these layouts. Besides, also
                 // set true for each subviews if `SlidingPaneLayout`.
+                needHold = true;
+            } else if (MIUIUtils.isMIUI()) {
+                // Hold the status bar for all layout in some roms
                 needHold = true;
             } else {
                 needHold = Build.VERSION.SDK_INT < 21; // 21, 5.0, LOLLIPOP
