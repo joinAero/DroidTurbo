@@ -9,11 +9,17 @@
 
     <include layout="@layout/toolbar" />
 
-    <EditText
+    <cc.eevee.turbo.core.widget.ActionEditText
         android:id="@+id/edit"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="text"
-        android:hint="@string/hint_say_sth" />
+        android:layout_height="match_parent"
+        android:gravity="start"
+        android:inputType="textMultiLine|textNoSuggestions"
+        android:typeface="monospace"
+        android:overScrollMode="always"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:imeOptions="actionDone"
+        tools:ignore="HardcodedText" />
 
 </android.support.v7.widget.LinearLayoutCompat>
