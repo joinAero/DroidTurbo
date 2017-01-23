@@ -20,7 +20,7 @@ public class Terminal {
     public static final String PROMPT = "$ ";
     public static final String PROMPT_ROOT = "# ";
 
-    private static boolean mUseRoot = false;
+    private boolean mUseRoot = false;
 
     public interface OutputCallback {
         void onOutput(ArrayList<String> lines);
@@ -41,11 +41,11 @@ public class Terminal {
     public Terminal() {
     }
 
-    public static boolean useRoot() {
+    public boolean useRoot() {
         return mUseRoot;
     }
 
-    public static String prompt() {
+    public String prompt() {
         return mUseRoot ? PROMPT_ROOT : PROMPT;
     }
 
@@ -97,6 +97,9 @@ public class Terminal {
         }
         // not exec su whatever root access or not
         if (command.trim().equals("su")) {
+            if (!mUseRoot) {
+                // TODO check "su" granted or not
+            }
             mUseRoot = true;
             changed = true;
         }

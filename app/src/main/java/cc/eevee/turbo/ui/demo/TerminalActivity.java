@@ -27,7 +27,8 @@ import cc.eevee.turbo.ui.base.BaseActivity;
  * <pre>
  * COMMAND      TEST
  * su           √
- * top          ×       Any not terminated commands are not supported
+ * cd           x       Not record the work directory
+ * top          ×       Not support any unterminated commands
  * unknown      √       Catch the exception "Cannot run program "unknown": ..."
  * </pre>
  *
@@ -57,6 +58,61 @@ public class TerminalActivity extends BaseActivity {
         new CommandProcessor(mEditText);
     }
 
+    private static class TextSpan<T> {
+
+        T mSpan;
+        int mStart;
+        int mEnd;
+        int mFlags;
+
+        public TextSpan(T span, Editable s) {
+            mSpan = span;
+            mStart = s.getSpanStart(span);
+            mEnd = s.getSpanEnd(span);
+            mFlags = s.getSpanFlags(span);
+        }
+
+        public void apply(Editable s) {
+            s.setSpan(mSpan, mStart, mEnd, mFlags);
+        }
+    }
+
+    private static class TextSpansRestorer {
+
+        private Editable mEditable;
+        private ArrayList<TextSpan<ForegroundColorSpan>> mTextSpans;
+
+        public TextSpansRestorer() {
+        }
+
+        public TextSpansRestorer(Editable s, int start, int end) {
+            reset(s, start, end);
+        }
+
+        public void reset(Editable s, int start, int end) {
+            mEditable = s;
+            ForegroundColorSpan[] spans = s.getSpans(start, end, ForegroundColorSpan.class);
+            if (mTextSpans == null) {
+                mTextSpans = new ArrayList<>();
+            } else {
+                mTextSpans.clear();
+            }
+            for (ForegroundColorSpan span : spans) {
+                mTextSpans.add(new TextSpan<>(span, s));
+            }
+        }
+
+        public void apply() {
+            apply(mEditable);
+        }
+
+        public void apply(Editable s) {
+            for (TextSpan<ForegroundColorSpan> span : mTextSpans) {
+                span.apply(s);
+            }
+        }
+    }
+
     private static class CommandProcessor implements TextWatcher,
             TextView.OnEditorActionListener {
 
@@ -66,14 +122,13 @@ public class TerminalActivity extends BaseActivity {
 
         private int mFixedLength = 0;
 
-        private ForegroundColorSpan mSpanFixed = new ForegroundColorSpan(Color.GRAY);
-        private ForegroundColorSpan mSpanNormal = new ForegroundColorSpan(Color.BLACK);
-
         private int mTextStart;
         private int mTextSelection;
         private CharSequence mTextFixed = null;
         private CharSequence mTextInput = null;
         private CharSequence mTextRest = null;
+
+        private TextSpansRestorer mTextFixedSpans = new TextSpansRestorer();
 
         private Terminal mTerminal;
 
@@ -87,38 +142,55 @@ public class TerminalActivity extends BaseActivity {
 
             mTerminal = new Terminal();
 
-            appendFixed(Terminal.prompt());
-        }
-
-        private void appendFixed(CharSequence text) {
             mEditText.removeTextChangedListener(this);
-            mEditText.append(text);
+            doPromptAppend(mEditText);
             mFixedLength = mEditText.length();
-            updateTextSpans();
             mEditText.addTextChangedListener(this);
         }
 
-        private void updateTextSpans() {
-            updateTextSpans(mEditText.getEditableText());
+        private void doPromptAppend(EditText edit) {
+            doPromptAppend(edit, mTerminal.prompt());
         }
 
-        private void updateTextSpans(Editable s) {
-            clearTextSpans(s);
-            s.setSpan(mSpanFixed, 0, mFixedLength, Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            if (mFixedLength < s.length()) {
-                s.setSpan(mSpanNormal, mFixedLength, s.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
-            }
+        private void doPromptAppend(EditText edit, CharSequence prompt) {
+            doPromptAppend(edit.getEditableText(), prompt);
         }
 
-        private void clearTextSpans(Editable s) {
+        private void doPromptAppend(Editable s) {
+            doPromptAppend(s, mTerminal.prompt());
+        }
+
+        private void doPromptAppend(Editable s, CharSequence prompt) {
+            doTextAppend(s, prompt, Color.GREEN);
+        }
+
+        private void doCommandAppend(EditText edit, CharSequence command) {
+            doCommandAppend(edit.getEditableText(), command);
+        }
+
+        private void doCommandAppend(Editable s, CharSequence command) {
+            doTextAppend(s, command, Color.RED);
+        }
+
+        private void doResultAppend(EditText edit, CharSequence result) {
+            doResultAppend(edit.getEditableText(), result);
+        }
+
+        private void doResultAppend(Editable s, CharSequence result) {
+            doTextAppend(s, result, Color.BLUE);
+        }
+
+        private void doTextAppend(Editable s, CharSequence text, int color) {
+            final int start = s.length();
+            ForegroundColorSpan span = new ForegroundColorSpan(color);
+            s.append(text);
+            s.setSpan(span, start, s.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+        }
+
+        /*private void clearTextSpans(Editable s) {
             ForegroundColorSpan[] spans = s.getSpans(0, s.length(), ForegroundColorSpan.class);
             for (ForegroundColorSpan span : spans) s.removeSpan(span);
-        }
-
-        private void updateFixedText() {
-            mFixedLength = mEditText.length();
-            updateTextSpans();
-        }
+        }*/
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -127,6 +199,7 @@ public class TerminalActivity extends BaseActivity {
                 // fixed: [start, mFixedLength)
                 mTextStart = start;
                 mTextFixed = s.subSequence(start, mFixedLength); // fixed but deleted
+                mTextFixedSpans.reset(mEditText.getEditableText(), start, mFixedLength);
             }
         }
 
@@ -157,11 +230,13 @@ public class TerminalActivity extends BaseActivity {
             if (DBG) Log.i(TAG, "afterTextChanged: " + s);
             mEditText.removeTextChangedListener(this);
             if (mTextFixed != null) {
-                if (DBG) Log.i(TAG, "mTextFixed: " + mTextFixed);
-                if (DBG) Log.i(TAG, "mTextInput: " + ((mTextInput == null) ? "null" : mTextInput));
-                if (DBG) Log.i(TAG, "mTextRest: " + ((mTextRest == null) ? "null" : mTextRest));
+                //if (DBG) Log.i(TAG, "mTextFixed: " + mTextFixed);
+                //if (DBG) Log.i(TAG, "mTextInput: " + ((mTextInput == null) ? "null" : mTextInput));
+                //if (DBG) Log.i(TAG, "mTextRest: " + ((mTextRest == null) ? "null" : mTextRest));
                 s.delete(mTextStart, s.length());
                 s.append(mTextFixed);
+                // restore the fixed text spans
+                mTextFixedSpans.apply(s);
                 if (mTextInput != null) {
                     CharSequence text = mTextInput;
                     if (mTextRest != null) {
@@ -171,10 +246,10 @@ public class TerminalActivity extends BaseActivity {
                     processInput(s, text);
                     mTextSelection = s.length() - restSelection;
                 } else if (mTextRest != null) {
-                    s.append(mTextRest);
+                    // the rest command
+                    doCommandAppend(s, mTextRest);
                 }
 
-                updateTextSpans(s);
                 mEditText.setSelection(mTextSelection);
 
                 mTextFixed = null;
@@ -187,7 +262,6 @@ public class TerminalActivity extends BaseActivity {
                 processInput(s, text);
                 mTextSelection = s.length() - restSelection;
 
-                updateTextSpans(s);
                 mEditText.setSelection(mTextSelection);
             }
             mEditText.addTextChangedListener(this);
@@ -228,7 +302,7 @@ public class TerminalActivity extends BaseActivity {
             } else {
                 // only a line delimiter
                 s.append(text);
-                s.append(Terminal.prompt());
+                doPromptAppend(s);
                 mFixedLength = s.length();
             }
             return false;
@@ -237,11 +311,11 @@ public class TerminalActivity extends BaseActivity {
         private void onCommandExec(String cmd, int index, int count) {
             if (DBG) Log.i(TAG, "onCommandExec: " + index + ", " + cmd);
             if (index > 0) {
-                mEditText.append(Terminal.prompt());
+                doPromptAppend(mEditText);
             }
-            mEditText.append(cmd);
+            doCommandAppend(mEditText, cmd);
             mEditText.append("\n");
-            updateFixedText();
+            mFixedLength = mEditText.length();
 
             ArrayList<String> result = new ArrayList<>();
             mTerminal.exec(cmd)
@@ -252,12 +326,12 @@ public class TerminalActivity extends BaseActivity {
                         if (message != null) result.add(message);
                     })
                     .close();
-            for (String line : result) {
-                mEditText.append(line);
+            if (!result.isEmpty()) {
+                doResultAppend(mEditText, TextUtils.join("\n", result));
                 mEditText.append("\n");
             }
             if (index == (count-1)) {
-                mEditText.append(Terminal.prompt());
+                doPromptAppend(mEditText);
             }
             mFixedLength = mEditText.length();
         }
@@ -265,10 +339,10 @@ public class TerminalActivity extends BaseActivity {
         private void onCommandRest(String cmd, int index, int count) {
             if (DBG) Log.i(TAG, "onCommandRest: " + index + ", " + cmd);
             if (index > 0) {
-                mEditText.append(Terminal.prompt());
+                doPromptAppend(mEditText);
                 mFixedLength = mEditText.length();
             }
-            mEditText.append(cmd);
+            doCommandAppend(mEditText, cmd);
         }
 
         private boolean isLastCharNewline(CharSequence text) {
