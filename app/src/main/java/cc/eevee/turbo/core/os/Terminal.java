@@ -1,5 +1,7 @@
 package cc.eevee.turbo.core.os;
 
+import android.content.Context;
+
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -42,19 +44,25 @@ public class Terminal {
     private File mWorkDir = null;
     private File mWorkDirRoot = null;
 
+    // special commands
+    private ArrayList<String> mSuperUserResult = null;
+    private boolean mSuperUserResultError = false;
     private ArrayList<String> mChangeDirResult = null;
     private boolean mChangeDirResultError = false;
 
-    public Terminal() {
+    private Context mContext;
+
+    public Terminal(Context context) {
+        mContext = context;
     }
 
     public boolean useRoot() {
         return mUseRoot;
     }
 
-    public String prompt() {
-        String prompt = mUseRoot ? PROMPT_ROOT : PROMPT;
-        return workDir() + " " + prompt + " ";
+    public Terminal setUseRoot(boolean useRoot) {
+        mUseRoot = useRoot;
+        return this;
     }
 
     public File workDir() {
@@ -67,49 +75,58 @@ public class Terminal {
         }
     }
 
-    public void setWorkDir(File dir) {
+    public Terminal setWorkDir(File dir) {
         if (mUseRoot) {
             mWorkDirRoot = dir;
         } else {
             mWorkDir = dir;
         }
+        return this;
+    }
+
+    public String prompt() {
+        String prompt = mUseRoot ? PROMPT_ROOT : PROMPT;
+        return workDir() + " " + prompt + " ";
     }
 
     public Terminal exec(String cmd) {
-        return exec(cmd, workDir());
+        return exec(cmd, workDir(), true);
     }
 
-    public Terminal exec(String cmd, File dir) {
+    private Terminal exec(String cmd, File dir, boolean checkRoot) {
         if (cmd == null || cmd.isEmpty())
             throw new IllegalArgumentException("Empty command");
 
         String trimCmd = cmd.trim();
-        if (processRoot(trimCmd)) return this;
+        if (checkRoot && processRoot(trimCmd)) return this;
 
         if (mProcess != null) {
             Log.w(TAG, "Close for each command to prevent \"Stream closed\"");
             close();
+        } else {
+            clearResults();
         }
 
-        mException = null;
         try {
             if (mProcess == null) {
                 if (mUseRoot) {
                     mProcess = Runtime.getRuntime().exec("su", null);
                 } else {
-                    mProcess = Runtime.getRuntime().exec("sh", null, dir);
+                    mProcess = Runtime.getRuntime().exec(cmd, null, dir);
                 }
                 mStdin = new DataOutputStream(mProcess.getOutputStream());
                 mStdout = new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
                 mStderr = new BufferedReader(new InputStreamReader(mProcess.getErrorStream()));
             }
-            if (mUseRoot && dir != null && !dir.toString().equals("/")) {
-                mStdin.writeBytes("cd " + dir + "\n");
+            if (mUseRoot) {
+                if (dir != null && !dir.toString().equals("/")) {
+                    mStdin.writeBytes("cd " + dir + "\n");
+                    mStdin.flush();
+                }
+                if (!cmd.endsWith("\n")) cmd += "\n";
+                mStdin.writeBytes(cmd);
                 mStdin.flush();
             }
-            if (!cmd.endsWith("\n")) cmd += "\n";
-            mStdin.writeBytes(cmd);
-            mStdin.flush();
             // not block for su & sh
             mStdin.writeBytes("exit\n");
             mStdin.flush();
@@ -121,6 +138,16 @@ public class Terminal {
         }
 
         return this;
+    }
+
+    private void clearResults() {
+        mException = null;
+
+        mSuperUserResult = null;
+        mSuperUserResultError = false;
+
+        mChangeDirResult = null;
+        mChangeDirResultError = false;
     }
 
     private boolean processRoot(String cmd) {
@@ -135,7 +162,11 @@ public class Terminal {
         // not exec su whatever root access or not
         if (cmd.equals("su")) {
             if (!mUseRoot) {
-                // TODO check "su" granted or not
+                // check "su" granted or not
+                if (!checkSuperUserGranted()) {
+                    // not continue to process
+                    return true;
+                }
             }
             mUseRoot = true;
             changed = true;
@@ -148,9 +179,46 @@ public class Terminal {
         return changed;
     }
 
+    private boolean checkSuperUserGranted() {
+        Terminal t = new Terminal(mContext)
+                .exec("su", null, false)
+                .onStdout(lines -> {
+                    if (!lines.isEmpty()) {
+                        mChangeDirResult = lines;
+                    }
+                })
+                .onStderr(lines -> {
+                    if (!lines.isEmpty()) {
+                        mChangeDirResult = lines;
+                        mSuperUserResultError = true;
+                    }
+                })
+                .onError(e -> mException = e)
+                .close();
+        final boolean[] granted = {mSuperUserResult == null && mException == null};
+        if (granted[0]) {
+            // check root access
+            granted[0] = false;
+            t.setUseRoot(true)
+                    .exec("id", null, false)
+                    .onStdout(lines -> {
+                        for (String line : lines) {
+                            if (line.toLowerCase().contains("uid=0")) {
+                                granted[0] = true;
+                                break;
+                            }
+                        }
+                    })
+                    .close();
+            if (!granted[0]) {
+                mSuperUserResult = new ArrayList<>();
+                mSuperUserResult.add("superuser permission denied");
+            }
+        }
+        return granted[0];
+    }
+
     private void processChangeDir(String cmd) {
-        mChangeDirResult = null;
-        mChangeDirResultError = false;
         if (cmd.startsWith("cd")) {
             onStdout(lines -> {
                 if (!lines.isEmpty()) {
@@ -178,28 +246,12 @@ public class Terminal {
         }
     }
 
-    private boolean processChangeDirResult(boolean stderr, OutputCallback callback) {
-        //if (callback == null) return false;
-        if (mChangeDirResult == null) return false;
-        if (stderr) {
-            if (mChangeDirResultError) {
-                callback.onOutput(mChangeDirResult);
-                return true;
-            }
-        } else { // stdout
-            if (!mChangeDirResultError) {
-                callback.onOutput(mChangeDirResult);
-                return true;
-            }
-        }
-        return false;
-    }
-
     public Terminal onStdout(OutputCallback callback) {
-        if (checkNotProcess()) return this;
+        if (processSpecialResult(false, callback))
+            return this;
+        if (checkNotProcess())
+            return this;
         if (callback != null) {
-            if (processChangeDirResult(false, callback))
-                return this;
             try {
                 String line;
                 ArrayList<String> lines = new ArrayList<>();
@@ -216,10 +268,11 @@ public class Terminal {
     }
 
     public Terminal onStderr(OutputCallback callback) {
-        if (checkNotProcess()) return this;
+        if (processSpecialResult(true, callback))
+            return this;
+        if (checkNotProcess())
+            return this;
         if (callback != null) {
-            if (processChangeDirResult(true, callback))
-                return this;
             try {
                 String line;
                 ArrayList<String> lines = new ArrayList<>();
@@ -242,7 +295,7 @@ public class Terminal {
         return this;
     }
 
-    public void close() {
+    public Terminal close() {
         if (mProcess != null) {
             try {
                 mStdin.close();
@@ -255,6 +308,8 @@ public class Terminal {
             mProcess.destroy();
             mProcess = null;
         }
+        clearResults();
+        return this;
     }
 
     private boolean checkNotProcess() {
@@ -263,6 +318,45 @@ public class Terminal {
                 Log.w(TAG, mException);
             }
             return true;
+        }
+        return false;
+    }
+
+    private boolean processSpecialResult(boolean stderr, OutputCallback callback) {
+        if (callback == null) return false;
+        if (processSuperUserResult(stderr, callback)) return true;
+        if (processChangeDirResult(stderr, callback)) return true;
+        return false;
+    }
+
+    private boolean processSuperUserResult(boolean stderr, OutputCallback callback) {
+        if (mSuperUserResult == null) return false;
+        if (stderr) {
+            if (mSuperUserResultError) {
+                callback.onOutput(mSuperUserResult);
+                return true;
+            }
+        } else { // stdout
+            if (!mSuperUserResultError) {
+                callback.onOutput(mSuperUserResult);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean processChangeDirResult(boolean stderr, OutputCallback callback) {
+        if (mChangeDirResult == null) return false;
+        if (stderr) {
+            if (mChangeDirResultError) {
+                callback.onOutput(mChangeDirResult);
+                return true;
+            }
+        } else { // stdout
+            if (!mChangeDirResultError) {
+                callback.onOutput(mChangeDirResult);
+                return true;
+            }
         }
         return false;
     }
