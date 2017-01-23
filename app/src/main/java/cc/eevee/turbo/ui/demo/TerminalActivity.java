@@ -27,7 +27,7 @@ import cc.eevee.turbo.ui.base.BaseActivity;
  * <pre>
  * COMMAND      TEST
  * su           √
- * cd           x       Not record the work directory
+ * cd           √       Not record the work directory
  * top          ×       Not support any unterminated commands
  * unknown      √       Catch the exception "Cannot run program "unknown": ..."
  * </pre>
