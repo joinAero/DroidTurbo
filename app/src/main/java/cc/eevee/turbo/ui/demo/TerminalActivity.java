@@ -24,12 +24,22 @@ import cc.eevee.turbo.core.util.Log;
 import cc.eevee.turbo.ui.base.BaseActivity;
 
 /**
- *  CMD          RET
- *  unknown      √      Cannot run program "unknown": ...
- *  pwd          √
- *  ls           √
- *  su           √
- *  top          ×
+ * <pre>
+ * COMMAND      TEST
+ * su           √
+ * top          ×       Any not terminated commands are not supported
+ * unknown      √       Catch the exception "Cannot run program "unknown": ..."
+ * </pre>
+ *
+ * <pre>
+ * $ ls /sbin
+ * ls: /sbin: Permission denied
+ * $ su
+ * # ls /sbin
+ * ...
+ * # exit
+ * $
+ * </pre>
  */
 public class TerminalActivity extends BaseActivity {
 
@@ -47,19 +57,12 @@ public class TerminalActivity extends BaseActivity {
         new CommandProcessor(mEditText);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
     private static class CommandProcessor implements TextWatcher,
             TextView.OnEditorActionListener {
 
         private final String LINE_DELIMITERS = "\r\n";
 
         private EditText mEditText;
-
-        private Terminal mTerminal;
 
         private int mFixedLength = 0;
 
@@ -72,21 +75,19 @@ public class TerminalActivity extends BaseActivity {
         private CharSequence mTextInput = null;
         private CharSequence mTextRest = null;
 
+        private Terminal mTerminal;
+
         public CommandProcessor(EditText editText) {
             mEditText = editText;
-
-            mTerminal = new Terminal();
 
             // TextWatcher events are being fired multiple times
             // http://stackoverflow.com/questions/17535415/textwatcher-events-are-being-fired-multiple-times
             mEditText.addTextChangedListener(this);
             mEditText.setOnEditorActionListener(this);
 
-            appendFixed(mTerminal.prompt());
-        }
+            mTerminal = new Terminal();
 
-        public void close() {
-            mTerminal.close();
+            appendFixed(Terminal.prompt());
         }
 
         private void appendFixed(CharSequence text) {
@@ -223,13 +224,11 @@ public class TerminalActivity extends BaseActivity {
                         onCommandRest(cmd, i, count);
                     }
                 }
-                // close after execute command
-                mTerminal.close();
                 return true;
             } else {
                 // only a line delimiter
                 s.append(text);
-                s.append(mTerminal.prompt());
+                s.append(Terminal.prompt());
                 mFixedLength = s.length();
             }
             return false;
@@ -238,7 +237,7 @@ public class TerminalActivity extends BaseActivity {
         private void onCommandExec(String cmd, int index, int count) {
             if (DBG) Log.i(TAG, "onCommandExec: " + index + ", " + cmd);
             if (index > 0) {
-                mEditText.append(mTerminal.prompt());
+                mEditText.append(Terminal.prompt());
             }
             mEditText.append(cmd);
             mEditText.append("\n");
@@ -251,13 +250,14 @@ public class TerminalActivity extends BaseActivity {
                     .onError(e -> {
                         String message = e.getLocalizedMessage();
                         if (message != null) result.add(message);
-                    });
+                    })
+                    .close();
             for (String line : result) {
                 mEditText.append(line);
                 mEditText.append("\n");
             }
             if (index == (count-1)) {
-                mEditText.append(mTerminal.prompt());
+                mEditText.append(Terminal.prompt());
             }
             mFixedLength = mEditText.length();
         }
@@ -265,7 +265,7 @@ public class TerminalActivity extends BaseActivity {
         private void onCommandRest(String cmd, int index, int count) {
             if (DBG) Log.i(TAG, "onCommandRest: " + index + ", " + cmd);
             if (index > 0) {
-                mEditText.append(mTerminal.prompt());
+                mEditText.append(Terminal.prompt());
                 mFixedLength = mEditText.length();
             }
             mEditText.append(cmd);

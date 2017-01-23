@@ -8,10 +8,19 @@ import java.util.ArrayList;
 
 import cc.eevee.turbo.core.util.Log;
 
+/**
+ * @see <a href="https://github.com/Stericson/RootShell">RootShell</a>
+ * @see <a href="https://github.com/Stericson/RootTools">RootTools</a>
+ * @see <a href="https://github.com/jackpal/Android-Terminal-Emulator"></a>
+ */
 public class Terminal {
 
-    public static final String PREFIX = "$ ";
-    public static final String PREFIX_SU = "# ";
+    public static final String TAG = Terminal.class.getSimpleName();
+
+    public static final String PROMPT = "$ ";
+    public static final String PROMPT_ROOT = "# ";
+
+    private static boolean mUseRoot = false;
 
     public interface OutputCallback {
         void onOutput(ArrayList<String> lines);
@@ -27,55 +36,76 @@ public class Terminal {
     private BufferedReader mStdout;
     private BufferedReader mStderr;
 
-    private String mCommand;
     private Exception mException;
-
-    private boolean mSuperUser = false;
 
     public Terminal() {
     }
 
-    public boolean su() {
-        return mSuperUser;
+    public static boolean useRoot() {
+        return mUseRoot;
     }
 
-    public String prompt() {
-        return mSuperUser ? PREFIX_SU : PREFIX;
+    public static String prompt() {
+        return mUseRoot ? PROMPT_ROOT : PROMPT;
     }
 
     public Terminal exec(String command) {
         if (command == null || command.isEmpty())
             throw new IllegalArgumentException("Empty command");
 
-        mException = null;
+        if (processRoot(command)) return this;
+        if (mProcess != null) {
+            Log.w(TAG, "Close for each command to prevent \"Stream closed\"");
+            close();
+        }
 
+        mException = null;
         try {
             if (mProcess == null) {
-                mProcess = Runtime.getRuntime().exec(command);
-
+                if (mUseRoot) {
+                    mProcess = Runtime.getRuntime().exec("su");
+                } else {
+                    mProcess = Runtime.getRuntime().exec("sh");
+                }
                 mStdin = new DataOutputStream(mProcess.getOutputStream());
                 mStdout = new BufferedReader(new InputStreamReader(mProcess.getInputStream()));
                 mStderr = new BufferedReader(new InputStreamReader(mProcess.getErrorStream()));
-            } else {
-                DataOutputStream stdin = new DataOutputStream(mProcess.getOutputStream());
-
-                String cmd = command;
-                if (!cmd.endsWith("\n")) cmd += "\n";
-                stdin.writeBytes(cmd);
-
-                stdin.flush();
             }
-            if (!mSuperUser) {
-                // easy way to know superuser now
-                mSuperUser = checkSuperUser(command);
-            }
-            mCommand = command;
+            String cmd = command;
+            if (!cmd.endsWith("\n")) cmd += "\n";
+            mStdin.writeBytes(cmd);
+            mStdin.flush();
+            // not block for su & sh
+            mStdin.writeBytes("exit\n");
+            mStdin.flush();
         } catch (IOException e) {
             e.printStackTrace();
             mException = e;
         }
 
         return this;
+    }
+
+    private boolean processRoot(String command) {
+        boolean changed = false;
+        // easy way to change root access
+        if (mUseRoot) {
+            if (command.trim().equals("exit")) {
+                mUseRoot = false;
+                changed = true;
+            }
+        }
+        // not exec su whatever root access or not
+        if (command.trim().equals("su")) {
+            mUseRoot = true;
+            changed = true;
+        }
+        if (changed) {
+            // close sub process when change root access
+            close();
+            Log.i(TAG, "Change root access");
+        }
+        return changed;
     }
 
     public Terminal onStdout(OutputCallback callback) {
@@ -127,31 +157,20 @@ public class Terminal {
                 mStdin.close();
                 mStdout.close();
                 mStderr.close();
-            } catch (IOException e) {
+                mProcess.waitFor();
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
-                mException = e;
             }
             mProcess.destroy();
             mProcess = null;
         }
     }
 
-    private boolean checkSuperUser(String command) {
-        // how about "su -h"
-        return command.trim().equals("su");
-    }
-
     private boolean checkNotProcess() {
         if (mProcess == null) {
-            if (mException == null) {
-                throw new IllegalStateException("Not command in processing");
-            } else {
-                Log.w("Terminal", mException);
+            if (mException != null) {
+                Log.w(TAG, mException);
             }
-            return true;
-        }
-        if (checkSuperUser(mCommand)) {
-            // not wait read output if do su
             return true;
         }
         return false;
