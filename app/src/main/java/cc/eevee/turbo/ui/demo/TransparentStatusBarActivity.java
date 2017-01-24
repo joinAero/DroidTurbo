@@ -14,6 +14,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,10 +24,11 @@ import cc.eevee.turbo.R;
 import cc.eevee.turbo.model.DataInfo;
 import cc.eevee.turbo.ui.base.BaseActivity;
 import cc.eevee.turbo.view.InfoRecyclerViewAdapter;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.FlowableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 public class TransparentStatusBarActivity extends BaseActivity {
 
@@ -112,45 +116,66 @@ public class TransparentStatusBarActivity extends BaseActivity {
         }
     }
 
+    private Subscription mSubscription;
+
     private void loadApps(final RecyclerView recyclerView) {
-        Observable.create(new Observable.OnSubscribe<List<DataInfo<ResolveInfo>>>() {
-            @Override
-            public void call(Subscriber<? super List<DataInfo<ResolveInfo>>> subscriber) {
-                if (subscriber.isUnsubscribed()){
-                    return;
-                }
+        if (mSubscription != null) {
+            mSubscription.cancel();
+        }
+        Flowable.create((FlowableOnSubscribe<DataInfo<ResolveInfo>>) e -> {
+            //long amount = e.requested();
 
-                final List<DataInfo<ResolveInfo>> dataList = new ArrayList<>();
+            final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
+            mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
-                final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
-                mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
-
-                final PackageManager pm = getPackageManager();
-                List<ResolveInfo> infoList = pm.queryIntentActivities(mainIntent, 0);
-                for(ResolveInfo info : infoList){
-                    dataList.add(new DataInfo<>(
-                            info.loadLabel(pm).toString(),
-                            (info.activityInfo == null) ? "" : info.activityInfo.packageName,
-                            info.loadIcon(pm), info));
-                }
-
-                subscriber.onNext(dataList);
+            final PackageManager pm = getPackageManager();
+            List<ResolveInfo> infoList = pm.queryIntentActivities(mainIntent, 0);
+            for(ResolveInfo info : infoList) {
+                if (e.isCancelled()) break;
+                e.onNext(new DataInfo<>(
+                        info.loadLabel(pm).toString(),
+                        (info.activityInfo == null) ? "" : info.activityInfo.packageName,
+                        info.loadIcon(pm), info));
             }
-        })
-        .subscribeOn(Schedulers.newThread())
+
+            e.onComplete();
+        }, BackpressureStrategy.BUFFER)
+        .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
-        .subscribe(new Subscriber<List<DataInfo<ResolveInfo>>>() {
+        .subscribe(new Subscriber<DataInfo<ResolveInfo>>() {
+            InfoRecyclerViewAdapter<DataInfo<ResolveInfo>, ?> mAdapter;
             @Override
-            public void onCompleted() {
+            public void onSubscribe(Subscription s) {
+                mSubscription = s;
+                s.request(1);
             }
             @Override
-            public void onError(Throwable e) {
+            public void onNext(DataInfo<ResolveInfo> info) {
+                if (mAdapter == null) {
+                    ArrayList<DataInfo<ResolveInfo>> dataList = new ArrayList<>();
+                    dataList.add(info);
+                    mAdapter = InfoRecyclerViewAdapter.create(dataList, R.layout.item_app);
+                    recyclerView.setAdapter(mAdapter);
+                } else {
+                    mAdapter.addData(info);
+                }
+                mSubscription.request(1);
             }
             @Override
-            public void onNext(List<DataInfo<ResolveInfo>> dataList) {
-                recyclerView.setAdapter(InfoRecyclerViewAdapter.create(dataList, R.layout.item_app));
+            public void onError(Throwable t) {
+            }
+            @Override
+            public void onComplete() {
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.cancel();
+        }
+        super.onDestroy();
     }
 
 }

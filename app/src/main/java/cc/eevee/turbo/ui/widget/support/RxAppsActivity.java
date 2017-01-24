@@ -12,6 +12,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,11 +26,11 @@ import cc.eevee.turbo.model.DataInfo;
 import cc.eevee.turbo.ui.base.BaseActivity;
 import cc.eevee.turbo.util.ToastUtils;
 import cc.eevee.turbo.view.InfoRecyclerViewAdapter;
-import rx.Observable;
-import rx.Observer;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
-import rx.schedulers.Schedulers;
+import io.reactivex.BackpressureStrategy;
+import io.reactivex.Flowable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 public class RxAppsActivity extends BaseActivity implements
         InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Long>> {
@@ -64,8 +67,8 @@ public class RxAppsActivity extends BaseActivity implements
     public void onItemViewClick(View view, int position, DataInfo<Long> info) {
     }
 
-    private Observable<DataInfo<Long>> observableApps() {
-        return Observable.create(subscriber -> {
+    private Flowable<DataInfo<Long>> observableApps() {
+        return Flowable.create(emitter -> {
             final Intent mainIntent = new Intent(Intent.ACTION_MAIN, null);
             mainIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 
@@ -75,21 +78,20 @@ public class RxAppsActivity extends BaseActivity implements
             ComponentInfo compInfo;
             long i = 0L;
             for(ResolveInfo info : infos){
-                if (subscriber.isUnsubscribed()){
-                    return;
+                if (emitter.isCancelled()){
+                    break;
                 }
                 compInfo = getComponentInfo(info);
-                subscriber.onNext(new DataInfo<>(
+                emitter.onNext(new DataInfo<>(
                         info.loadLabel(pm).toString(),
                         (compInfo == null) ? "" : compInfo.packageName,
                         info.loadIcon(pm), i++));
-                //break; // test complete immediately
             }
             // after sending all values we complete the sequence
-            if (!subscriber.isUnsubscribed()){
-                subscriber.onCompleted();
+            if (!emitter.isCancelled()){
+                emitter.onComplete();
             }
-        });
+        }, BackpressureStrategy.BUFFER);
     }
 
     private ComponentInfo getComponentInfo(ResolveInfo info) {
@@ -101,44 +103,68 @@ public class RxAppsActivity extends BaseActivity implements
         return null;
     }
 
+    private Subscription mSubscription;
+
     private void refreshApps() {
         mSwipeRefreshLayout.setRefreshing(true);
         mRecyclerView.setAdapter(null);
+        if (mSubscription != null) {
+            mSubscription.cancel();
+        }
         // hot observable begin emitting items as soon as it is created
         observableApps()
-                .map(new Func1<DataInfo<Long>, DataInfo<Long>>() {
-                    long mIndex = 0;
-                    @Override
-                    public DataInfo<Long> call(DataInfo<Long> info) {
-                        if (DBG) Log.i(TAG, "call: " + info.getData());
-                        info.setTitle((mIndex++) + " " + info.getTitle());
-                        return info;
+            .map(new Function<DataInfo<Long>, DataInfo<Long>>() {
+                long mIndex = 0;
+                @Override
+                public DataInfo<Long> apply(DataInfo<Long> info) throws Exception {
+                    if (DBG) Log.i(TAG, "call: " + info.getData());
+                    info.setTitle((mIndex++) + " " + info.getTitle());
+                    return info;
+                }
+            })
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(new Subscriber<DataInfo<Long>>() {
+                InfoRecyclerViewAdapter<DataInfo<Long>, ?> mAdapter;
+                @Override
+                public void onSubscribe(Subscription s) {
+                    mSubscription = s;
+                    s.request(1);
+                }
+                @Override
+                public void onNext(DataInfo<Long> info) {
+                    if (DBG) Log.i(TAG, "onNext: " + info.getTitle());
+                    if (mAdapter == null) {
+                        ArrayList<DataInfo<Long>> infoList = new ArrayList<>();
+                        infoList.add(info);
+                        mAdapter = createAdapter(infoList);
+                        mRecyclerView.setAdapter(mAdapter);
+                    } else {
+                        mAdapter.addData(info);
                     }
-                })
-                .onBackpressureBuffer() // emit faster than observer consume
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DataInfo<Long>>() {
-                    private List<DataInfo<Long>> mApps = new ArrayList<>();
-                    @Override
-                    public void onCompleted() {
-                        if (DBG) Log.i(TAG, "onCompleted");
-                        mRecyclerView.setAdapter(createAdapter(mApps));
-                        mSwipeRefreshLayout.setRefreshing(false);
-                    }
-                    @Override
-                    public void onError(Throwable e) {
-                        if (DBG) Log.i(TAG, "onError");
-                        e.printStackTrace();
-                        mSwipeRefreshLayout.setRefreshing(false);
-                        ToastUtils.show(RxAppsActivity.this, "Refresh apps failed!");
-                    }
-                    @Override
-                    public void onNext(DataInfo<Long> info) {
-                        if (DBG) Log.i(TAG, "onNext: " + info.getTitle());
-                        mApps.add(info);
-                    }
-                });
+                    mSubscription.request(1);
+                }
+                @Override
+                public void onError(Throwable t) {
+                    if (DBG) Log.i(TAG, "onError");
+                    t.printStackTrace();
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    ToastUtils.show(RxAppsActivity.this, "Refresh apps failed!");
+                }
+                @Override
+                public void onComplete() {
+                    if (DBG) Log.i(TAG, "onCompleted");
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (mSubscription != null) {
+            mSubscription.cancel();
+        }
+        super.onDestroy();
     }
 
     private InfoRecyclerViewAdapter<DataInfo<Long>, InfoRecyclerViewAdapter.ViewHolder2>
