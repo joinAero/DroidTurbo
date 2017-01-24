@@ -22,7 +22,11 @@
 
     <style name="OcvActionBar" parent="Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:background">@color/ocv_action_bar_bg</item>
+        <item name="android:backgroundStacked">@color/ocv_action_bar_bg</item>
+        <item name="android:backgroundSplit">@color/ocv_action_bar_bg</item>
         <item name="background">@color/ocv_action_bar_bg</item>
+        <item name="backgroundStacked">@color/ocv_action_bar_bg</item>
+        <item name="backgroundSplit">@color/ocv_action_bar_bg</item>
     </style>
 
 </resources>
