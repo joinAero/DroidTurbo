@@ -140,7 +140,7 @@ public class TerminalActivity extends BaseActivity {
             mEditText.addTextChangedListener(this);
             mEditText.setOnEditorActionListener(this);
 
-            mTerminal = new Terminal(editText.getContext());
+            mTerminal = new Terminal();
 
             mEditText.removeTextChangedListener(this);
             doPromptAppend(mEditText);

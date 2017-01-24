@@ -1,7 +1,5 @@
 package cc.eevee.turbo.core.os;
 
-import android.content.Context;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -50,10 +48,7 @@ public class Terminal {
     private ArrayList<String> mChangeDirResult = null;
     private boolean mChangeDirResultError = false;
 
-    private Context mContext;
-
-    public Terminal(Context context) {
-        mContext = context;
+    public Terminal() {
     }
 
     public boolean useRoot() {
@@ -180,7 +175,7 @@ public class Terminal {
     }
 
     private boolean checkSuperUserGranted() {
-        Terminal t = new Terminal(mContext)
+        Terminal t = new Terminal()
                 .exec("su", null, false)
                 .onStdout(lines -> {
                     if (!lines.isEmpty()) {
