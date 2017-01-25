@@ -1,16 +1,3 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        jcenter()
-    }
-    dependencies {
-        // android-apt: https://bitbucket.org/hvisser/android-apt
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        // Gradle Retrolambda: https://github.com/evant/gradle-retrolambda
-        classpath 'me.tatarka:gradle-retrolambda:3.5.0'
-    }
-}
-
 apply plugin: 'com.android.application'
 apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
@@ -131,35 +118,23 @@ retrolambda {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile "com.android.support:appcompat-v7:${versionSupportLib}"
-    compile "com.android.support:design:${versionSupportLib}"
-    compile "com.android.support:cardview-v7:${versionSupportLib}"
-    //compile 'com.android.support:multidex:1.0.1'
+    compile compiles.supportAppCompat
+    compile compiles.supportCardView
+    compile compiles.supportDesgin
 
     // simplify
 
-    // Butter Knife: https://github.com/JakeWharton/butterknife
-    compile 'com.jakewharton:butterknife:8.5.0'
-    apt 'com.jakewharton:butterknife-compiler:8.5.0'
+    compile compiles.butterknife
+    apt apts.butterknifeCompiler
 
     // behavior
 
-    // RxAndroid: https://github.com/ReactiveX/RxAndroid
-    // RxJava2-Android-Samples: https://github.com/amitshekhariitbhu/RxJava2-Android-Samples
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.0.4'
-    // RxJavaProGuardRules: https://github.com/artem-zinnatullin/RxJavaProGuardRules
-    //compile 'com.artemzin.rxjava:proguard-rules:1.2.5.1'
+    compile compiles.rxandroid
+    compile compiles.rxjava
 
     // view & widget
 
-    // android-gif-drawable: https://github.com/koral--/android-gif-drawable
-    compile 'pl.droidsonroids.gif:android-gif-drawable:1.2.4'
-
-    // using in demos
-
-    // MaterialDrawer: https://github.com/mikepenz/MaterialDrawer
-    //compile('com.mikepenz:materialdrawer:5.8.1@aar') { transitive = true }
+    compile compiles.gifdrawable
 
     // dependent libraries
 
@@ -173,37 +148,26 @@ dependencies {
 
     // test
 
-    // JUnit4: https://github.com/junit-team/junit4
-    testCompile 'junit:junit:4.12'
-    // AssertJ: https://github.com/joel-costigliola/assertj-core
-    testCompile 'org.assertj:assertj-core:3.6.2'
-    // Mockito: https://github.com/mockito/mockito
-    testCompile 'org.mockito:mockito-core:2.6.8'
+    testCompile testCompiles.junit
+    testCompile testCompiles.assertj
+    testCompile testCompiles.mockito
 
     // android test
-    // Testing Support Library: https://developer.android.com/topic/libraries/testing-support-library/index.html
-    // android-unit-testing-tutorial: https://github.com/ChrisZou/android-unit-testing-tutorial
 
-    androidTestCompile "com.android.support:support-annotations:${versionSupportLib}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.5'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestCompile compiles.supportAnnotations
+    androidTestCompile androidTestCompiles.supportTestRunner
+    androidTestCompile androidTestCompiles.supportTestRules
+    androidTestCompile(androidTestCompiles.supportTestEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.2'
+    androidTestCompile androidTestCompiles.supportTestUiautomator
 
-    // AssertJ Android: https://github.com/square/assertj-android
-    def versionAssertJAndroid = '1.1.1'
-    androidTestCompile "com.squareup.assertj:assertj-android:${versionAssertJAndroid}"
-    androidTestCompile "com.squareup.assertj:assertj-android-support-v4:${versionAssertJAndroid}@aar"
-    //androidTestCompile "com.squareup.assertj:assertj-android-play-services:${versionAssertJAndroid}@aar"
-    androidTestCompile "com.squareup.assertj:assertj-android-appcompat-v7:${versionAssertJAndroid}@aar"
-    androidTestCompile "com.squareup.assertj:assertj-android-design:${versionAssertJAndroid}@aar"
-    //androidTestCompile "com.squareup.assertj:assertj-android-mediarouter-v7:${versionAssertJAndroid}@aar"
-    //androidTestCompile "com.squareup.assertj:assertj-android-gridlayout-v7:${versionAssertJAndroid}@aar"
-    androidTestCompile "com.squareup.assertj:assertj-android-cardview-v7:${versionAssertJAndroid}@aar"
-    androidTestCompile "com.squareup.assertj:assertj-android-recyclerview-v7:${versionAssertJAndroid}@aar"
-    //androidTestCompile "com.squareup.assertj:assertj-android-palette-v7:${versionAssertJAndroid}@aar
+    androidTestCompile androidTestCompiles.assertjAndroid
+    androidTestCompile androidTestCompiles.assertjAndroidSupport
+    androidTestCompile androidTestCompiles.assertjAndroidAppCompat
+    androidTestCompile androidTestCompiles.assertjAndroidDesign
+    androidTestCompile androidTestCompiles.assertjAndroidCardView
+    androidTestCompile androidTestCompiles.assertjAndroidRecyclerView
 }
 
 // Reference:

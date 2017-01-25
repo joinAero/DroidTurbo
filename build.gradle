@@ -1,11 +1,18 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
+//apply from: rootProject.file('ext.gradle')
 
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.3'
+
+        // android-apt: https://bitbucket.org/hvisser/android-apt
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
+        // Gradle Retrolambda: https://github.com/evant/gradle-retrolambda
+        classpath 'me.tatarka:gradle-retrolambda:3.5.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -30,8 +37,74 @@ ext {
     versionMinSdk = 18
     versionTargetSdk = 25
 
-    versionSupportLib = '25.1.0'  // keep support lib consistent
+    versionSupportLib = '25.1.0'
+    versionButterKnife = '8.5.0'
+    versionAssertJAndroid = '1.1.1'
+
+    apts = [
+            butterknifeCompiler: "com.jakewharton:butterknife-compiler:${versionButterKnife}"
+    ]
+
+    compiles = [
+            supportAppCompat   : "com.android.support:appcompat-v7:${versionSupportLib}",
+            supportAnnotations : "com.android.support:support-annotations:${versionSupportLib}",
+            supportCardView    : "com.android.support:cardview-v7:${versionSupportLib}",
+            supportDesgin      : "com.android.support:design:${versionSupportLib}",
+            supportMultidex    : "com.android.support:multidex:1.0.1",
+
+            // Butter Knife: https://github.com/JakeWharton/butterknife
+            butterknife : "com.jakewharton:butterknife:${versionButterKnife}",
+
+            // RxAndroid: https://github.com/ReactiveX/RxAndroid
+            rxandroid: "io.reactivex.rxjava2:rxandroid:2.0.1",
+            rxjava: "io.reactivex.rxjava2:rxjava:2.0.4",
+            // RxJavaProGuardRules: https://github.com/artem-zinnatullin/RxJavaProGuardRules
+            // Note: RxJava 2.x are not required now
+            rxrules: "com.artemzin.rxjava:proguard-rules:1.2.5.1",
+
+            // android-gif-drawable: https://github.com/koral--/android-gif-drawable
+            gifdrawable: "pl.droidsonroids.gif:android-gif-drawable:1.2.4",
+
+            // MaterialDrawer: https://github.com/mikepenz/MaterialDrawer
+            materialdrawer: "com.mikepenz:materialdrawer:5.8.1@aar"
+            //compile(materialdrawer) { transitive = true }
+    ]
+
+    testCompiles = [
+            // JUnit4: https://github.com/junit-team/junit4
+            junit : "junit:junit:4.12",
+            // AssertJ: https://github.com/joel-costigliola/assertj-core
+            assertj: "org.assertj:assertj-core:3.6.2",
+            // Mockito: https://github.com/mockito/mockito
+            mockito: "org.mockito:mockito-core:2.6.8"
+    ]
+
+    // Testing Support Library: https://developer.android.com/topic/libraries/testing-support-library/index.html
+    // android-unit-testing-tutorial: https://github.com/ChrisZou/android-unit-testing-tutorial
+    androidTestCompiles = [
+            supportTestEspresso : "com.android.support.test.espresso:espresso-core:2.2.2",
+            /*androidTestCompile(androidTestCompiles.supportTestEspresso, {
+                exclude group: 'com.android.support', module: 'support-annotations'
+            })*/
+            supportTestRules    : "com.android.support.test:rules:0.5",
+            supportTestRunner   : "com.android.support.test:runner:0.5",
+            supportTestUiautomator : "com.android.support.test.uiautomator:uiautomator-v18:2.1.2",
+
+            // AssertJ Android: https://github.com/square/assertj-android
+            assertjAndroid             : "com.squareup.assertj:assertj-android:${versionAssertJAndroid}",
+            assertjAndroidSupport      : "com.squareup.assertj:assertj-android-support-v4:${versionAssertJAndroid}@aar",
+            assertjAndroidPlayServices : "com.squareup.assertj:assertj-android-play-services:${versionAssertJAndroid}@aar",
+            assertjAndroidAppCompat    : "com.squareup.assertj:assertj-android-appcompat-v7:${versionAssertJAndroid}@aar",
+            assertjAndroidDesign       : "com.squareup.assertj:assertj-android-design:${versionAssertJAndroid}@aar",
+            assertjAndroidMediaRouter  : "com.squareup.assertj:assertj-android-mediarouter-v7:${versionAssertJAndroid}@aar",
+            assertjAndroidGridLayout   : "com.squareup.assertj:assertj-android-gridlayout-v7:${versionAssertJAndroid}@aar",
+            assertjAndroidCardView     : "com.squareup.assertj:assertj-android-cardview-v7:${versionAssertJAndroid}@aar",
+            assertjAndroidRecyclerView : "com.squareup.assertj:assertj-android-recyclerview-v7:${versionAssertJAndroid}@aar",
+            assertjAndroidPalette      : "com.squareup.assertj:assertj-android-palette-v7:${versionAssertJAndroid}@aar"
+    ]
 
     javaSourceCompatibility = JavaVersion.VERSION_1_8
     javaTargetCompatibility = JavaVersion.VERSION_1_8
+
+    ndkABIs = ['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] as String[]
 }
