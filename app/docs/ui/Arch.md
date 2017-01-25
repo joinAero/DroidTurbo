@@ -30,6 +30,10 @@ This sample project shows how to apply MVP and Clean architecture on an Android 
 
 * [EffectiveAndroid](https://github.com/rallat/EffectiveAndroid)
 
+## 2.4) MVVM 知乎日报 APP
+
+* [Idaily](https://github.com/liuguangqiang/Idaily)
+
 ---
 
 * [给 Android 开发者的 RxJava 详解](http://gank.io/post/560e15be2dca930e00da1083)

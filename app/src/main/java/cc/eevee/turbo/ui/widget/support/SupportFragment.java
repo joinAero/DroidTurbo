@@ -18,8 +18,6 @@ import pl.droidsonroids.gif.GifDrawable;
 
 /**
  * Fragment for practicing new APIs in support libraries.
- *
- * <p>See `Support.md` for more introductions.
  */
 public class SupportFragment extends ListSightFragment implements
         InfoRecyclerViewAdapter.OnItemViewClickListener<DataInfo<Class>> {

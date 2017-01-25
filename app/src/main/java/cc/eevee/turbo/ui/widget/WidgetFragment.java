@@ -13,6 +13,11 @@ import cc.eevee.turbo.ui.widget.custom.CustomFragment;
 import cc.eevee.turbo.ui.widget.design.DesignFragment;
 import cc.eevee.turbo.ui.widget.support.SupportFragment;
 
+/**
+ * Fragment for practicing support and design libraries.
+ *
+ * <p>See `Widget.md` for more introductions.
+ */
 public class WidgetFragment extends TabSightFragment {
 
     public WidgetFragment() {
