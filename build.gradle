@@ -37,7 +37,7 @@ ext {
     versionMinSdk = 18
     versionTargetSdk = 25
 
-    versionSupportLib = '25.1.0'
+    versionSupportLib = '25.1.1'
     versionButterKnife = '8.5.0'
     versionAssertJAndroid = '1.1.1'
 
