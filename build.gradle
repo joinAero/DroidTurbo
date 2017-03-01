@@ -21,9 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
-        jcenter()
-        mavenCentral()
         //maven { url 'file:///Users/John/Repository/' }
+        mavenCentral()
+        jcenter()
     }
 }
 
@@ -57,7 +57,7 @@ ext {
 
             // RxAndroid: https://github.com/ReactiveX/RxAndroid
             rxandroid: "io.reactivex.rxjava2:rxandroid:2.0.1",
-            rxjava: "io.reactivex.rxjava2:rxjava:2.0.4",
+            rxjava: "io.reactivex.rxjava2:rxjava:2.0.6",
             // RxJavaProGuardRules: https://github.com/artem-zinnatullin/RxJavaProGuardRules
             // Note: RxJava 2.x are not required now
             rxrules: "com.artemzin.rxjava:proguard-rules:1.2.5.1",
