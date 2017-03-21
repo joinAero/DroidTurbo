@@ -7,7 +7,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
+        classpath 'com.android.tools.build:gradle:2.3.0'
 
         // android-apt: https://bitbucket.org/hvisser/android-apt
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
@@ -21,9 +21,9 @@ buildscript {
 
 allprojects {
     repositories {
-        //maven { url 'file:///Users/John/Repository/' }
-        mavenCentral()
         jcenter()
+        mavenCentral()
+        //maven { url 'file:///Users/John/Repository/' }
     }
 }
 
@@ -37,7 +37,7 @@ ext {
     versionMinSdk = 18
     versionTargetSdk = 25
 
-    versionSupportLib = '25.2.0'
+    versionSupportLib = '25.3.0'
     versionButterKnife = '8.5.0'
     versionAssertJAndroid = '1.1.1'
 
