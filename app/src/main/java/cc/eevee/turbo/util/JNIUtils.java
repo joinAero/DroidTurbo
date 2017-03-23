@@ -11,4 +11,5 @@ public final class JNIUtils {
     public static native String stringFromJNI();
 
     public static native void grayscale(Bitmap rgba_8888);
+    public static native void grayscale_gpu(Bitmap rgba_8888);
 }

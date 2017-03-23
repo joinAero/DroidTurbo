@@ -7,5 +7,6 @@
 jstring native_stringFromJNI(JNIEnv *env, jobject thiz);
 
 void native_grayscale(JNIEnv *env, jobject thiz, jobject bitmap);
+void native_grayscale_gpu(JNIEnv *env, jobject thiz, jobject bitmap);
 
 #endif  // JNI_UTILS_H_

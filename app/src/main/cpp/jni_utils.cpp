@@ -5,6 +5,8 @@
 
 #include <android/bitmap.h>
 
+#include "device/gpu_grayscale.h"
+
 jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
 
 #if defined(__arm__)
@@ -87,4 +89,9 @@ static void grayscale(const AndroidBitmapInfo &info, uint32_t *rgba_pixels) {
 void native_grayscale(JNIEnv *env, jobject thiz, jobject bitmap) {
     DBG_LOGI(__FUNCTION__);
     process_rgba_pixels(env, thiz, bitmap, grayscale);
+}
+
+void native_grayscale_gpu(JNIEnv *env, jobject thiz, jobject bitmap) {
+    DBG_LOGI(__FUNCTION__);
+    process_rgba_pixels(env, thiz, bitmap, gpu_grayscale);
 }
