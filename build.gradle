@@ -55,6 +55,11 @@ ext {
             // Butter Knife: https://github.com/JakeWharton/butterknife
             butterknife : "com.jakewharton:butterknife:${versionButterKnife}",
 
+            // Guava: https://github.com/google/guava
+            // Compatibility: https://github.com/google/guava/wiki/Compatibility#Android
+            // Important: Guava 21.0 requires Java 8. If you need Java 6, 7 or Android compatibility, use Guava 20.0 for now.
+            guava: "com.google.guava:guava:20.0",
+
             // RxAndroid: https://github.com/ReactiveX/RxAndroid
             rxandroid: "io.reactivex.rxjava2:rxandroid:2.0.1",
             rxjava: "io.reactivex.rxjava2:rxjava:2.0.6",

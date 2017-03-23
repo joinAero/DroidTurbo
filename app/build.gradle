@@ -136,6 +136,7 @@ dependencies {
 
     compile compiles.butterknife
     apt apts.butterknifeCompiler
+    //compile compiles.guava
 
     // behavior
 
