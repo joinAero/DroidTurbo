@@ -50,7 +50,7 @@ public class HumanReadable {
     }
 
     public static String date(String pattern, long date) {
-        return date(pattern, date);
+        return date(pattern, new Date(date));
     }
 
     @SuppressLint("SimpleDateFormat")

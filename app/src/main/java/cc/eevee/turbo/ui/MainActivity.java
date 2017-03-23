@@ -30,6 +30,7 @@ import cc.eevee.turbo.R;
 import cc.eevee.turbo.core.view.TabFragmentPagerAdapter;
 import cc.eevee.turbo.ui.arch.ArchFragment;
 import cc.eevee.turbo.ui.base.BaseActivity;
+import cc.eevee.turbo.ui.demo.GrayscaleActivity;
 import cc.eevee.turbo.ui.demo.SnakeSurfaceViewActivity;
 import cc.eevee.turbo.ui.demo.TerminalActivity;
 import cc.eevee.turbo.ui.demo.TransparentStatusBarActivity;
@@ -250,6 +251,9 @@ public class MainActivity extends BaseActivity
                 break;
             case R.id.nav_snake_surface_view:
                 ContextUtils.startActivity(this, SnakeSurfaceViewActivity.class);
+                break;
+            case R.id.nav_grayscale:
+                ContextUtils.startActivity(this, GrayscaleActivity.class);
                 break;
             case R.id.nav_share:
             case R.id.nav_send:

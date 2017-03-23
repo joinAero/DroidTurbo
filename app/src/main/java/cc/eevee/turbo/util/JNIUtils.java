@@ -1,0 +1,14 @@
+package cc.eevee.turbo.util;
+
+import android.graphics.Bitmap;
+
+public final class JNIUtils {
+
+    static {
+        System.loadLibrary("jni_utils");
+    }
+
+    public static native String stringFromJNI();
+
+    public static native void grayscale(Bitmap rgba_8888);
+}

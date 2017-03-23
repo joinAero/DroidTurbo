@@ -46,6 +46,12 @@
         <!-- menu -->
 
         <activity
+            android:name=".ui.demo.TerminalActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:label="@string/terminal"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateVisible|adjustResize" />
+        <activity
             android:name=".ui.demo.TransparentStatusBarActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:label="@string/transparent_status_bar"
@@ -58,11 +64,11 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan" />
         <activity
-            android:name=".ui.demo.TerminalActivity"
+            android:name=".ui.demo.GrayscaleActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
-            android:label="@string/terminal"
+            android:label="@string/grayscale"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustResize" />
+            android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <!-- widget -->
 

@@ -9,9 +9,10 @@
 
     <!-- menu -->
 
+    <string name="terminal">Terminal</string>
     <string name="transparent_status_bar">Transparent StatusBar</string>
     <string name="snake_surface_view">Snake SurfaceView</string>
-    <string name="terminal">Terminal</string>
+    <string name="grayscale">Grayscale</string>
 
     <!-- widget -->
 

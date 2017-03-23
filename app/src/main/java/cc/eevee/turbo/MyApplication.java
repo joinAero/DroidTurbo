@@ -5,10 +5,13 @@ import android.os.StrictMode;
 
 import cc.eevee.turbo.core.debug.CrashHandler;
 import cc.eevee.turbo.core.util.Log;
+import cc.eevee.turbo.util.JNIUtils;
 
 import static cc.eevee.turbo.BuildConfig.DEBUG;
 
 public class MyApplication extends Application {
+
+    public static String LOG_TAG = "DroidTurbo";
 
     public static MyApplication INSTANCE;
 
@@ -21,6 +24,8 @@ public class MyApplication extends Application {
             setupStrictMode();
         }
         new CrashHandler(this);
+
+        Log.i(LOG_TAG, JNIUtils.stringFromJNI());
     }
 
     private void setupStrictMode() {
