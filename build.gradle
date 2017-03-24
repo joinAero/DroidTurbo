@@ -111,6 +111,6 @@ ext {
     javaSourceCompatibility = JavaVersion.VERSION_1_8
     javaTargetCompatibility = JavaVersion.VERSION_1_8
 
-    ndkABIs = ['armeabi'] as String[]
+    ndkABIs = ['armeabi-v7a'] as String[]
     //ndkABIs = ['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] as String[]
 }
