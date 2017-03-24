@@ -6,7 +6,6 @@
 #include <android/bitmap.h>
 
 jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
-
 #if defined(__arm__)
   #if defined(__ARM_ARCH_7A__)
     #if defined(__ARM_NEON__)
