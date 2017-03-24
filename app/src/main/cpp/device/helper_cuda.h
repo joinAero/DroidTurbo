@@ -25,8 +25,8 @@
 
 #include "jni_helper.h"
 
-#define EXIT_FAILURE
-//#define EXIT_FAILURE exit(EXIT_FAILURE);
+#define DO_EXIT_FAILURE
+//#define DO_EXIT_FAILURE exit(EXIT_FAILURE);
 
 #ifndef EXIT_WAIVED
 #define EXIT_WAIVED 2
@@ -997,7 +997,7 @@ void check(T result, char const *const func, const char *const file, int const l
                 file, line, static_cast<unsigned int>(result), _cudaGetErrorEnum(result), func);
         DEVICE_RESET
         // Make sure we call CUDA Device Reset before exiting
-        EXIT_FAILURE
+        DO_EXIT_FAILURE
     }
 }
 
@@ -1017,7 +1017,7 @@ inline void __getLastCudaError(const char *errorMessage, const char *file, const
         LOGE("%s(%i) : getLastCudaError() CUDA error : %s : (%d) %s.",
                 file, line, errorMessage, (int)err, cudaGetErrorString(err));
         DEVICE_RESET
-        EXIT_FAILURE
+        DO_EXIT_FAILURE
     }
 }
 #endif
@@ -1087,7 +1087,7 @@ inline int gpuDeviceInit(int devID)
     if (device_count == 0)
     {
         LOGE("gpuDeviceInit() CUDA error: no devices supporting CUDA.");
-        EXIT_FAILURE
+        DO_EXIT_FAILURE
     }
 
     if (devID < 0)
@@ -1114,7 +1114,7 @@ inline int gpuDeviceInit(int devID)
     if (deviceProp.major < 1)
     {
         LOGE("gpuDeviceInit(): GPU device does not support CUDA.");
-        EXIT_FAILURE
+        DO_EXIT_FAILURE
     }
 
     checkCudaErrors(cudaSetDevice(devID));
@@ -1140,7 +1140,7 @@ inline int gpuGetMaxGflopsDeviceId()
     if (device_count == 0)
     {
         LOGE("gpuGetMaxGflopsDeviceId() CUDA error: no devices supporting CUDA.");
-        EXIT_FAILURE
+        DO_EXIT_FAILURE
     }
 
     // Find the best major SM Architecture GPU device
@@ -1167,7 +1167,7 @@ inline int gpuGetMaxGflopsDeviceId()
     if (devices_prohibited == device_count)
     {
     	LOGE("gpuGetMaxGflopsDeviceId() CUDA error: all devices have compute mode prohibited.");
-    	EXIT_FAILURE
+    	DO_EXIT_FAILURE
     }
 
     // Find the best CUDA capable GPU device
@@ -1232,7 +1232,7 @@ inline int findCudaDevice(int argc, const char **argv)
         if (devID < 0)
         {
             LOGI("Invalid command line parameter");
-            EXIT_FAILURE
+            DO_EXIT_FAILURE
         }
         else
         {
@@ -1241,7 +1241,7 @@ inline int findCudaDevice(int argc, const char **argv)
             if (devID < 0)
             {
                 LOGI("exiting...");
-                EXIT_FAILURE
+                DO_EXIT_FAILURE
             }
         }
     }

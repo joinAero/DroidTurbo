@@ -41,18 +41,18 @@ public class GrayscaleActivity extends BaseActivity {
 
         mAsyncHandler = new Handler(mHandlerThread.getLooper());
         mAsyncHandler.post(() -> {
-            TimeCost.beg("load");
+            TimeCost.beg("load4cpu");
             Bitmap bm = AssetsUtils.loadBitmap(GrayscaleActivity.this, "lenna.jpg");
-            TimeCost costLoad = TimeCost.end("load").log();
+            TimeCost costLoad = TimeCost.end("load4cpu").log();
             mTextCpu.post(() -> mTextCpu.append(costLoad.toLineString()));
 
             mImageCpu.post(() -> {
                 mImageCpu.setImageBitmap(bm);
                 // grayscale after display
                 mAsyncHandler.post(() -> {
-                    TimeCost.beg("grayscale");
+                    TimeCost.beg("grayscale_cpu");
                     JNIUtils.grayscale(bm);
-                    TimeCost costGray = TimeCost.end("grayscale").log();
+                    TimeCost costGray = TimeCost.end("grayscale_cpu").log();
                     mTextCpu.post(() -> mTextCpu.append("\n"+costGray.toLineString()));
                     // ensure flush image view
                     mImageCpu.postInvalidate();
@@ -61,18 +61,18 @@ public class GrayscaleActivity extends BaseActivity {
         });
 
         mAsyncHandler.post(() -> {
-            TimeCost.beg("load");
+            TimeCost.beg("load4gpu");
             Bitmap bm = AssetsUtils.loadBitmap(GrayscaleActivity.this, "lenna.jpg");
-            TimeCost costLoad = TimeCost.end("load").log();
+            TimeCost costLoad = TimeCost.end("load4gpu").log();
             mTextGpu.post(() -> mTextGpu.append(costLoad.toLineString()));
 
             mImageGpu.post(() -> {
                 mImageGpu.setImageBitmap(bm);
                 // grayscale after display
                 mAsyncHandler.post(() -> {
-                    TimeCost.beg("grayscale");
+                    TimeCost.beg("grayscale_gpu");
                     JNIUtils.grayscale_gpu(bm);
-                    TimeCost costGray = TimeCost.end("grayscale").log();
+                    TimeCost costGray = TimeCost.end("grayscale_gpu").log();
                     mTextGpu.post(() -> mTextGpu.append("\n"+costGray.toLineString()));
                     // ensure flush image view
                     mImageGpu.postInvalidate();

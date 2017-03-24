@@ -6,10 +6,10 @@ __global__ void kernel_grayscale(
     const unsigned int idx = (blockIdx.x * blockDim.x) + threadIdx.x;
     //const unsigned int idy = (blockIdx.y * blockDim.y) + threadIdx.y;
     //const unsigned int tid = ((gridDim.x * blockDim.x) * idy) + idx;
-    if (tid < n) {
+    if (idx < n) {
         // Y = 0.299*R + 0.587*G + 0.114*B
         rgba_t &rgba = rgba_pixels[idx];
-        gray = (uint8_t) (0.299 * rgba.r + 0.587 * rgba.g + 0.114 * rgba.b);
+        uint8_t gray = (uint8_t) (0.299 * rgba.r + 0.587 * rgba.g + 0.114 * rgba.b);
         rgba.r = rgba.g = rgba.b = gray;
     }
 }
