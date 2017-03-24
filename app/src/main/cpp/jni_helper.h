@@ -2,6 +2,7 @@
 #define JNI_HELPER_H_
 #pragma once
 
+#include <stdint.h>
 #include <jni.h>
 #include <android/log.h>
 
@@ -23,5 +24,12 @@
 #endif
 
 #define CJNIEXPORT extern "C" JNIEXPORT
+
+typedef struct {
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+    uint8_t a;
+} rgba_t;
 
 #endif  // JNI_HELPER_H_

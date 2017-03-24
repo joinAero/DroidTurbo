@@ -40,7 +40,7 @@ jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
     return env->NewStringUTF("Hello from JNI! Compiled with ABI " ABI ".");
 }
 
-using RGBAPixelsProcessor = std::function<void(const AndroidBitmapInfo &, uint32_t *)>;
+using RGBAPixelsProcessor = std::function<void(const AndroidBitmapInfo &, rgba_t *)>;
 
 static void process_rgba_pixels(JNIEnv *env, jobject thiz, jobject bitmap, RGBAPixelsProcessor processor) {
     AndroidBitmapInfo info;
@@ -59,27 +59,21 @@ static void process_rgba_pixels(JNIEnv *env, jobject thiz, jobject bitmap, RGBAP
     if ((result = AndroidBitmap_lockPixels(env, bitmap, &pixels)) < 0) {
         LOGE("AndroidBitmap_lockPixels() failed, error=%d", result);
     }
-    uint32_t *rgba_pixels = static_cast<uint32_t*>(pixels);
+    rgba_t *rgba_pixels = static_cast<rgba_t*>(pixels);
 
     if (processor) processor(info, rgba_pixels);
 
     AndroidBitmap_unlockPixels(env, bitmap);
 }
 
-static void grayscale(const AndroidBitmapInfo &info, uint32_t *rgba_pixels) {
+static void grayscale(const AndroidBitmapInfo &info, rgba_t *rgba_pixels) {
     uint32_t n = info.width * info.height;
-    uint32_t gray = 0;
+    uint8_t gray = 0;
     for (uint32_t i = 0; i < n; ++i) {
         // Y = 0.299*R + 0.587*G + 0.114*B
-        uint32_t &rgba = rgba_pixels[i];
-        gray = (uint32_t) (
-                0.299 * ((rgba >> 24) & 0xFF) +
-                0.587 * ((rgba >> 16) & 0xFF) +
-                0.114 * ((rgba >> 8) & 0xFF));
-        rgba = ((gray & 0xFF) << 24) +
-                ((gray & 0xFF) << 16) +
-                ((gray & 0xFF) << 8) +
-                (gray & 0xFF);
+        rgba_t &rgba = rgba_pixels[i];
+        gray = (uint8_t) (0.299 * rgba.r + 0.587 * rgba.g + 0.114 * rgba.b);
+        rgba.r = rgba.g = rgba.b = gray;
     }
 }
 
