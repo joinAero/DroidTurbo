@@ -181,6 +181,15 @@ dependencies {
     androidTestCompile androidTestCompiles.assertjAndroidRecyclerView
 }
 
+task makeGpu(type: Exec) {
+    workingDir 'src/main/cpp/device'
+    commandLine 'make'
+}
+
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn makeGpu
+}
+
 // Reference:
 // * Android Plugin for Gradle: http://developer.android.com/tools/building/plugin-for-gradle.html
 // * Gradle Plugin User Guide: http://tools.android.com/tech-docs/new-build-system/user-guide
