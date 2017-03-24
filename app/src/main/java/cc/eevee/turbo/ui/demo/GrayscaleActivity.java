@@ -17,8 +17,11 @@ import cc.eevee.turbo.util.TimeCost;
 
 public class GrayscaleActivity extends BaseActivity {
 
-    @BindView(R.id.text) TextView mTextView;
-    @BindView(R.id.image) ImageView mImageView;
+    @BindView(R.id.text_cpu) TextView mTextCpu;
+    @BindView(R.id.image_cpu) ImageView mImageCpu;
+
+    @BindView(R.id.text_gpu) TextView mTextGpu;
+    @BindView(R.id.image_gpu) ImageView mImageGpu;
 
     HandlerThread mHandlerThread;
     Handler mAsyncHandler;
@@ -41,18 +44,38 @@ public class GrayscaleActivity extends BaseActivity {
             TimeCost.beg("load");
             Bitmap bm = AssetsUtils.loadBitmap(GrayscaleActivity.this, "lenna.jpg");
             TimeCost costLoad = TimeCost.end("load").log();
-            mTextView.post(() -> mTextView.append(costLoad.toLineString()));
+            mTextCpu.post(() -> mTextCpu.append(costLoad.toLineString()));
 
-            mImageView.post(() -> {
-                mImageView.setImageBitmap(bm);
+            mImageCpu.post(() -> {
+                mImageCpu.setImageBitmap(bm);
                 // grayscale after display
                 mAsyncHandler.post(() -> {
                     TimeCost.beg("grayscale");
                     JNIUtils.grayscale(bm);
                     TimeCost costGray = TimeCost.end("grayscale").log();
-                    mTextView.post(() -> mTextView.append("\n"+costGray.toLineString()));
+                    mTextCpu.post(() -> mTextCpu.append("\n"+costGray.toLineString()));
                     // ensure flush image view
-                    mImageView.postInvalidate();
+                    mImageCpu.postInvalidate();
+                });
+            });
+        });
+
+        mAsyncHandler.post(() -> {
+            TimeCost.beg("load");
+            Bitmap bm = AssetsUtils.loadBitmap(GrayscaleActivity.this, "lenna.jpg");
+            TimeCost costLoad = TimeCost.end("load").log();
+            mTextGpu.post(() -> mTextGpu.append(costLoad.toLineString()));
+
+            mImageGpu.post(() -> {
+                mImageGpu.setImageBitmap(bm);
+                // grayscale after display
+                mAsyncHandler.post(() -> {
+                    TimeCost.beg("grayscale");
+                    JNIUtils.grayscale_gpu(bm);
+                    TimeCost costGray = TimeCost.end("grayscale").log();
+                    mTextGpu.post(() -> mTextGpu.append("\n"+costGray.toLineString()));
+                    // ensure flush image view
+                    mImageGpu.postInvalidate();
                 });
             });
         });

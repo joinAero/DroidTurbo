@@ -10,10 +10,12 @@
 
 #include <cuda_runtime.h>
 
+#include "jni_helper.h"
+
 #define CUDA_CALL(func) do { \
     const cudaError_t a = (func); \
     if (a != cudaSuccess) { \
-        printf("\nCUDA Error: %s (err_num=%d)\n", cudaGetErrorString(a), a); \
+        LOGE("CUDA Error: %s (err_num=%d)", cudaGetErrorString(a), a); \
         cudaDeviceReset(); \
         assert(0); \
     } \
@@ -65,8 +67,7 @@ private:
         cudaError_t result = cudaMalloc((void **)&first_, size * sizeof(T));
         if (result != cudaSuccess) {
             first_ = last_ = nullptr;
-            printf("\nCUDA Error: %s (err_num=%d)\n",
-                   cudaGetErrorString(result), result);
+            LOGE("CUDA Error: %s (err_num=%d)", cudaGetErrorString(result), result);
             cudaDeviceReset();
             assert(0);
         }

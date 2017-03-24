@@ -10,14 +10,27 @@
     <include layout="@layout/toolbar" />
 
     <TextView
-        android:id="@+id/text"
+        android:id="@+id/text_cpu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:lines="2" />
 
     <cc.eevee.turbo.widget.TopCropImageView
-        android:id="@+id/image"
+        android:id="@+id/image_cpu"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+    <TextView
+        android:id="@+id/text_gpu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:lines="2" />
+
+    <cc.eevee.turbo.widget.TopCropImageView
+        android:id="@+id/image_gpu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
 
 </android.support.v7.widget.LinearLayoutCompat>
