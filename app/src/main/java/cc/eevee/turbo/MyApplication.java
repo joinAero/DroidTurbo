@@ -26,6 +26,7 @@ public class MyApplication extends Application {
         new CrashHandler(this);
 
         Log.i(LOG_TAG, JNIUtils.stringFromJNI());
+        JNIUtils.deviceQuery();
     }
 
     private void setupStrictMode() {

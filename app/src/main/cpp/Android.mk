@@ -1,3 +1,16 @@
+# Requirements
+# 1) CodeWorks for Android 1R4
+#   http://docs.nvidia.com/gameworks/index.html#developertools/mobile/codeworks_android/codeworks_android_1r4.htm
+# 2) Android NDK with CMake, Please use r12+.
+#
+# References
+# 1) InfiniTAM: https://github.com/victorprad/InfiniTAM
+#
+# Issues
+# 1) CUDA Error: CUDA driver version is insufficient for CUDA runtime version (err_num=35)
+#
+# CUDA Toolkit Documentation: http://docs.nvidia.com/cuda/index.html
+
 MY_LOCAL_PATH := $(call my-dir)
 MY_MODULE_PATH := $(MY_LOCAL_PATH)/../../..
 MY_PROJECT_PATH := $(MY_MODULE_PATH)/..
@@ -15,14 +28,14 @@ LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE := cudart_static
 LOCAL_SRC_FILES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart_static.a
-LOCAL_EXPORT_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
+LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
 include $(PREBUILT_STATIC_LIBRARY)
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
 include $(CLEAR_VARS)
 LOCAL_MODULE := cudart
 LOCAL_SRC_FILES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart.so
-LOCAL_EXPORT_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
+LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
 include $(PREBUILT_SHARED_LIBRARY)
 
 # jni_utils
@@ -45,11 +58,3 @@ include $(BUILD_SHARED_LIBRARY)
 # subdirs
 
 include $(MY_SUBDIR_MKS)
-
-# Requirements
-# 1) CodeWorks for Android 1R4
-#   http://docs.nvidia.com/gameworks/index.html#developertools/mobile/codeworks_android/codeworks_android_1r4.htm
-# 2) Android NDK with CMake, Please use r12+.
-#
-# References
-# 1) InfiniTAM: https://github.com/victorprad/InfiniTAM

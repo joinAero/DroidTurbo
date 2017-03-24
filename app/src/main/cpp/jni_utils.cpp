@@ -5,6 +5,7 @@
 
 #include <android/bitmap.h>
 
+#include "device/gpu.h"
 #include "device/gpu_grayscale.h"
 
 jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
@@ -40,6 +41,10 @@ jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
 #define ABI "unknown"
 #endif
     return env->NewStringUTF("Hello from JNI! Compiled with ABI " ABI ".");
+}
+
+jboolean native_deviceQuery(JNIEnv *env, jobject thiz) {
+    return static_cast<jboolean>(deviceQuery());
 }
 
 using RGBAPixelsProcessor = std::function<void(const AndroidBitmapInfo &, uint32_t *)>;

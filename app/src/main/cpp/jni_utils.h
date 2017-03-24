@@ -5,6 +5,7 @@
 #include <jni.h>
 
 jstring native_stringFromJNI(JNIEnv *env, jobject thiz);
+jboolean native_deviceQuery(JNIEnv *env, jobject thiz);
 
 void native_grayscale(JNIEnv *env, jobject thiz, jobject bitmap);
 void native_grayscale_gpu(JNIEnv *env, jobject thiz, jobject bitmap);

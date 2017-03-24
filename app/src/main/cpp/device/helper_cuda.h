@@ -21,7 +21,12 @@
 #include <stdio.h>
 #include <string.h>
 
-#include <helper_string.h>
+#include "helper_string.h"
+
+#include "jni_helper.h"
+
+#define EXIT_FAILURE
+//#define EXIT_FAILURE exit(EXIT_FAILURE);
 
 #ifndef EXIT_WAIVED
 #define EXIT_WAIVED 2
@@ -282,8 +287,10 @@ static const char *_cudaGetErrorEnum(cudaError_t error)
             return "cudaErrorApiFailureBase";
 
         /* Since CUDA 8.0*/        
-        case cudaErrorNvlinkUncorrectable :   
+        /*
+        case cudaErrorNvlinkUncorrectable :
             return "cudaErrorNvlinkUncorrectable";
+        */
     }
 
     return "<unknown>";
@@ -986,11 +993,11 @@ void check(T result, char const *const func, const char *const file, int const l
 {
     if (result)
     {
-        fprintf(stderr, "CUDA error at %s:%d code=%d(%s) \"%s\" \n",
+        LOGE("CUDA error at %s:%d code=%d(%s) \"%s\"",
                 file, line, static_cast<unsigned int>(result), _cudaGetErrorEnum(result), func);
         DEVICE_RESET
         // Make sure we call CUDA Device Reset before exiting
-        exit(EXIT_FAILURE);
+        EXIT_FAILURE
     }
 }
 
@@ -1007,10 +1014,10 @@ inline void __getLastCudaError(const char *errorMessage, const char *file, const
 
     if (cudaSuccess != err)
     {
-        fprintf(stderr, "%s(%i) : getLastCudaError() CUDA error : %s : (%d) %s.\n",
+        LOGE("%s(%i) : getLastCudaError() CUDA error : %s : (%d) %s.",
                 file, line, errorMessage, (int)err, cudaGetErrorString(err));
         DEVICE_RESET
-        exit(EXIT_FAILURE);
+        EXIT_FAILURE
     }
 }
 #endif
@@ -1065,7 +1072,7 @@ inline int _ConvertSMVer2Cores(int major, int minor)
     }
 
     // If we don't find the values, we default use the previous one to run properly
-    printf("MapSMtoCores for SM %d.%d is undefined.  Default to use %d Cores/SM\n", major, minor, nGpuArchCoresPerSM[index-1].Cores);
+    LOGI("MapSMtoCores for SM %d.%d is undefined.  Default to use %d Cores/SM", major, minor, nGpuArchCoresPerSM[index-1].Cores);
     return nGpuArchCoresPerSM[index-1].Cores;
 }
 // end of GPU Architecture definitions
@@ -1079,8 +1086,8 @@ inline int gpuDeviceInit(int devID)
 
     if (device_count == 0)
     {
-        fprintf(stderr, "gpuDeviceInit() CUDA error: no devices supporting CUDA.\n");
-        exit(EXIT_FAILURE);
+        LOGE("gpuDeviceInit() CUDA error: no devices supporting CUDA.");
+        EXIT_FAILURE
     }
 
     if (devID < 0)
@@ -1090,10 +1097,8 @@ inline int gpuDeviceInit(int devID)
 
     if (devID > device_count-1)
     {
-        fprintf(stderr, "\n");
-        fprintf(stderr, ">> %d CUDA capable GPU device(s) detected. <<\n", device_count);
-        fprintf(stderr, ">> gpuDeviceInit (-device=%d) is not a valid GPU device. <<\n", devID);
-        fprintf(stderr, "\n");
+        LOGE(">> %d CUDA capable GPU device(s) detected. <<", device_count);
+        LOGE(">> gpuDeviceInit (-device=%d) is not a valid GPU device. <<", devID);
         return -devID;
     }
 
@@ -1102,18 +1107,18 @@ inline int gpuDeviceInit(int devID)
 
     if (deviceProp.computeMode == cudaComputeModeProhibited)
     {
-        fprintf(stderr, "Error: device is running in <Compute Mode Prohibited>, no threads can use ::cudaSetDevice().\n");
+        LOGE("Error: device is running in <Compute Mode Prohibited>, no threads can use ::cudaSetDevice().");
         return -1;
     }
 
     if (deviceProp.major < 1)
     {
-        fprintf(stderr, "gpuDeviceInit(): GPU device does not support CUDA.\n");
-        exit(EXIT_FAILURE);
+        LOGE("gpuDeviceInit(): GPU device does not support CUDA.");
+        EXIT_FAILURE
     }
 
     checkCudaErrors(cudaSetDevice(devID));
-    printf("gpuDeviceInit() CUDA Device [%d]: \"%s\n", devID, deviceProp.name);
+    LOGI("gpuDeviceInit() CUDA Device [%d]: \"%s", devID, deviceProp.name);
 
     return devID;
 }
@@ -1134,8 +1139,8 @@ inline int gpuGetMaxGflopsDeviceId()
 
     if (device_count == 0)
     {
-        fprintf(stderr, "gpuGetMaxGflopsDeviceId() CUDA error: no devices supporting CUDA.\n");
-        exit(EXIT_FAILURE);
+        LOGE("gpuGetMaxGflopsDeviceId() CUDA error: no devices supporting CUDA.");
+        EXIT_FAILURE
     }
 
     // Find the best major SM Architecture GPU device
@@ -1161,8 +1166,8 @@ inline int gpuGetMaxGflopsDeviceId()
 
     if (devices_prohibited == device_count)
     {
-    	fprintf(stderr, "gpuGetMaxGflopsDeviceId() CUDA error: all devices have compute mode prohibited.\n");
-    	exit(EXIT_FAILURE);
+    	LOGE("gpuGetMaxGflopsDeviceId() CUDA error: all devices have compute mode prohibited.");
+    	EXIT_FAILURE
     }
 
     // Find the best CUDA capable GPU device
@@ -1226,8 +1231,8 @@ inline int findCudaDevice(int argc, const char **argv)
 
         if (devID < 0)
         {
-            printf("Invalid command line parameter\n ");
-            exit(EXIT_FAILURE);
+            LOGI("Invalid command line parameter");
+            EXIT_FAILURE
         }
         else
         {
@@ -1235,8 +1240,8 @@ inline int findCudaDevice(int argc, const char **argv)
 
             if (devID < 0)
             {
-                printf("exiting...\n");
-                exit(EXIT_FAILURE);
+                LOGI("exiting...");
+                EXIT_FAILURE
             }
         }
     }
@@ -1246,7 +1251,7 @@ inline int findCudaDevice(int argc, const char **argv)
         devID = gpuGetMaxGflopsDeviceId();
         checkCudaErrors(cudaSetDevice(devID));
         checkCudaErrors(cudaGetDeviceProperties(&deviceProp, devID));
-        printf("GPU Device %d: \"%s\" with compute capability %d.%d\n\n", devID, deviceProp.name, deviceProp.major, deviceProp.minor);
+        LOGI("GPU Device %d: \"%s\" with compute capability %d.%d\n", devID, deviceProp.name, deviceProp.major, deviceProp.minor);
     }
 
     return devID;
@@ -1266,12 +1271,12 @@ inline bool checkCudaCapabilities(int major_version, int minor_version)
     if ((deviceProp.major > major_version) ||
         (deviceProp.major == major_version && deviceProp.minor >= minor_version))
     {
-        printf("  Device %d: <%16s >, Compute SM %d.%d detected\n", dev, deviceProp.name, deviceProp.major, deviceProp.minor);
+        LOGI("  Device %d: <%16s >, Compute SM %d.%d detected", dev, deviceProp.name, deviceProp.major, deviceProp.minor);
         return true;
     }
     else
     {
-        printf("  No GPU device was found that can support CUDA compute capability %d.%d.\n", major_version, minor_version);
+        LOGI("  No GPU device was found that can support CUDA compute capability %d.%d.", major_version, minor_version);
         return false;
     }
 }

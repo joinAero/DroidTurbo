@@ -9,8 +9,24 @@
 #include <iterator>
 
 #include <cuda_runtime.h>
+#include "helper_cuda.h"
 
-#include "jni_helper.h"
+#if CUDART_VERSION < 5000
+
+#include <cuda.h>
+
+// This function wraps the CUDA Driver API into a template function
+template <class T>
+inline void getCudaAttribute(T *attribute, CUdevice_attribute device_attribute, int device) {
+    CUresult error = cuDeviceGetAttribute(attribute, device_attribute, device);
+    if (CUDA_SUCCESS != error) {
+        LOGE("cuSafeCallNoSync() Driver API error = %04d from file <%s>, line %i.",
+             error, __FILE__, __LINE__);
+        assert(0);
+    }
+}
+
+#endif /* CUDART_VERSION < 5000 */
 
 #define CUDA_CALL(func) do { \
     const cudaError_t a = (func); \
@@ -84,5 +100,7 @@ private:
     T *first_;
     T *last_;
 };
+
+extern bool deviceQuery();
 
 #endif  // GPU_H_
