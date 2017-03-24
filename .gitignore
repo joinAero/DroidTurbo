@@ -35,4 +35,5 @@ local.properties
 .DS_Store
 
 # Others
-opencv-*
+/OpenCV-android-sdk/
+/opencv-*.zip
