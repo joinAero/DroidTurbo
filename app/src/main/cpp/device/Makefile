@@ -1,6 +1,11 @@
 include config.mk
 
-MY_MODULE := libgpu.a
+ifneq ("$(wildcard $(GCC))","")
+  MY_MODULE := libgpu.a
+else
+  # task makeGpu ignored
+  MY_MODULE :=
+endif
 
 MY_FILE_LIST := \
     $(wildcard *.cpp) \
@@ -11,7 +16,7 @@ MY_OBJ_LIST := $(MY_OBJ_LIST:%.cu=%.o)
 $(info MY_FILE_LIST: $(MY_FILE_LIST))
 $(info MY_OBJ_LIST: $(MY_OBJ_LIST))
 
-MY_INCLUDES += ../ $(ALL_INCLUDES)
+MY_INCLUDES += $(ALL_INCLUDES)
 
 %.o: %.cu
 	$(NVCC) $(NVCC_FLAGS) -c -o $@ $< $(MY_INCLUDES:%=-I%)

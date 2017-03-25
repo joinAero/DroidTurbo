@@ -41,4 +41,4 @@ ifneq ($(USE_CUDA_65),on)
     $(NDK_ROOT)/sources/cxx-stl/gnu-libstdc++/4.9/libs/armeabi-v7a/include
 endif
 CUDA_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
-ALL_INCLUDES := $(NDK_INCLUDES) $(CUDA_INCLUDES)
+ALL_INCLUDES := ../ common $(NDK_INCLUDES) $(CUDA_INCLUDES)

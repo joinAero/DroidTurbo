@@ -1,5 +1,5 @@
 #include "gpu_grayscale.h"
-#include "gpu.h"
+#include "gpu_helper.h"
 
 __global__ void kernel_grayscale(
         rgba_t * const rgba_pixels, const uint32_t n) {

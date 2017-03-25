@@ -1,4 +1,5 @@
 #include "gpu.h"
+#include "gpu_helper.h"
 
 bool deviceQuery() {
     LOGI(" CUDA Device Query (Runtime API) version (CUDART static linking)\n");
