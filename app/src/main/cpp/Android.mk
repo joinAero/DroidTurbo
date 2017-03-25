@@ -17,27 +17,6 @@ MY_PROJECT_PATH := $(MY_MODULE_PATH)/..
 
 MY_SUBDIR_MKS := $(call all-subdir-makefiles)
 
-$(info CUDA_TOOLKIT_ROOT: $(CUDA_TOOLKIT_ROOT))
-$(info NDK_ROOT: $(NDK_ROOT))
-
-# prebuilt
-
-# cudart cufft nppc nppi npps ...
-
-LOCAL_PATH := $(MY_LOCAL_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE := cudart_static
-LOCAL_SRC_FILES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart_static.a
-LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
-include $(PREBUILT_STATIC_LIBRARY)
-
-LOCAL_PATH := $(MY_LOCAL_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE := cudart
-LOCAL_SRC_FILES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart.so
-LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
-include $(PREBUILT_SHARED_LIBRARY)
-
 # jni_utils
 
 LOCAL_PATH := $(MY_LOCAL_PATH)
