@@ -3,12 +3,13 @@
 #pragma once
 
 #include <cmath>
+#include <ctime>
 #include <chrono>
 #include <functional>
 #include <iomanip>
 #include <sstream>
 #include <stdexcept>
-#include <unordered_map>
+#include <tr1/unordered_map>
 
 #include "jni_helper.h"
 
@@ -46,11 +47,13 @@ inline int64_t count(const system_clock::duration &d) {
     return cast<Duration>(d).count();
 }
 
-std::string to_string(const system_clock::time_point &t,
+inline std::string to_string(const system_clock::time_point &t,
         const char *fmt = "%F %T", int precision = 6) {
     auto t_c = system_clock::to_time_t(t);
     std::stringstream ss;
-    ss << std::put_time(std::localtime(&t_c), fmt);
+    char foo[20];
+    strftime(foo, sizeof(foo), fmt, std::localtime(&t_c));
+    ss << foo;
     if (precision > 0) {
         if (precision > 6) precision = 6;
         ss << '.' << std::setfill('0') << std::setw(precision) <<
@@ -67,7 +70,7 @@ std::string to_string(const system_clock::time_point &t,
 
 class TimeCost {
 public:
-    using tag_map_t = std::unordered_map<std::string, TimeCost>;
+    using tag_map_t = std::tr1::unordered_map<std::string, TimeCost>;
 
     explicit TimeCost(const std::string &tag) : tag_(tag) {}
     ~TimeCost() {}
@@ -141,12 +144,22 @@ private:
 
 #ifdef TIME_COST
   #define TIME_BEG(tag) TimeCost::Beg(tag)
-  #define TIME_END(tag) LOGI(TimeCost::End(tag).ToLineString())
-  #define TIME_ENDV(tag) LOGI(TimeCost::End(tag).ToString())
+  #define TIME_END(tag) LOGI(TimeCost::End(tag).ToLineString().c_str())
+  #define FUNC_TIME_BEG(tag) do { \
+    char buff[256] = {'\0'}; \
+    sprintf(buff, "%s::%s", tag, __func__); \
+    TIME_BEG(buff); \
+  } while (0)
+  #define FUNC_TIME_END(tag) do { \
+    char buff[256] = {'\0'}; \
+    sprintf(buff, "%s::%s", tag, __func__); \
+    TIME_END(buff); \
+  } while (0)
 #else
   #define TIME_BEG(tag)
   #define TIME_END(tag)
-  #define TIME_ENDV(tag)
+  #define FUNC_TIME_BEG(tag)
+  #define FUNC_TIME_END(tag)
 #endif
 
 #endif  // TIME_COST_H_
