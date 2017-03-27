@@ -1,5 +1,8 @@
 include config.mk
 
+NVCC_FLAGS += -DTIME_COST
+GCC_FLAGS += -DTIME_COST
+
 ifneq ("$(wildcard $(GCC))","")
   MY_MODULE := libgpu.a
 else

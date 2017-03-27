@@ -15,9 +15,11 @@ __global__ void kernel_grayscale(
 }
 
 void gpu_grayscale(const AndroidBitmapInfo &info, rgba_t *rgba_pixels) {
-     const uint32_t n = info.width * info.height;
-     GpuArray<rgba_t> gpu_rgba_pixels(n);
-     gpu_rgba_pixels.Set(rgba_pixels, n);
-     kernel_grayscale<<<n/256+1, 256>>>(gpu_rgba_pixels.GetData(), n);
-     gpu_rgba_pixels.Get(rgba_pixels, n);
+    const uint32_t n = info.width * info.height;
+    GpuArray<rgba_t> gpu_rgba_pixels(n);
+    gpu_rgba_pixels.Set(rgba_pixels, n);
+    TIME_BEG("kernel_grayscale");
+    kernel_grayscale<<<n/256+1, 256>>>(gpu_rgba_pixels.GetData(), n);
+    TIME_END("kernel_grayscale");
+    gpu_rgba_pixels.Get(rgba_pixels, n);
 }
