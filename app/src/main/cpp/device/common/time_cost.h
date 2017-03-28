@@ -7,6 +7,8 @@
 #include <chrono>
 #include <functional>
 #include <iomanip>
+#include <memory>
+#include <mutex>
 #include <sstream>
 #include <stdexcept>
 #include <tr1/unordered_map>
@@ -70,7 +72,7 @@ inline std::string to_string(const system_clock::time_point &t,
 
 class TimeCost {
 public:
-    using tag_map_t = std::tr1::unordered_map<std::string, TimeCost>;
+    using tag_map_t = std::tr1::unordered_map<std::string, std::shared_ptr<TimeCost>>;
 
     explicit TimeCost(const std::string &tag) : tag_(tag) {}
     ~TimeCost() {}
@@ -111,9 +113,10 @@ public:
     void set_beg(const system_clock::time_point &t) { beg_ = t; }
     void set_end(const system_clock::time_point &t) { end_ = t; }
 
-    static TimeCost &Beg(const std::string &tag) {
-        TimeCost cost(tag);
-        cost.beg_ = now();
+    static std::shared_ptr<TimeCost> Beg(const std::string &tag) {
+        const std::lock_guard<std::mutex> lock(GetMutex());
+        std::shared_ptr<TimeCost> cost = std::make_shared<TimeCost>(tag);
+        cost->beg_ = now();
         tag_map_t &map = GetTagMap();
         auto it = map.insert({tag, cost});
         if (!it.second)
@@ -121,30 +124,29 @@ public:
         return it.first->second;
     }
 
-    static TimeCost &End(const std::string &tag) {
+    static std::shared_ptr<TimeCost> End(const std::string &tag) {
+        const std::lock_guard<std::mutex> lock(GetMutex());
         tag_map_t &map = GetTagMap();
         auto it = map.find(tag);
         if (it == map.end())
             throw std::logic_error("This tag not Beg before End");
-        TimeCost &cost = it->second;
-        cost.end_ = now();
+        std::shared_ptr<TimeCost> cost = it->second;
+        cost->end_ = now();
         return cost;
-    }
-
-    static tag_map_t &GetTagMap() {
-        static tag_map_t map;
-        return map;
     }
 
 private:
     std::string tag_;
     system_clock::time_point beg_;
     system_clock::time_point end_;
+
+    static tag_map_t  &GetTagMap() { static tag_map_t map;  return map; }
+    static std::mutex &GetMutex()  { static std::mutex mtx; return mtx; }
 };
 
 #ifdef TIME_COST
   #define TIME_BEG(tag) TimeCost::Beg(tag)
-  #define TIME_END(tag) LOGI(TimeCost::End(tag).ToLineString().c_str())
+  #define TIME_END(tag) LOGI(TimeCost::End(tag)->ToLineString().c_str())
   #define FUNC_TIME_BEG(tag) do { \
     char buff[256] = {'\0'}; \
     sprintf(buff, "%s::%s", tag, __func__); \
