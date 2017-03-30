@@ -1,18 +1,6 @@
 #include "jni_helper.h"
 #include "jni_utils.h"
 
-#define REGISTER_NATIVES(env, cls_name, methods) \
-do { \
-    jint n = sizeof(methods) / sizeof(methods[0]); \
-    jclass clazz = env->FindClass(cls_name); \
-    jint result = env->RegisterNatives(clazz, methods, n); \
-    if (result < 0) { \
-        LOGE("RegisterNatives error: %s", cls_name); \
-        return JNI_ERR; \
-    } \
-    DBG_LOGI("RegisterNatives %d methods: %s", n, cls_name); \
-} while (0)
-
 static JavaVM *g_jvm = nullptr;
 
 CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {

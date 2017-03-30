@@ -111,6 +111,12 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateHidden|adjustPan"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity
+            android:name=".ui.fever.ocv.OcvGrayscaleActivity"
+            android:label="@string/ocv_grayscale"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
 
         <!-- arch -->
 

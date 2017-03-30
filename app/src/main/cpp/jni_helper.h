@@ -25,6 +25,18 @@
 
 #define CJNIEXPORT extern "C" JNIEXPORT
 
+#define REGISTER_NATIVES(env, cls_name, methods) \
+do { \
+    jint n = sizeof(methods) / sizeof(methods[0]); \
+    jclass clazz = env->FindClass(cls_name); \
+    jint result = env->RegisterNatives(clazz, methods, n); \
+    if (result < 0) { \
+        LOGE("RegisterNatives error: %s", cls_name); \
+        return JNI_ERR; \
+    } \
+    DBG_LOGI("RegisterNatives %d methods: %s", n, cls_name); \
+} while (0)
+
 typedef struct {
     uint8_t r;
     uint8_t g;
