@@ -47,6 +47,7 @@ public class OcvFragment extends ListSightFragment implements
         infos.add(createInfo("Tutorial 3", R.string.ocv_t3, null, Tutorial3Activity.class));
         infos.add(createInfo("Camera Calibration", R.string.ocv_calib, null, CameraCalibrationActivity.class));
         infos.add(createInfo("Face Detection", R.string.ocv_face_detect, null, FaceDetectionActivity.class));
+        infos.add(createInfo(R.string.ocv_grayscale, "OpenCV Grayscale Sample", null, OcvGrayscaleActivity.class));
         return infos;
     }
 
@@ -60,6 +61,18 @@ public class OcvFragment extends ListSightFragment implements
             }
         }
         return new DataInfo<Class>(title, getString(descId), drawable, cls);
+    }
+
+    private DataInfo<Class> createInfo(int titleId, String desc, String gifAsset, Class<?> cls) {
+        Drawable drawable = null;
+        if (gifAsset != null) {
+            try {
+                drawable = new GifDrawable(getActivity().getAssets(), gifAsset);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return new DataInfo<Class>(getString(titleId), desc, drawable, cls);
     }
 
     @Override

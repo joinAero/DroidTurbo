@@ -15,25 +15,6 @@ MY_LOCAL_PATH := $(call my-dir)
 MY_MODULE_PATH := $(MY_LOCAL_PATH)/../../..
 MY_PROJECT_PATH := $(MY_MODULE_PATH)/..
 
-MY_SUBDIR_MKS := $(call all-subdir-makefiles)
+MY_C_INCLUDES := $(MY_LOCAL_PATH)
 
-# jni_utils
-
-LOCAL_PATH := $(MY_LOCAL_PATH)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := jni_utils
-LOCAL_SRC_FILES := \
-    jni_main.cpp \
-    jni_utils.cpp
-LOCAL_LDLIBS += -llog -ljnigraphics
-LOCAL_SHARED_LIBRARIES += cudart
-LOCAL_STATIC_LIBRARIES += gpu
-#LOCAL_CPPFLAGS += -DDEBUG
-
-include $(BUILD_SHARED_LIBRARY)
-
-# subdirs
-
-include $(MY_SUBDIR_MKS)
+include $(call all-subdir-makefiles)

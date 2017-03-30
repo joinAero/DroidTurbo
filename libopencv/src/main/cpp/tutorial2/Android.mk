@@ -2,6 +2,8 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
+OPENCV_INSTALL_MODULES := on
+OPENCV_CAMERA_MODULES := on
 ifneq ("","$(wildcard $(OPENCV_SDK_PATH)/OpenCV.mk)")
   include $(OPENCV_SDK_PATH)/OpenCV.mk
 else
