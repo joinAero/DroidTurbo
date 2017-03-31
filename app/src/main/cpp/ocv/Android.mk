@@ -1,6 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
-OPENCV_SDK_PATH := $(MY_PROJECT_PATH)/OpenCV-android-sdk
+OPENCV_SDK_PATH := $(HOME)/Workspace/opencv-3.2.0/platforms/build_android_arm
+#OPENCV_SDK_PATH := $(MY_PROJECT_PATH)/OpenCV-android-sdk
 
 include $(CLEAR_VARS)
 
