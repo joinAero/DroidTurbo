@@ -17,19 +17,27 @@ endif
 
 # cudart cufft nppc nppi npps ...
 
-LOCAL_PATH := $(MY_LOCAL_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE := cudart_static
-LOCAL_SRC_FILES := $(CUDA_PREBUILT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart_static.a
-LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
-include $(PREBUILT_STATIC_LIBRARY)
+CUDA_RUNTIME_LIBS := cudart cufft nppc nppi npps
 
-LOCAL_PATH := $(MY_LOCAL_PATH)
-include $(CLEAR_VARS)
-LOCAL_MODULE := cudart
-LOCAL_SRC_FILES := $(CUDA_PREBUILT_ROOT)/targets/armv7-linux-androideabi/lib/libcudart.so
-LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
-include $(PREBUILT_SHARED_LIBRARY)
+define add_cuda_module
+  LOCAL_PATH := $(MY_LOCAL_PATH)
+  include $(CLEAR_VARS)
+  LOCAL_MODULE := $1
+  LOCAL_SRC_FILES := $(CUDA_PREBUILT_ROOT)/targets/armv7-linux-androideabi/lib/lib$1.so
+  LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
+  include $(PREBUILT_SHARED_LIBRARY)
+endef
+
+define add_cuda_static_module
+  LOCAL_PATH := $(MY_LOCAL_PATH)
+  include $(CLEAR_VARS)
+  LOCAL_MODULE := $1_static
+  LOCAL_SRC_FILES := $(CUDA_PREBUILT_ROOT)/targets/armv7-linux-androideabi/lib/lib$1_static.a
+  LOCAL_EXPORT_C_INCLUDES := $(CUDA_TOOLKIT_ROOT)/targets/armv7-linux-androideabi/include
+  include $(PREBUILT_STATIC_LIBRARY)
+endef
+
+$(foreach module,$(CUDA_RUNTIME_LIBS),$(eval $(call add_cuda_module,$(module))))
 
 # gpu
 

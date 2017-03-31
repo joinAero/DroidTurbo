@@ -10,9 +10,13 @@ endif
 
 LOCAL_SRC_FILES  := DetectionBasedTracker_jni.cpp
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
-LOCAL_C_INCLUDES += $(MY_C_INCLUDES)
+LOCAL_C_INCLUDES += $(MY_OPENCV_C_INCLUDES)
 LOCAL_LDLIBS     += -llog -ldl
 
 LOCAL_MODULE     := ocv_facedetect
 
 include $(BUILD_SHARED_LIBRARY)
+
+ifeq ($(MY_OPENCV_C_INCLUDES),)
+  MY_OPENCV_C_INCLUDES := $(OPENCV_LOCAL_C_INCLUDES)
+endif

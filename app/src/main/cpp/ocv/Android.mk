@@ -17,6 +17,7 @@ LOCAL_SRC_FILES := \
   jni_main.cpp \
   ocv_grayscale.cpp
 LOCAL_C_INCLUDES += $(MY_C_INCLUDES)
+LOCAL_SHARED_LIBRARIES += cudart cufft nppc nppi npps
 LOCAL_LDLIBS += -llog
 
 include $(BUILD_SHARED_LIBRARY)

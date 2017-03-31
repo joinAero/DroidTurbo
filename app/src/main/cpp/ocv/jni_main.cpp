@@ -10,7 +10,8 @@ CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {
     }
 
     static JNINativeMethod OcvGrayscaleActivity_methods[] = {
-        {"grayscale", "(J)V", reinterpret_cast<void*>(native_ocv_grayscale)}
+        {"grayscale", "(J)V", reinterpret_cast<void*>(native_ocv_grayscale)},
+        {"grayscale_gpu", "(J)V", reinterpret_cast<void*>(native_ocv_grayscale_gpu)}
     };
     REGISTER_NATIVES(env, "cc/eevee/turbo/ui/fever/ocv/OcvGrayscaleActivity",
         OcvGrayscaleActivity_methods);
