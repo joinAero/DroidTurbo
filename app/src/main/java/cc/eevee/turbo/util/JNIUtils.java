@@ -9,6 +9,8 @@ public final class JNIUtils {
     }
 
     public static native String stringFromJNI();
+
+    public static native void deviceReset();
     public static native boolean deviceQuery();
 
     public static native void grayscale(Bitmap rgba_8888);

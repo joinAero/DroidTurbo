@@ -1,6 +1,10 @@
 #include "gpu.h"
 #include "gpu_helper.h"
 
+void deviceReset() {
+    CUDA_CALL(cudaDeviceReset());
+}
+
 bool deviceQuery() {
     LOGI(" CUDA Device Query (Runtime API) version (CUDART static linking)\n");
 

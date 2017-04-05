@@ -15,6 +15,7 @@ CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {
     // JNIUtils.java
     static JNINativeMethod JNIUtils_methods[] = {
         {"stringFromJNI", "()Ljava/lang/String;", reinterpret_cast<void*>(native_stringFromJNI)},
+        {"deviceReset", "()V", reinterpret_cast<void*>(native_deviceReset)},
         {"deviceQuery", "()Z", reinterpret_cast<void*>(native_deviceQuery)},
         {"grayscale", "(Landroid/graphics/Bitmap;)V", reinterpret_cast<void*>(native_grayscale)},
         {"grayscale_gpu", "(Landroid/graphics/Bitmap;)V", reinterpret_cast<void*>(native_grayscale_gpu)}

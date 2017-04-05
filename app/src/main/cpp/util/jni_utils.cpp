@@ -45,6 +45,10 @@ jstring native_stringFromJNI(JNIEnv *env, jobject thiz) {
     return env->NewStringUTF("Hello from JNI! Compiled with ABI " ABI ".");
 }
 
+void native_deviceReset(JNIEnv *env, jobject thiz) {
+    deviceReset();
+}
+
 jboolean native_deviceQuery(JNIEnv *env, jobject thiz) {
     return static_cast<jboolean>(deviceQuery());
 }
