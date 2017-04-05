@@ -11,7 +11,7 @@
 #include <cuda_runtime.h>
 #include "helper_cuda.h"
 
-#include "time_cost.h"
+#include "time_cost.hpp"
 
 #if CUDART_VERSION < 5000
 
@@ -70,23 +70,26 @@ public:
 
     // Set host to device
     void Set(const T *host, size_t size) {
-        FUNC_TIME_BEG("GpuArray");
+        DBG_LOGI(__func__);
+        TIME_BEG("GpuArray::Set");
         size_t min = std::min(size, GetSize());
         CUDA_CALL(cudaMemcpy(first_, host, min * sizeof(T), cudaMemcpyHostToDevice));
-        FUNC_TIME_END("GpuArray");
+        TIME_END("GpuArray::Set");
     }
 
     // Get host from devie
     void Get(T *host, size_t size) {
-        FUNC_TIME_BEG("GpuArray");
+        DBG_LOGI(__func__);
+        TIME_BEG("GpuArray::Get");
         size_t min = std::min(size, GetSize());
         CUDA_CALL(cudaMemcpy(host, first_, min * sizeof(T), cudaMemcpyDeviceToHost));
-        FUNC_TIME_END("GpuArray");
+        TIME_END("GpuArray::Get");
     }
 
 private:
     void Allocate(size_t size) {
-        FUNC_TIME_BEG("GpuArray");
+        DBG_LOGI(__func__);
+        TIME_BEG("GpuArray::Allocate");
         cudaError_t result = cudaMalloc((void **)&first_, size * sizeof(T));
         if (result != cudaSuccess) {
             first_ = last_ = nullptr;
@@ -95,16 +98,17 @@ private:
             assert(0);
         }
         last_ = first_ + size;
-        FUNC_TIME_END("GpuArray");
+        TIME_END("GpuArray::Allocate");
     }
 
     void Free() {
-        FUNC_TIME_BEG("GpuArray");
+        DBG_LOGI(__func__);
+        TIME_BEG("GpuArray::Free");
         if (first_) {
             cudaFree(first_);
             first_ = last_ = nullptr;
         }
-        FUNC_TIME_END("GpuArray");
+        TIME_END("GpuArray::Free");
     }
 
     T *first_;

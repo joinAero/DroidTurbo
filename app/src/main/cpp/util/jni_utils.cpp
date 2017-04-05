@@ -94,6 +94,8 @@ void native_grayscale(JNIEnv *env, jobject thiz, jobject bitmap) {
 }
 
 void native_grayscale_gpu(JNIEnv *env, jobject thiz, jobject bitmap) {
-    DBG_LOGI(__FUNCTION__);
+    DBG_LOGI(__func__);
+    TIME_BEG_FUNC2;
     process_rgba_pixels(env, thiz, bitmap, gpu_grayscale);
+    TIME_END_FUNC2;
 }
