@@ -1,6 +1,8 @@
 #include "jni_utils.h"
 #include "jni_helper.h"
 
+#include "time_cost.hpp"
+
 #include <functional>
 
 #include <android/bitmap.h>
@@ -78,6 +80,8 @@ static void grayscale(const AndroidBitmapInfo &info, rgba_t *rgba_pixels) {
 }
 
 void native_grayscale(JNIEnv *env, jobject thiz, jobject bitmap) {
-    DBG_LOGI(__FUNCTION__);
+    DBG_LOGI(__func__);
+    TIME_BEG_FUNC2;
     process_rgba_pixels(env, thiz, bitmap, grayscale);
+    TIME_END_FUNC2;
 }
