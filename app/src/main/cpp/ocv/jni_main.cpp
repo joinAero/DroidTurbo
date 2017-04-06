@@ -1,5 +1,6 @@
 #include "jni_helper.h"
 #include "ocv_grayscale.h"
+#include "ocv_orb.h"
 
 CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {
     DBG_LOGI(__FUNCTION__);
@@ -15,6 +16,12 @@ CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {
     };
     REGISTER_NATIVES(env, "cc/eevee/turbo/ui/fever/ocv/OcvGrayscaleActivity",
         OcvGrayscaleActivity_methods);
+
+    static JNINativeMethod OcvORBActivity_methods[] = {
+        {"orb", "(J)V", reinterpret_cast<void*>(native_ocv_orb)}
+    };
+    REGISTER_NATIVES(env, "cc/eevee/turbo/ui/fever/ocv/OcvORBActivity",
+        OcvORBActivity_methods);
 
     return JNI_VERSION_1_6;
 }

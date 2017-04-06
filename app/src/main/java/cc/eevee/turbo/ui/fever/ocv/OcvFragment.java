@@ -48,6 +48,7 @@ public class OcvFragment extends ListSightFragment implements
         infos.add(createInfo("Camera Calibration", R.string.ocv_calib, null, CameraCalibrationActivity.class));
         infos.add(createInfo("Face Detection", R.string.ocv_face_detect, null, FaceDetectionActivity.class));
         infos.add(createInfo(R.string.ocv_grayscale, "OpenCV Grayscale Sample", null, OcvGrayscaleActivity.class));
+        infos.add(createInfo(R.string.ocv_orb, "OpenCV ORB Sample", null, OcvORBActivity.class));
         return infos;
     }
 
