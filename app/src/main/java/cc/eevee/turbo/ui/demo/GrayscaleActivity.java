@@ -55,7 +55,8 @@ public class GrayscaleActivity extends BaseActivity {
                     TimeCost costGray = TimeCost.end("grayscale_cpu").log();
                     mTextCpu.post(() -> mTextCpu.append("\n"+costGray.toLineString()));
                     // ensure flush image view
-                    mImageCpu.postInvalidate();
+                    //mImageCpu.postInvalidate();
+                    mImageCpu.post(() -> mImageCpu.setImageBitmap(bm));
                 });
             });
         });
@@ -75,7 +76,8 @@ public class GrayscaleActivity extends BaseActivity {
                     TimeCost costGray = TimeCost.end("grayscale_gpu").log();
                     mTextGpu.post(() -> mTextGpu.append("\n"+costGray.toLineString()));
                     // ensure flush image view
-                    mImageGpu.postInvalidate();
+                    //mImageView.postInvalidate();
+                    mImageGpu.post(() -> mImageGpu.setImageBitmap(bm));
                 });
             });
         });
