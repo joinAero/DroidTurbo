@@ -13,8 +13,9 @@ else
 endif
 
 LOCAL_MODULE    := ocv_all
-LOCAL_SRC_FILES := $(wildcard *.cpp)
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/*.cpp)
 LOCAL_C_INCLUDES += $(MY_C_INCLUDES)
 LOCAL_LDLIBS += -llog
+LOCAL_CPPFLAGS += -DDEBUG -DTIME_COST
 
 include $(BUILD_SHARED_LIBRARY)
