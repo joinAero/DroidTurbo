@@ -28,7 +28,7 @@ public class OcvGrayscaleActivity extends BaseActivity {
     Handler mAsyncHandler;
 
     static {
-        System.loadLibrary("ocv_grayscale");
+        System.loadLibrary("ocv_all");
     }
 
     @Override

@@ -27,6 +27,7 @@
     <string name="hello_cube">Hello Cube</string>
     <string name="san_angeles">San Angeles</string>
     <string name="ocv_grayscale">OpenCV Grayscale</string>
+    <string name="ocv_orb">OpenCV ORB</string>
 
     <!-- arch -->
 
