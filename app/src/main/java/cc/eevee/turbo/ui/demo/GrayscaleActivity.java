@@ -52,7 +52,8 @@ public class GrayscaleActivity extends BaseActivity {
                     TimeCost costGray = TimeCost.end("grayscale").log();
                     mTextView.post(() -> mTextView.append("\n"+costGray.toLineString()));
                     // ensure flush image view
-                    mImageView.postInvalidate();
+                    //mImageView.postInvalidate();
+                    mImageView.post(() -> mImageView.setImageBitmap(bm));
                 });
             });
         });

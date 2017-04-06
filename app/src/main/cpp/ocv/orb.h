@@ -17,19 +17,18 @@ public:
     }
 
     void DetectAndCompute(const cv::Mat &im) {
-        cv::Mat im_gray;
         if (im.channels() == 3) {  // rgb
-            cv::cvtColor(im, im_gray, CV_RGB2GRAY);
+            cv::cvtColor(im, im_gray_, CV_RGB2GRAY);
         } else if (im.channels() == 4) {  // rgba
-            cv::cvtColor(im, im_gray, CV_RGBA2GRAY);
+            cv::cvtColor(im, im_gray_, CV_RGBA2GRAY);
         } else {
-            im_gray = im;
+            im_gray_ = im;
         }
 
         // find the keypoints with ORB
-        orb_->detect(im_gray, keypoints_);
+        orb_->detect(im_gray_, keypoints_);
         // compute the descriptors with ORB
-        orb_->compute(im_gray, keypoints_, descriptors_);
+        orb_->compute(im_gray_, keypoints_, im_desc_);
     }
 
     void DrawKeypoints(const cv::Mat &im) {
@@ -39,7 +38,7 @@ public:
     }
 
     std::vector<cv::KeyPoint> keypoints() const { return keypoints_; }
-    cv::Mat descriptors() const { return descriptors_; }
+    cv::Mat descriptors() const { return im_desc_; }
 
 private:
     ORB() : orb_(cv::ORB::create()) {}
@@ -47,7 +46,9 @@ private:
     cv::Ptr<cv::ORB> orb_;
 
     std::vector<cv::KeyPoint> keypoints_;
-    cv::Mat descriptors_;
+
+    cv::Mat im_gray_;
+    cv::Mat im_desc_;
 
     DISABLE_COPY(ORB)
 };
