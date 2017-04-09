@@ -18,7 +18,8 @@ CJNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *jvm, void */*reserved*/) {
         OcvGrayscaleActivity_methods);
 
     static JNINativeMethod OcvORBActivity_methods[] = {
-        {"orb", "(J)V", reinterpret_cast<void*>(native_ocv_orb)}
+        {"orb", "(J)V", reinterpret_cast<void*>(native_ocv_orb)},
+        {"orb_gpu", "(J)V", reinterpret_cast<void*>(native_ocv_orb_gpu)}
     };
     REGISTER_NATIVES(env, "cc/eevee/turbo/ui/fever/ocv/OcvORBActivity",
         OcvORBActivity_methods);

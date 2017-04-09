@@ -2,6 +2,8 @@ package cc.eevee.turbo.ui.fever.ocv;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 
@@ -42,6 +44,8 @@ public class OcvORBActivity extends BaseActivity implements
         System.loadLibrary("ocv_all");
     }
 
+    private boolean mUseGpu = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +85,23 @@ public class OcvORBActivity extends BaseActivity implements
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ocv_orb, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        final int itemId = item.getItemId();
+        switch (itemId) {
+            case R.id.cpu: mUseGpu = false; break;
+            case R.id.gpu: mUseGpu = true; break;
+            default: return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
     public void onCameraViewStarted(int width, int height) {
     }
 
@@ -91,10 +112,15 @@ public class OcvORBActivity extends BaseActivity implements
     @Override
     public Mat onCameraFrame(CameraBridgeViewBase.CvCameraViewFrame inputFrame) {
         Mat mat = inputFrame.rgba();
-        orb(mat.getNativeObjAddr());
+        if (mUseGpu) {
+            orb_gpu(mat.getNativeObjAddr());
+        } else {
+            orb(mat.getNativeObjAddr());
+        }
         return mat;
     }
 
     public native void orb(long addr);
+    public native void orb_gpu(long addr);
 
 }
