@@ -157,12 +157,9 @@ public class MainActivity extends BaseActivity
             new AlertDialog.Builder(this)
                     .setTitle("Request Permissions")
                     .setMessage(explanation)
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            ActivityCompat.requestPermissions(MainActivity.this,
-                                    permissions, requestCode);
-                        }
+                    .setPositiveButton(android.R.string.ok, (dialog, which) -> {
+                        ActivityCompat.requestPermissions(MainActivity.this,
+                                permissions, requestCode);
                     })
                     .show();
         } else {
@@ -175,7 +172,7 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQ_WRITE_EXTERNAL_STORAGE) {
+        if (requestCode == REQ_WRITE_EXTERNAL_STORAGE || requestCode == REQ_CAMERA) {
             if (PermissionUtils.verifyPermission(grantResults)) {
                 // permission was granted, yay!
                 // Do the related task you need to do.
