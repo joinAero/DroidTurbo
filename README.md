@@ -12,12 +12,16 @@ $ cd DroidTurbo/
 $ ./get_ready.sh
 ```
 
+Besides, you could checkout `master-cuda` to use CUDA.
+
 ## Sample modules
 
 ### Menu
 
+* Terminal
 * Transparent StatusBar
 * Snake SurfaceView
+* Grayscale
 
 ![](https://github.com/joinAero/DroidTurbo/blob/master/images/menu/menu.png?raw=true)
 
@@ -65,6 +69,8 @@ Samples about fever things.
 * Tutorial 3: OpenCV Tutorial 3: Camera Control.
 * Camera Calibration: OpenCV Camera Calibration.
 * Face Detection: OpenCV Face Detection.
+* OpenCV Grayscale: OpenCV Grayscale Sample.
+* OpenCV ORB: OpenCV ORB Sample.
 
 ![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
 
