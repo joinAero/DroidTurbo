@@ -12,15 +12,9 @@ ecol() {
     echo -e "\033[${code}m${text}\033[0m"
 }
 
-ered() {
-    ecol "$1" "1;31"
-}
-egreen() {
-    ecol "$1" "1;32"
-}
-eblue() {
-    ecol "$1" "1;34"
-}
+ered()   { ecol "$1" "1;31"; }
+egreen() { ecol "$1" "1;32"; }
+eblue()  { ecol "$1" "1;34"; }
 
 # OpenCV
 
