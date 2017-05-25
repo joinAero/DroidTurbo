@@ -164,7 +164,7 @@ inline std::string to_string(const system_clock::time_point &t,
                              const char *fmt = "%F %T",
                              int precision = 6) {
     std::stringstream ss;
-#ifdef OS_ANDROID
+#if defined(OS_ANDROID) || defined(OS_LINUX)
     char foo[20];
     strftime(foo, sizeof(foo), fmt, tm);
     ss << foo;
