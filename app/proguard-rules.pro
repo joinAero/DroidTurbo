@@ -19,6 +19,7 @@
 # Gradle Retrolambda Plugin
 
 -dontwarn java.lang.invoke.*
+-dontwarn **$$Lambda$*
 
 # Butter Knife
 
