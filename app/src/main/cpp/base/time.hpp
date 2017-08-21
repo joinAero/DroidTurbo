@@ -162,7 +162,7 @@ inline int64_t now() {
 inline std::string to_string(const system_clock::time_point &t,
                              const std::tm *tm,
                              const char *fmt = "%F %T",
-                             int precision = 6) {
+                             int32_t precision = 6) {
     std::stringstream ss;
 #if defined(OS_ANDROID) || defined(OS_LINUX)
     char foo[20];
@@ -181,13 +181,13 @@ inline std::string to_string(const system_clock::time_point &t,
 
 inline std::string to_local_string(const system_clock::time_point &t,
                                    const char *fmt = "%F %T",
-                                   int precision = 6) {
+                                   const int32_t &precision = 6) {
     return to_string(t, to_local_tm(t), fmt, precision);
 }
 
 inline std::string to_utc_string(const system_clock::time_point &t,
                                  const char *fmt = "%F %T",
-                                 int precision = 6) {
+                                 const int32_t &precision = 6) {
     return to_string(t, to_utc_tm(t), fmt, precision);
 }
 

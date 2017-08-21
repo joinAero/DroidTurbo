@@ -11,6 +11,14 @@
     #else
         #define OS_WIN32
     #endif
+    #if defined(__MINGW32__) || defined(__MINGW64__)
+        #define OS_MINGW
+        #ifdef __MINGW64__
+            #define OS_MINGW64
+        #else
+            #define OS_MINGW32
+        #endif
+    #endif
 #elif __APPLE__
     #include "TargetConditionals.h"
     #if TARGET_IPHONE_SIMULATOR
@@ -33,6 +41,17 @@
     #define OS_POSIX
 #else
     #error "Unknown compiler"
+#endif
+
+// https://stackoverflow.com/questions/22285240/mingw-use-declspecdllexport-or-attribute-visibilitydefault
+#ifdef OS_WIN
+    #define DECL_EXPORT __declspec(dllexport)
+    #define DECL_IMPORT __declspec(dllimport)
+    #define DECL_HIDDEN
+#else
+    #define DECL_EXPORT __attribute__((visibility("default")))
+    #define DECL_IMPORT __attribute__((visibility("default")))
+    #define DECL_HIDDEN __attribute__((visibility("hidden")))
 #endif
 
 #define DISABLE_COPY(Class) \

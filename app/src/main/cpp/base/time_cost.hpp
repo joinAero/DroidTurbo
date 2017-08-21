@@ -121,14 +121,14 @@ private:
   #define TIME_BEG(tag) xt::TimeCost::Beg(tag)
   #define TIME_END(tag) LOGI(xt::TimeCost::End(tag)->ToLineString())
   #define TIME_BEG_FUNC(tag) do { \
-    char buff[256] = {'\0'}; \
-    sprintf(buff, "%s::%s", tag, __func__); \
-    TIME_BEG(buff); \
+    std::stringstream ss; \
+    ss << __func__ << "::" << tag; \
+    TIME_BEG(ss.str()); \
   } while (0)
   #define TIME_END_FUNC(tag) do { \
-    char buff[256] = {'\0'}; \
-    sprintf(buff, "%s::%s", tag, __func__); \
-    TIME_END(buff); \
+    std::stringstream ss; \
+    ss << __func__ << "::" << tag; \
+    TIME_END(ss.str()); \
   } while (0)
   #define TIME_BEG_FUNC2 TIME_BEG(__func__)
   #define TIME_END_FUNC2 TIME_END(__func__)
