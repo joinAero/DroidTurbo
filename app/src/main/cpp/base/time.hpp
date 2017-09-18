@@ -9,6 +9,8 @@
 #include <ratio>
 #include <sstream>
 
+#include "global.hpp"
+
 namespace xt {
 
 using system_clock  = std::chrono::system_clock;

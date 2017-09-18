@@ -19,7 +19,6 @@
 #include <sstream>
 #include <stdexcept>
 
-#include "global.hpp"
 #include "log.hpp"
 #include "time.hpp"
 

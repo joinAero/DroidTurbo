@@ -54,6 +54,12 @@
     #define DECL_HIDDEN __attribute__((visibility("hidden")))
 #endif
 
+#if defined(OS_WIN) && !defined(OS_MINGW)
+    #define OS_SEP "\\"
+#else
+    #define OS_SEP "/"
+#endif
+
 #define DISABLE_COPY(Class) \
     Class(const Class &) = delete; \
     Class &operator=(const Class &) = delete;
