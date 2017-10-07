@@ -131,12 +131,15 @@ dependencies {
     compile compiles.supportAppCompat
     compile compiles.supportCardView
     compile compiles.supportDesgin
+    compile compiles.supportConstraint
 
     // simplify
 
     compile compiles.butterknife
     apt apts.butterknifeCompiler
-    //compile compiles.guava
+
+    compile 'com.google.code.findbugs:jsr305:2.0.1'
+    compile compiles.guava
 
     // behavior
 

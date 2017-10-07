@@ -34,6 +34,15 @@
 * [CardView](http://developer.android.com/reference/android/support/v7/widget/CardView.html)
 * [Using the CardView](https://guides.codepath.com/android/Using-the-CardView)
 
+# Hardware
+
+## Camera
+
+* [Camera2 API](https://developer.android.com/reference/android/hardware/camera2/package-summary.html)
+    * [Camera2Basic](https://github.com/googlesamples/android-Camera2Basic)
+    * [Camera2Raw](https://github.com/googlesamples/android-Camera2Raw)
+    * [Camera2Video](https://github.com/googlesamples/android-Camera2Video)
+
 ---
 
 ## Percent

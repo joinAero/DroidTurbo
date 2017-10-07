@@ -21,6 +21,8 @@
 
     <string name="bottom_sheet">Bottom Sheet</string>
 
+    <string name="camera2_basic">Camera2 Basic</string>
+
     <!-- fever -->
 
     <string name="hello_gl2">Hello GL2</string>

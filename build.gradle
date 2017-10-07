@@ -50,13 +50,15 @@ ext {
             supportAnnotations : "com.android.support:support-annotations:${versionSupportLib}",
             supportCardView    : "com.android.support:cardview-v7:${versionSupportLib}",
             supportDesgin      : "com.android.support:design:${versionSupportLib}",
+
+            supportConstraint  : "com.android.support.constraint:constraint-layout:1.0.2",
             supportMultidex    : "com.android.support:multidex:1.0.1",
 
             // Butter Knife: https://github.com/JakeWharton/butterknife
             butterknife : "com.jakewharton:butterknife:${versionButterKnife}",
 
             // Guava: https://github.com/google/guava
-            guava: "com.google.guava:guava:23.0-android",
+            guava: "com.google.guava:guava:23.1-android",
 
             // RxAndroid: https://github.com/ReactiveX/RxAndroid
             rxandroid: "io.reactivex.rxjava2:rxandroid:2.0.1",

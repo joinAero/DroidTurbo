@@ -11,6 +11,7 @@ import cc.eevee.turbo.core.view.TabFragmentPagerAdapter;
 import cc.eevee.turbo.ui.base.TabSightFragment;
 import cc.eevee.turbo.ui.widget.custom.CustomFragment;
 import cc.eevee.turbo.ui.widget.design.DesignFragment;
+import cc.eevee.turbo.ui.widget.hardware.HardwareFragment;
 import cc.eevee.turbo.ui.widget.support.SupportFragment;
 
 /**
@@ -42,7 +43,7 @@ public class WidgetFragment extends TabSightFragment {
 
     public static class SupportPagerAdapter extends TabFragmentPagerAdapter {
 
-        private final int PAGE_COUNT = 3;
+        private final int PAGE_COUNT = 4;
 
         public SupportPagerAdapter(FragmentManager fm, Context ctx) {
             super(fm, ctx, R.layout.tab_custom);
@@ -58,7 +59,8 @@ public class WidgetFragment extends TabSightFragment {
             switch (position) {
                 case 0: return SupportFragment.newInstance();
                 case 1: return DesignFragment.newInstance();
-                case 2: return CustomFragment.newInstance();
+                case 2: return HardwareFragment.newInstance();
+                case 3: return CustomFragment.newInstance();
                 default: return null;
             }
         }
@@ -68,7 +70,8 @@ public class WidgetFragment extends TabSightFragment {
             switch (position) {
                 case 0: return "Support";
                 case 1: return "Design";
-                case 2: return "Custom";
+                case 2: return "Hardware";
+                case 3: return "Custom";
                 default: return "Tab " + position;
             }
         }
