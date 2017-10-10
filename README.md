@@ -44,6 +44,11 @@ Samples about new APIs in support libraries.
 
 ![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/design.png?raw=true)
 
+#### Hardware
+
+* Camera2 Basic: How to use basic functionalities of Camera2 API.
+* Camera2 Image: How to capture image without preview using Camera2 API.
+
 #### Custom
 
 ![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/custom.png?raw=true)
