@@ -8,7 +8,7 @@ int32_t height;
 uint picWidth, uvPixelStride, uvRowStride;
 rs_allocation ypsIn, uIn, vIn;
 
-// The LaunchOptions ensure that the Kernel does not enter the padding  zone of Y, so yRowStride can be ignored WITHIN the Kernel.
+// The LaunchOptions ensure that the Kernel does not enter the padding zone of Y, so yRowStride can be ignored WITHIN the Kernel.
 uchar4 __attribute__((kernel)) doConvert(uint32_t x, uint32_t y) {
     // index for accessing the uIn's and vIn's
     uint uvIndex = uvPixelStride * (x/2) + uvRowStride * (y/2);

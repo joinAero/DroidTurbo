@@ -522,7 +522,7 @@ public class Camera2ImageActivity extends BaseActivity {
                 }
             }
         }
-        Log.i(TAG, "------------------------------------------------------------");
+        Log.i(tag, "------------------------------------------------------------");
     }
 
     /**
@@ -533,7 +533,7 @@ public class Camera2ImageActivity extends BaseActivity {
      * RenderScript
      *   https://developer.android.com/guide/topics/renderscript/compute.html
      */
-    private Bitmap YUV_420_888_toRGB(Image image, int width, int height){
+    private Bitmap YUV_420_888_toRGB(Image image, int width, int height) {
         // Get the three image planes
         Image.Plane[] planes = image.getPlanes();
         ByteBuffer buffer = planes[0].getBuffer();
@@ -592,7 +592,7 @@ public class Camera2ImageActivity extends BaseActivity {
         lo.setX(0, width);  // by this we ignore the y’s padding zone, i.e. the right side of x between width and yRowStride
         lo.setY(0, height);
 
-        mYuv420.forEach_doConvert(outAlloc,lo);
+        mYuv420.forEach_doConvert(outAlloc, lo);
         outAlloc.copyTo(outBitmap);
 
         return outBitmap;
