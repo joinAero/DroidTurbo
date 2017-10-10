@@ -38,6 +38,7 @@ public class HardwareFragment extends ListSightFragment implements
     private List<DataInfo<Class>> createInfos() {
         List<DataInfo<Class>> infos = new ArrayList<>();
         infos.add(createInfo(R.string.camera2_basic, "How to use basic functionalities of Camera2 API.", null, Camera2BasicActivity.class));
+        infos.add(createInfo(R.string.camera2_image, "How to capture image without preview using Camera2 API.", null, Camera2ImageActivity.class));
         return infos;
     }
 
