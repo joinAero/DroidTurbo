@@ -292,7 +292,7 @@ public class Camera2ImageActivity extends BaseActivity {
     }
 
     /**
-     * Opens the camera specified by {@link Camera2BasicActivity#mCameraId}.
+     * Opens the camera specified by {@link Camera2ImageActivity#mCameraId}.
      */
     private void openCamera() {
         setupCamera();
