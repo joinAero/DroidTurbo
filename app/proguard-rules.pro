@@ -16,11 +16,6 @@
 #   public *;
 #}
 
-# Gradle Retrolambda Plugin
-
--dontwarn java.lang.invoke.*
--dontwarn **$$Lambda$*
-
 # Butter Knife
 
 -keep public class * implements butterknife.Unbinder { public <init>(...); }

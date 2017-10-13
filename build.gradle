@@ -4,17 +4,11 @@
 buildscript {
     repositories {
         google()
-        //maven { url 'https://dl.google.com/dl/android/maven2/' }
         jcenter()
         mavenCentral()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0-beta7'
-
-        // android-apt: https://bitbucket.org/hvisser/android-apt
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
-        // Gradle Retrolambda: https://github.com/evant/gradle-retrolambda
-        classpath 'me.tatarka:gradle-retrolambda:3.7.0'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -24,7 +18,6 @@ buildscript {
 allprojects {
     repositories {
         google()
-        //maven { url 'https://dl.google.com/dl/android/maven2/' }
         jcenter()
         mavenCentral()
         //maven { url 'file:///Users/John/Repository/' }
@@ -116,5 +109,5 @@ ext {
     javaTargetCompatibility = JavaVersion.VERSION_1_8
 
     ndkABIs = ['armeabi-v7a'] as String[]
-    //ndkABIs = ['armeabi', 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] as String[]
+    //ndkABIs = ['armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'] as String[]
 }

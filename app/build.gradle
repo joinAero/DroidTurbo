@@ -1,6 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.neenbedankt.android-apt'
-apply plugin: 'me.tatarka.retrolambda'
 
 def getGitBranch() {
     def gitBranch = new ByteArrayOutputStream()
@@ -72,7 +70,6 @@ android {
         }
     }
     compileOptions {
-        // Gradle Retrolambda Plugin
         sourceCompatibility javaSourceCompatibility
         targetCompatibility javaTargetCompatibility
     }
@@ -136,10 +133,6 @@ android {
     }
 }
 
-retrolambda {
-    javaVersion JavaVersion.VERSION_1_7
-}
-
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -157,9 +150,9 @@ dependencies {
     // simplify
 
     compile compiles.butterknife
-    apt apts.butterknifeCompiler
+    annotationProcessor apts.butterknifeCompiler
 
-    //compile 'com.google.code.findbugs:jsr305:3.0.0'
+    compile 'com.google.code.findbugs:jsr305:3.0.0'
     compile compiles.guava
 
     // behavior
@@ -173,13 +166,8 @@ dependencies {
 
     // dependent libraries
 
-    //compile project(':libgldraw')
-    debugCompile project(path: ':libgldraw', configuration: 'debug')
-    releaseCompile project(path: ':libgldraw', configuration: 'release')
-
-    //compile project(':libopencv')
-    debugCompile project(path: ':libopencv', configuration: 'debug')
-    releaseCompile project(path: ':libopencv', configuration: 'release')
+    implementation project(':libgldraw')
+    implementation project(':libopencv')
 
     // test
 
