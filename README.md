@@ -99,10 +99,6 @@ Samples about latest architectures.
 * [RxAndroid](https://github.com/ReactiveX/RxAndroid)
 * [android-gif-drawable](https://github.com/koral--/android-gif-drawable)
 
-**Studio Plugin**
-
-* [Gradle Retrolambda Plugin](https://github.com/evant/gradle-retrolambda)
-
 ## License
 
     Copyright 2015 joinAero
