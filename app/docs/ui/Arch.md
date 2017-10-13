@@ -1,7 +1,10 @@
 
 # Architecture
 
-* [android architecture - GitHub](https://github.com/search?utf8=%E2%9C%93&q=android+architecture)
+* [Android Architecture Blueprints](https://github.com/googlesamples/android-architecture)
+
+* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html)
+* [Android Architecture Components samples](https://github.com/googlesamples/android-architecture-components)
 
 ## 1) RxJava + MVP
 

@@ -1,6 +1,8 @@
 
 # DroidTurbo
 
+[![Android Studio Preview](https://img.shields.io/badge/Android%20Studio-3.0%20Preview-brightgreen.svg?style=flat)](https://developer.android.com/studio/preview/index.html)
+
 Android sample project shows new stuff about support library, architecture, etc.
 
 ## Get ready
@@ -84,6 +86,12 @@ Samples about fever things.
 ### Arch
 
 Samples about latest architectures.
+
+#### References
+
+* [Android Architecture Blueprints](https://github.com/googlesamples/android-architecture)
+* [Android Architecture Components](https://developer.android.com/topic/libraries/architecture/index.html)
+* [Android Architecture Components samples](https://github.com/googlesamples/android-architecture-components)
 
 ## Third Party
 
