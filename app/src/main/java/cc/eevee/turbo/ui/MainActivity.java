@@ -55,8 +55,7 @@ import static cc.eevee.turbo.ui.ColorPageFragment.PURPLE;
 public class MainActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    final int REQ_WRITE_EXTERNAL_STORAGE = 1;
-    final int REQ_CAMERA = 2;
+    final int REQ_PERMISSIONS = 1;
 
     @BindView(R.id.panel) SlidingPaneLayout mSlidingPane;
     @BindView(R.id.pager) ViewPager mPager;
@@ -128,16 +127,11 @@ public class MainActivity extends BaseActivity
      *     onRequestPermissionsResult not being called in dialog fragment</a>
      */
     private void requestPermissions() {
-        if (!PermissionUtils.checkPermissionGranted(this, WRITE_EXTERNAL_STORAGE)) {
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE},
-                    "Request WRITE_EXTERNAL_STORAGE to write the data to external storage.",
-                    REQ_WRITE_EXTERNAL_STORAGE);
-        }
-        // CAMERA for libopencv
-        if (!PermissionUtils.checkPermissionGranted(this, CAMERA)) {
-            requestPermissions(new String[]{CAMERA},
-                    "Request CAMERA to access camera or capture images/video from the device.",
-                    REQ_CAMERA);
+        if (!PermissionUtils.checkPermissionsGranted(this, WRITE_EXTERNAL_STORAGE, CAMERA)) {
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, CAMERA},
+                    "Request WRITE_EXTERNAL_STORAGE to write the data to external storage." +
+                    "\nRequest CAMERA to access camera or capture images/video from the device.",
+                    REQ_PERMISSIONS);
         }
     }
 
@@ -171,7 +165,7 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
-        if (requestCode == REQ_WRITE_EXTERNAL_STORAGE || requestCode == REQ_CAMERA) {
+        if (requestCode == REQ_PERMISSIONS) {
             if (PermissionUtils.verifyPermission(grantResults)) {
                 // permission was granted, yay!
                 // Do the related task you need to do.
