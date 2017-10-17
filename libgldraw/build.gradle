@@ -44,11 +44,11 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testCompile testCompiles.junit
+    testImplementation testImpls.junit
 
-    androidTestCompile(androidTestCompiles.supportTestEspresso, {
+    androidTestImplementation(androidTestImpls.supportTestEspresso, {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 }
