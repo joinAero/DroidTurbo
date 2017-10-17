@@ -16,7 +16,7 @@ $ ./get_ready.sh
 
 Besides, you could checkout `master-cuda` to use CUDA.
 
-The samples marked by "*" means having cuda implementations.
+The samples marked by "\*" means having cuda implementations.
 
 ## Sample modules
 
@@ -27,7 +27,7 @@ The samples marked by "*" means having cuda implementations.
 * Snake SurfaceView
 * Grayscale *
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/menu/menu.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/menu/menu.png?raw=true)
 
 ### Widget
 
@@ -38,13 +38,13 @@ Samples about new APIs in support libraries.
 * All Apps: Show all apps in list or grid. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/all_apps.gif?raw=true)
 * Rx Apps: Show all apps with RxJava. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/rx_apps.gif?raw=true)
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/support.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/support.png?raw=true)
 
 #### Design
 
 * Bottom Sheet: How to using bottom sheet.
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/design.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/design.png?raw=true)
 
 #### Hardware
 
@@ -53,7 +53,7 @@ Samples about new APIs in support libraries.
 
 #### Custom
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/custom.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/custom.png?raw=true)
 
 #### Extras
 
@@ -69,7 +69,7 @@ Samples about fever things.
 * Hello Cube: Draws a cube using GLES 1.x API.
 * San Angeles: San Angeles Observation OpenGL ES version example.
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/gles.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/gles.png?raw=true)
 
 #### OpenCV
 
@@ -81,7 +81,7 @@ Samples about fever things.
 * OpenCV Grayscale: OpenCV Grayscale Sample. *
 * OpenCV ORB: OpenCV ORB Sample. *
 
-![](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
+[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
 
 ### Arch
 
