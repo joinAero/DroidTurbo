@@ -11,8 +11,8 @@ message(STATUS "PRO_ROOT_DIR: ${PRO_ROOT_DIR}")
 
 set(OpenCV_SDK_DIR "${PRO_ROOT_DIR}/OpenCV-android-sdk")
 
-add_library(OpenCV_CORE SHARED IMPORTED)
-set_target_properties(OpenCV_CORE PROPERTIES
+add_library(opencv_java SHARED IMPORTED)
+set_target_properties(opencv_java PROPERTIES
   IMPORTED_LOCATION "${OpenCV_SDK_DIR}/sdk/native/libs/${ANDROID_ABI}/libopencv_java3.so"
 )
 

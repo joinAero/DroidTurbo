@@ -3,5 +3,5 @@ add_library(ocv_all SHARED
   ${OCV_SRCS}
 )
 target_link_libraries(ocv_all
-  log OpenCV_CORE
+  log opencv_java
 )
