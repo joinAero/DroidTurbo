@@ -53,6 +53,11 @@ android {
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
 
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
+            }
+        }
         ndk {
             abiFilters ndkABIs
         }
@@ -65,8 +70,13 @@ android {
         }
     }
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/cpp/Android.mk'
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+        }
+    }
+    sourceSets {
+        main {
+            jniLibs.srcDirs += ["${project.rootDir}/OpenCV-android-sdk/sdk/native/libs"]
         }
     }
     compileOptions {

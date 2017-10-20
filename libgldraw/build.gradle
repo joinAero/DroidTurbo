@@ -15,6 +15,7 @@ android {
         // C++ Library Support: https://developer.android.com/ndk/guides/cpp-support.html
         // C++ Build Support: https://sites.google.com/a/android.com/tools/tech-docs/external-c-builds
         externalNativeBuild {
+            // cmake: https://developer.android.com/ndk/guides/cmake.html
             cmake {
                 // Android NDK Native APIs: https://developer.android.com/ndk/guides/stable_apis.html
                 cppFlags '-std=c++11 -frtti -fexceptions'
@@ -39,7 +40,6 @@ android {
             path 'CMakeLists.txt'
         }
     }
-
     publishNonDefault true
 }
 

@@ -12,12 +12,11 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
-        /*externalNativeBuild {
-            ndkBuild {
-                arguments 'NDK_APPLICATION_MK:=src/main/cpp/Application.mk'
-                abiFilters ndkABIs
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++11 -frtti -fexceptions"
             }
-        }*/
+        }
         ndk {
             abiFilters ndkABIs
         }
@@ -28,13 +27,16 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     externalNativeBuild {
-        ndkBuild {
-            path 'src/main/cpp/Android.mk'
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
         }
     }
-
+    sourceSets {
+        main {
+            jniLibs.srcDirs += ["${project.rootDir}/OpenCV-android-sdk/sdk/native/libs"]
+        }
+    }
     publishNonDefault true
 }
 
