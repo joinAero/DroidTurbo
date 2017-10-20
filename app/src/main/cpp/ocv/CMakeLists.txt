@@ -1,6 +1,3 @@
-include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}
-)
 file(GLOB OCV_SRCS "*.cpp")
 add_library(ocv_all SHARED
   ${OCV_SRCS}
