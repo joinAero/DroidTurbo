@@ -1,7 +1,7 @@
 
 # DroidTurbo
 
-[![Android Studio Preview](https://img.shields.io/badge/Android%20Studio-3.0%20Preview-brightgreen.svg?style=flat)](https://developer.android.com/studio/preview/index.html)
+[![Android Studio](https://img.shields.io/badge/Android%20Studio-3.0-brightgreen.svg?style=flat)](https://developer.android.com/studio/index.html)
 
 Android sample project shows new stuff about support library, architecture, etc.
 
