@@ -81,7 +81,7 @@ public class PermissionUtils {
      */
     public static boolean verifyPermissions(int[] grantResults) {
         // At least one result must be checked.
-        if(grantResults.length < 1){
+        if (grantResults.length < 1) {
             return false;
         }
 
