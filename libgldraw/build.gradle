@@ -17,12 +17,12 @@ android {
         externalNativeBuild {
             // cmake: https://developer.android.com/ndk/guides/cmake.html
             cmake {
-                // Android NDK Native APIs: https://developer.android.com/ndk/guides/stable_apis.html
-                cppFlags '-std=c++11 -frtti -fexceptions'
                 // Available argumetns are inside ${SDK}/cmake/.../android.toolchain.cmake file
                 arguments '-DANDROID_PLATFORM=android-9',
                         '-DANDROID_TOOLCHAIN=clang',
                         '-DANDROID_STL=gnustl_static'
+                // Android NDK Native APIs: https://developer.android.com/ndk/guides/stable_apis.html
+                cppFlags '-std=c++11 -frtti -fexceptions'
             }
         }
         ndk {

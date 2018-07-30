@@ -5,8 +5,6 @@
 #include <stdint.h>
 #include <jni.h>
 
-#define LOG_TAG "DroidTurbo_native"
-
 #include "log.hpp"
 
 #define CJNIEXPORT extern "C" JNIEXPORT

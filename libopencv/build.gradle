@@ -14,6 +14,9 @@ android {
 
         externalNativeBuild {
             cmake {
+                arguments '-DANDROID_PLATFORM=android-9',
+                        '-DANDROID_TOOLCHAIN=clang',
+                        '-DANDROID_STL=gnustl_static'
                 cppFlags "-std=c++11 -frtti -fexceptions"
             }
         }
