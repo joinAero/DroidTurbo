@@ -27,7 +27,7 @@ The samples marked by "\*" means having cuda implementations.
 * Snake SurfaceView
 * Grayscale *
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/menu/menu.png?raw=true)
+![](images/menu/menu.png)
 
 ### Widget
 
@@ -35,16 +35,16 @@ Samples about new APIs in support libraries.
 
 #### Support
 
-* All Apps: Show all apps in list or grid. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/all_apps.gif?raw=true)
-* Rx Apps: Show all apps with RxJava. [GIF](https://raw.githubusercontent.com/joinAero/DroidTurbo/master/app/src/main/assets/rx_apps.gif?raw=true)
+* All Apps: Show all apps in list or grid. ![](app/src/main/assets/all_apps.gif)
+* Rx Apps: Show all apps with RxJava. ![](app/src/main/assets/rx_apps.gif)
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/support.png?raw=true)
+![](images/widget/support.png)
 
 #### Design
 
 * Bottom Sheet: How to using bottom sheet.
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/design.png?raw=true)
+![](images/widget/design.png)
 
 #### Hardware
 
@@ -53,11 +53,11 @@ Samples about new APIs in support libraries.
 
 #### Custom
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/widget/custom.png?raw=true)
+![](images/widget/custom.png)
 
 #### Extras
 
-* Toolbar, TabLayout. [GIF](https://github.com/joinAero/DroidTurbo/blob/master/images/toolbar.gif?raw=true)
+* Toolbar, TabLayout. ![](images/toolbar.gif)
 
 ### Fever
 
@@ -69,7 +69,7 @@ Samples about fever things.
 * Hello Cube: Draws a cube using GLES 1.x API.
 * San Angeles: San Angeles Observation OpenGL ES version example.
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/gles.png?raw=true)
+![](images/fever/gles.png)
 
 #### OpenCV
 
@@ -81,7 +81,7 @@ Samples about fever things.
 * OpenCV Grayscale: OpenCV Grayscale Sample. *
 * OpenCV ORB: OpenCV ORB Sample. *
 
-[PNG](https://github.com/joinAero/DroidTurbo/blob/master/images/fever/ocv.png?raw=true)
+![](images/fever/ocv.png)
 
 ### Arch
 
